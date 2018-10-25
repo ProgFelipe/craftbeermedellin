@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "881126756987",
+    "firebase_url": "https://craftbeermedellin.firebaseio.com",
+    "project_id": "craftbeermedellin",
+    "storage_bucket": "craftbeermedellin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881126756987:android:9ac3c02de4e9c591",
+        "android_client_info": {
+          "package_name": "com.homestudios.brewerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881126756987-upjrsfuds9q3u5ukh2v513pqejh5n3sf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGgwNRW-VWnrrh2k_pZEfO7GiBxiu2ncQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
