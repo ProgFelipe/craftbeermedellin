@@ -11,10 +11,10 @@ class Utils extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return _buildTitle(title, color, 52.00);
+    return _buildTitle(title, color, size: 52.00);
   }
 
-  Widget _buildTitle(String title, Color color, double size) {
+  Widget _buildTitle(String title, Color color, {double size = 50.0}) {
     return Padding(
         padding: EdgeInsets.all(20.0),
         child: Text(

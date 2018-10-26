@@ -1,15 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 
+import '../utils.dart';
 import '../Rest/Response/Events.dart';
 import '../brewers_detail.dart';
 import '../awesome_cards.dart';
 import './beer_types.dart';
-import '../utils.dart';
+import '../base_view.dart';
+import '../Animations/animation.dart';
+import '../Events/event_detail.dart';
 
-class Home extends StatelessWidget {
-  final List<Events> events = [
+
+class Home extends BaseView {
+  @override
+  State<StatefulWidget> createState() {
+     return HomeState();
+  }
+}
+
+class HomeState extends BaseViewState{
+  
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+   final List<Events> events = [
     Events('Donde Ñisqui', 'Toma cervecera por el moli', '',
         'https://t3.ftcdn.net/jpg/00/64/77/16/240_F_64771693_ncondhOJwNdvLjBfeIwswLqhsavUSSY5.jpg'),
     Events('Donde Ñisqui 2', 'Toma cervecera por el burro', '',
@@ -24,32 +47,65 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _content(events);
+    if(connectionStatus== 'Unknown' || connectionStatus == 'ConnectivityResult.none'){
+         //return Center(child: Text('Connection Status: $connectionStatus\n'))
+         return _content(events, internet: false);}
+       else{return _content(events);}
   }
 }
 
-Widget _content(List<Events> events) {
-  return Container(
-      child: ListView(
-        padding: EdgeInsets.all(2.0),
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          Image.network('https://www.tolimafm.com/wp-content/uploads/2018/08/invima.png', height: 100.0,),
-          Utils('Promociones', Colors.white, 50.0),
-          _buildPromotionsCards(),
-          Utils('Cervecerias Locales', Colors.white, 50.0),
-          _buildBrewersCarousel(),
-          Utils('Eventos Locales', Colors.white, 50.0),
-          _buildEventsCards(events),
-          Utils('Tipos de cervezas', Colors.greenAccent, 50.0),
-          BeerTypes(),
-        ],
-      ),
-      decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage("assets/beer_blur.jpg"),
-        fit: BoxFit.cover,
-      )));
+
+Widget _content(List<Events> events, {bool internet: true}) {
+  bool contentLoaded = false;
+  if(internet){
+    contentLoaded = true;
+    return Container(
+        child: ListView(
+          padding: EdgeInsets.all(2.0),
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Image.network('https://www.tolimafm.com/wp-content/uploads/2018/08/invima.png', height: 100.0,),
+            Utils('Promociones', Colors.white, 50.0),
+            _buildPromotionsCards(),
+            Utils('Cervecerias Locales', Colors.white, 50.0),
+            _buildBrewersCarousel(),
+            Utils('Eventos Locales', Colors.white, 50.0),
+            _buildEventsCards(events),
+            Utils('Tipos de cervezas', Colors.greenAccent, 50.0),
+            BeerTypes(),
+          ],
+        ),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage("assets/beer_blur.jpg"),
+          fit: BoxFit.cover,
+        )));
+  }else{
+    return Container(
+        child: ListView(
+          padding: EdgeInsets.all(2.0),
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Text('SIN INTERNET', style: TextStyle(color: Colors.redAccent[400], 
+            wordSpacing: 4.0, fontSize: 40.0, fontFamily: 'Future'),textAlign: TextAlign.center, ),
+            Utils('Promociones', Colors.white, 50.0),
+            _buildPromotionsCardsNoInternet(1),
+            Utils('Cervecerias Locales', Colors.white, 50.0),
+            _buildPromotionsCardsNoInternet(2),
+            //_buildBrewersCarousel(),
+            Utils('Eventos Locales', Colors.white, 50.0),
+            //_buildEventsCards(events),
+            _buildPromotionsCardsNoInternet(3),
+            Utils('Tipos de cervezas', Colors.greenAccent, 50.0),
+            _buildPromotionsCardsNoInternet(4),
+          ],
+        ),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage("assets/beer_blur.jpg"),
+          fit: BoxFit.cover,
+        )));
+  }
 }
 
 Widget _buildEventsCards(List<Events> events) {
@@ -64,6 +120,37 @@ Widget _buildEventsCards(List<Events> events) {
           itemBuilder: (BuildContext context, int index) {
             return _buildEvents(events[index], context);
           }));
+}
+
+Widget _buildPromotionsCardsNoInternet(int loadingType) {
+  return Container(
+      margin: EdgeInsets.symmetric(vertical: 2.0),
+      height: 200.0,
+      child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(vertical: 10.0),
+          itemCount: 6,
+          itemBuilder: (BuildContext context, int index) {
+            //TODO LOADING GIF
+          if(loadingType == 1){
+            return Card(
+            elevation: 3.0,
+            color: Colors.white70,
+            semanticContainer: true,
+            child: Container(child: EasingAnimationWidget(), width: 200.0,height: 100.0, color: Colors.white,)
+          ); }else{
+            return Card(
+            elevation: 3.0,
+            color: Colors.white70,
+            semanticContainer: true,
+            child: Image.asset('assets/loading$loadingType.gif',
+              width: 100.0, fit: BoxFit.cover)
+          );
+             }
+          
+        }
+        ));
 }
 
 Widget _buildPromotionsCards() {
@@ -111,7 +198,13 @@ Widget _buildBrewersCarousel() {
 }
 
 Widget _buildEvents(Events event, BuildContext context) {
-  return AwesomeCards(1);
+  return GestureDetector(
+                  child: AwesomeCards(1),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventsDetail())));
+            
 }
 
 Widget _buildCarouselItem(DocumentSnapshot event) {
@@ -119,8 +212,8 @@ Widget _buildCarouselItem(DocumentSnapshot event) {
     padding: EdgeInsets.symmetric(horizontal: 10.0),
     child: Container(
         child: Card(
-          child: Image.network(
-            event.data['imageUri'],
+          child: Image(
+            image: CachedNetworkImageProvider(event.data['imageUri']),
           ),
           elevation: 4.0,
         ),
@@ -131,24 +224,4 @@ Widget _buildCarouselItem(DocumentSnapshot event) {
           ),
         ])),
   );
-}
-
-class ScrollViewWithHeight extends StatelessWidget {
-  final Widget child;
-
-  const ScrollViewWithHeight({Key key, this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return new LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return new SingleChildScrollView(
-        child: new ConstrainedBox(
-          constraints: constraints.copyWith(
-              minHeight: constraints.maxHeight, maxHeight: double.infinity),
-          child: child,
-        ),
-      );
-    });
-  }
 }

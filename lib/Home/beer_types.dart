@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class BeerTypes extends StatelessWidget{
   @override
@@ -14,7 +15,7 @@ class BeerTypes extends StatelessWidget{
             scrollDirection: Axis.horizontal,
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
-              var child = _buildBeerTypeItem('IPA', 'https://img.saveur-biere.com/img/p/30501-43783.jpg');
+              var child = _buildBeerTypeItem('IPA', 'https://freeiconshop.com/wp-content/uploads/edd/beer-bottle-flat.png');
               return GestureDetector(
                   child: child,
                   onTap: () => Navigator.push(
@@ -45,8 +46,8 @@ Widget _buildCarousel(String title, String imageUri) {
     child:  Container(
       height: 200.0,
         child:  Card(
-          child:  Image.network(
-            uriImage,
+          child:  Image(
+            image: CachedNetworkImageProvider(uriImage),
           ),
           elevation: 4.0,
         ),
