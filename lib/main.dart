@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 
 import './famousrecipies.dart';
 import './Home/home.dart';
-import './event_map.dart';
 import 'Events/events.dart';
 
-
-void main() => runApp( MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       title: 'Craft Beer Colombia',
-      theme:  ThemeData(
+      theme: ThemeData(
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -23,14 +21,14 @@ class MyApp extends StatelessWidget {
         // "hot reload" (press "r" in the console where you ran "flutter run",
         // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
         // counter didn't reset back to zero; the application is not restarted.
-        
+
         //Emergency
         //$ flutter update-packages --force-upgrade
         //$ flutter clean
         //$ flutter upgrade
         primarySwatch: Colors.orange,
       ),
-      home:  Navigator(),
+      home: Navigator(),
     );
   }
 }
@@ -44,7 +42,12 @@ class Navigator extends StatefulWidget {
 
 class _NavigatorState extends State<Navigator> {
   int _currentIndex = 0;
-  final List<Widget> _children = [Home(), Events(), Store(), EventMap()];
+  final List<Widget> _children = [
+    Home(),
+    Events(),
+    Store(),
+    Events()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,32 +55,46 @@ class _NavigatorState extends State<Navigator> {
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.brown,
-        onTap: onTabTapped, // 
-        currentIndex: _currentIndex, // 
+        onTap: onTabTapped, //
+        currentIndex: _currentIndex, //
         items: [
           BottomNavigationBarItem(
-            icon:  Icon(Icons.home),
-            activeIcon: Icon(Icons.home, color: Colors.blue[700],),
-            title:  Text('Home', style: TextStyle(color: Colors.blue[700]),),
-            backgroundColor: Colors.brown
-          ),
+              icon: Icon(Icons.home),
+              activeIcon: Icon(
+                Icons.home,
+                color: Colors.blue[700],
+              ),
+              title: Text(
+                'Home',
+                style: TextStyle(color: Colors.blue[700]),
+              ),
+              backgroundColor: Colors.brown),
           BottomNavigationBarItem(
-            icon:  Icon(Icons.filter_hdr),
-            activeIcon: Icon(Icons.filter_hdr, color: Colors.green,),
+            icon: Icon(Icons.filter_hdr),
+            activeIcon: Icon(
+              Icons.filter_hdr,
+              color: Colors.green,
+            ),
             backgroundColor: Colors.grey,
-            title:  Text('Eventos'),
+            title: Text('Eventos'),
           ),
           BottomNavigationBarItem(
-            icon:  Icon(Icons.receipt),
-            activeIcon: Icon(Icons.receipt, color: Colors.amber[700],),
+            icon: Icon(Icons.receipt),
+            activeIcon: Icon(
+              Icons.receipt,
+              color: Colors.amber[700],
+            ),
             backgroundColor: Colors.blueGrey,
-            title:  Text('Compras'),
+            title: Text('Compras'),
           ),
           BottomNavigationBarItem(
-            icon:  Icon(Icons.favorite),
-            activeIcon: Icon(Icons.favorite, color: Colors.red,),
+            icon: Icon(Icons.favorite),
+            activeIcon: Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ),
             backgroundColor: Colors.blueGrey,
-            title:  Text('Favoritas'),
+            title: Text('Favoritas'),
           ),
         ],
       ),
@@ -90,4 +107,3 @@ class _NavigatorState extends State<Navigator> {
     });
   }
 }
-

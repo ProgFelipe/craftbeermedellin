@@ -17,12 +17,12 @@ class BaseViewState extends State<BaseView>{
 
   @override
   void initState() {
-    super.initState();
     initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       setState(() => connectionStatus = result.toString());
     });
+    super.initState();
   }
 
   @override
