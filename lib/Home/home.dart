@@ -77,14 +77,23 @@ Widget _buildInternetContent(List<Events> events) {
         padding: EdgeInsets.all(2.0),
         scrollDirection: Axis.vertical,
         children: <Widget>[
-          Padding(padding: EdgeInsets.only(top: 2.0), child: Image.asset('assets/beer.png', alignment: Alignment.center, height: 120.0,),),
+          Padding(
+            padding: EdgeInsets.only(top: 2.0),
+            child: Image.asset(
+              'assets/icon.png',
+              alignment: Alignment.center,
+              height: 220.0,
+            ),
+          ),
           Card(
-              child: Column(
-            children: <Widget>[
-              Utils('Promociones', Colors.black87, 50.0),
-              _buildPromotionsCards()
-            ],
-          ), elevation: 2.0,),
+            child: Column(
+              children: <Widget>[
+                Utils('Promociones', Colors.black87, 50.0),
+                _buildPromotionsCards()
+              ],
+            ),
+            elevation: 2.0,
+          ),
           Utils('Cervecerias Locales', Colors.white, 50.0),
           _buildBrewersCarousel(),
           Card(
@@ -96,7 +105,7 @@ Widget _buildInternetContent(List<Events> events) {
             ),
             elevation: 2.0,
           ),
-          Utils('Tipos de cervezas', Colors.greenAccent, 50.0),
+          Utils('Tipos de cervezas', Colors.white, 50.0),
           BeerTypes(),
         ],
       ),
@@ -204,7 +213,7 @@ Widget _buildPromotionsCards() {
 
 Widget _buildBrewersCarousel() {
   return Container(
-    margin: EdgeInsets.symmetric(vertical: 2.0),
+    margin: EdgeInsets.only(bottom: 20.0),
     height: 200.0,
     child: StreamBuilder(
       stream: Firestore.instance.collection('brewers').snapshots(),
@@ -214,7 +223,7 @@ Widget _buildBrewersCarousel() {
         }
         return ListView.builder(
             shrinkWrap: true,
-            padding: EdgeInsets.symmetric(vertical: 0.0),
+            padding: EdgeInsets.symmetric(vertical: 2.0),
             scrollDirection: Axis.horizontal,
             itemCount: snapshot.data.documents.length,
             itemBuilder: (BuildContext context, int index) {
@@ -258,7 +267,7 @@ Widget _buildCustomCard(String url) {
   return Card(
       child: CachedNetworkImage(
           imageUrl: url,
-          placeholder: Shimmer.fromColors(
+          placeholder: (context, url) => Shimmer.fromColors(
               direction: ShimmerDirection.ltr,
               baseColor: Colors.grey[300],
               highlightColor: Colors.grey[100],
@@ -269,7 +278,7 @@ Widget _buildCustomCard(String url) {
                     height: 48.0,
                     color: Colors.white,
                   ))),
-          errorWidget: Card(
+          errorWidget: (context, url, error) => Card(
               elevation: 4.0,
               child: Container(
                 width: 150.0,
