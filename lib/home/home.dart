@@ -16,6 +16,8 @@ class Home extends BaseView {
 }
 
 class HomeState extends BaseViewState {
+  bool _isOffline = false;
+
   @override
   void initState() {
     super.initState();
@@ -28,70 +30,72 @@ class HomeState extends BaseViewState {
 
   @override
   Widget build(BuildContext context) {
-    if (connectionStatus == 'ConnectivityResult.none') {
-      return Center(child: Text('Connection Status: $connectionStatus\n'));
-      //return _content(events, internet: false);
-    } else {
-      return Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: FractionalOffset.topCenter,
-            end: FractionalOffset.bottomCenter,
-            colors: [Colors.black, Colors.blueGrey],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 2.0),
-                  child: Image.asset(
-                    'assets/icon.png',
-                    alignment: Alignment.center,
-                    height: 100.0,
-                  ),
-                ),
-                storyTellingWidget(),
-                SizedBox(
-                  height: 10.0,
-                ),
-                TitleTextUtils('Cervecerias Locales', Colors.white, 50.0),
-                _buildBrewersGrid(context),
-                //_buildEventsCards(events),
-              ],
-              /*StreamBuilder(
-                  stream: Firestore.instance.collection('brewers').snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting ||
-                        !snapshot.hasData) {
-                      return _shimmerLoading();
-                    } else {
-                      return _shimmerLoading();
-                    }
-                  },
-                ),*/
-            ),
-          ),
-        ),
-      );
+    var online = connectionStatus == 'ConnectivityResult.none';
+    if (_isOffline != online) {
+      setState(() {
+        _isOffline = online;
+      });
     }
+
+    return Container(
+      height: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: FractionalOffset.topCenter,
+          end: FractionalOffset.bottomCenter,
+          colors: [Colors.black, Colors.blueGrey],
+        ),
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: <Widget>[
+              _isOffline
+                  ? Container(
+                      width: double.infinity,
+                      height: 40.0,
+                      color: Colors.redAccent,
+                      child: Center(
+                        child: Text(
+                          'No tienes datos',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+              Padding(
+                padding: EdgeInsets.only(top: 2.0),
+                child: Image.asset(
+                  'assets/icon.png',
+                  alignment: Alignment.center,
+                  height: 100.0,
+                ),
+              ),
+              storyTellingWidget(),
+              SizedBox(
+                height: 10.0,
+              ),
+              TitleTextUtils('Cervecerias Locales', Colors.white, 50.0),
+              _buildBrewersGrid(context),
+              //_buildEventsCards(events),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
 Widget _buildBrewersGrid(context) {
-  //https://stackoverflow.com/questions/48405123/how-to-set-custom-height-for-widget-in-gridview-in-flutter
-  //var size = MediaQuery.of(context).size;
-  //var statusBarHeight = 24;
-  //final double itemHeight = (size.height - kToolbarHeight - statusBarHeight) / 2;
-  //final double itemWidth = size.width / 2;
   return StreamBuilder(
     stream: Firestore.instance.collection('brewers').snapshots(),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
-        debugPrint('Cargó ${snapshot.data.documents}');
         return Container(
           margin: EdgeInsets.only(bottom: 20.0),
           child: GridView.count(
@@ -101,8 +105,11 @@ Widget _buildBrewersGrid(context) {
               snapshot.data.documents.length,
               (index) => Container(
                 margin: EdgeInsets.symmetric(vertical: 10.0),
-                child: _buildCustomCard(context,
-                    snapshot.data.documents[index].data['imageUri'], index),
+                child: _buildCustomCard(
+                    context,
+                    snapshot.data.documents[index].data['imageUri'],
+                    snapshot.data.documents[index].data['name'],
+                    index),
               ),
             ),
           ),
@@ -147,7 +154,7 @@ Widget _shimmerCard() {
   );
 }
 
-Widget _buildCustomCard(context, String url, int index) {
+Widget _buildCustomCard(context, String url, String name, int index) {
   debugPrint('URL: $url');
   return GestureDetector(
     onTap: () {
@@ -166,25 +173,26 @@ Widget _buildCustomCard(context, String url, int index) {
         ),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Stack(
+      child: Container(
         alignment: Alignment.center,
-        children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            child: CachedNetworkImage(
-              fadeInDuration: Duration(milliseconds: 1500),
-              imageUrl: url,
-              fit: BoxFit.scaleDown,
-              placeholder: (context, url) => Image.network(url),
-              errorWidget: (context, url, error) => Card(
-                elevation: 4.0,
-                child: Container(
-                  child: Icon(Icons.error),
-                ),
+        child: CachedNetworkImage(
+          fadeInDuration: Duration(milliseconds: 1500),
+          imageUrl: url ?? '',
+          fit: BoxFit.scaleDown,
+          placeholder: (context, url) => Image.network(url),
+          errorWidget: (context, url, error) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                name,
+                style: TextStyle(color: Colors.white),
               ),
-            ),
+              Container(
+                child: Icon(Icons.error),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     ),
   );

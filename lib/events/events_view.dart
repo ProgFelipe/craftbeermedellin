@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/components/awesome_cards.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class EventsView extends StatelessWidget {
   @override
@@ -14,15 +16,89 @@ class EventsView extends StatelessWidget {
           colors: [Colors.black, Colors.blueGrey],
         ),
       ),
-      child: Column(
-        children: <Widget>[
-          TitleTextUtils('Promociones', Colors.white, 50.0),
-          _buildPromotionsCards(),
-          TitleTextUtils('Eventos Locales', Colors.white, 50.0),
-        ],
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              TitleTextUtils('Promociones', Colors.white, 50.0),
+              _buildPromotionsCards(),
+              TitleTextUtils('Eventos Locales', Colors.white, 50.0),
+              StreamBuilder(
+                stream: Firestore.instance.collection('events').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+
+                    List<Widget> cities = List();
+
+                    snapshot.data.documents.forEach((city) {
+                      cities = _createEventsCards(city);
+                    });
+                    return Column(
+                      children: cities,
+                    );
+                  } else {
+                    return Container(child: Text('Cargando Eventos..'));
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
+}
+
+List<Widget> _createEventsCards(DocumentSnapshot city) {
+  List<Widget> events = List();
+  events.add(Text(
+    'Ciudad ${city['name']}',
+    style: TextStyle(color: Colors.white),
+  ));
+  city['evento'].forEach((event) {
+    events.add(
+      Container(
+        child: Card(
+          margin: EdgeInsets.all(10.0),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  '${event['name']}',
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text('${event['description']}'),
+                ListTile(
+                  leading: Icon(Icons.date_range),
+                  title: Text('${event['date']}'),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: CachedNetworkImage(
+                    fadeInDuration: Duration(milliseconds: 1500),
+                    imageUrl: event['imageUri'],
+                    fit: BoxFit.scaleDown,
+                    placeholder: (context, url) => Image.network(url),
+                    errorWidget: (context, url, error) => Card(
+                      elevation: 4.0,
+                      child: Container(
+                        child: Icon(Icons.error),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  });
+  return events;
 }
 
 Widget _buildPromotionsCards() {
