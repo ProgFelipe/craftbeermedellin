@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:story_view/story_view.dart';
 
 import '../utils.dart';
 import './beer_types.dart';
@@ -91,6 +92,7 @@ Widget _homeContent(List<BrewEvents> events) {
             height: 100.0,
           ),
         ),
+        storyTellingWidget(),
         Column(
           children: <Widget>[
             Utils('Promociones', Colors.black87, 50.0),
@@ -312,4 +314,63 @@ class LoadingListPage extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget storyTellingWidget() {
+  return Container(
+    height: 300,
+    child: StoryView(
+      [
+        StoryItem.text(
+          "Hello world!\nHave a look at some great Ghanaian delicacies. I'm sorry if your mouth waters. \n\nTap!",
+          Colors.orange,
+          roundedTop: true,
+        ),
+        // StoryItem.inlineImage(
+        //   NetworkImage(
+        //       "https://image.ibb.co/gCZFbx/Banku-and-tilapia.jpg"),
+        //   caption: Text(
+        //     "Banku & Tilapia. The food to keep you charged whole day.\n#1 Local food.",
+        //     style: TextStyle(
+        //       color: Colors.white,
+        //       backgroundColor: Colors.black54,
+        //       fontSize: 17,
+        //     ),
+        //   ),
+        // ),
+        StoryItem.inlineImage(
+          NetworkImage(
+              "https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg"),
+          caption: Text(
+            "Omotuo & Nkatekwan; You will love this meal if taken as supper.",
+            style: TextStyle(
+              color: Colors.white,
+              backgroundColor: Colors.black54,
+              fontSize: 17,
+            ),
+          ),
+        ),
+        StoryItem.inlineGif(
+          "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif",
+          caption: Text(
+            "Hektas, sektas and skatad",
+            style: TextStyle(
+              color: Colors.white,
+              backgroundColor: Colors.black54,
+              fontSize: 17,
+            ),
+          ),
+        )
+      ],
+      onStoryShow: (s) {
+        print("Showing a story");
+      },
+      onComplete: () {
+        print("Completed a cycle");
+      },
+      progressPosition: ProgressPosition.bottom,
+      repeat: false,
+      inline: true,
+    ),
+  );
 }
