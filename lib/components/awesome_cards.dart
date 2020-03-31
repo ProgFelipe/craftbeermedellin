@@ -19,13 +19,6 @@ class AwesomeCards extends StatelessWidget{
     }
   }
 
-  Widget _simpleCard(){
-    return  Card(
-      elevation: 3.0,
-      child: Text('data'),
-    );
-  }
-
   Widget _newsCard(){
     return  Card(
       elevation: 3.0,

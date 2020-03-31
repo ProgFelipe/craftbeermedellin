@@ -5,12 +5,11 @@ class EasingAnimationWidget extends StatefulWidget {
   EasingAnimationWidgetState createState() => EasingAnimationWidgetState();
 }
 
-class EasingAnimationWidgetState extends State<EasingAnimationWidget> 
-  with TickerProviderStateMixin {  
-  
+class EasingAnimationWidgetState extends State<EasingAnimationWidget>
+    with TickerProviderStateMixin {
   AnimationController _controller;
   Animation _animation;
-  
+
   @override
   void initState() {
     super.initState();
@@ -23,26 +22,29 @@ class EasingAnimationWidgetState extends State<EasingAnimationWidget>
       curve: Curves.fastOutSlowIn,
     ));
   }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return AnimatedBuilder(
         animation: _controller,
+        child: Center(
+          child: Container(
+            width: 200.0,
+            height: 100.0,
+            color: Colors.purple,
+          ),
+        ),
         builder: (BuildContext context, Widget child) {
           return Scaffold(
-              body: Transform(
-                transform:
-                Matrix4.translationValues(_animation.value * width, 0.0, 0.0),
-                child: new Center(
-                    child: Container(
-                      width: 200.0,
-                      height: 100.0,
-                      color: Colors.purple,
-                    )),
-              ));
+            body: Transform(
+              transform:
+                  Matrix4.translationValues(_animation.value * width, 0.0, 0.0),
+            ),
+          );
         });
   }
-  
+
   @override
   void dispose() {
     _controller.dispose();

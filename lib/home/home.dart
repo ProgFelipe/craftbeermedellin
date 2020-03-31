@@ -1,3 +1,6 @@
+import 'package:craftbeer/api/brewer_events.dart';
+import 'package:craftbeer/brewers_detail.dart';
+import 'package:craftbeer/components/awesome_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
@@ -5,12 +8,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../utils.dart';
-import '../Rest/Response/Events.dart';
-import '../brewers_detail.dart';
-import '../awesome_cards.dart';
 import './beer_types.dart';
 import '../base_view.dart';
-import '../Animations/animation.dart';
 import '../Events/event_detail.dart';
 
 class Home extends BaseView {
@@ -31,16 +30,16 @@ class HomeState extends BaseViewState {
     super.dispose();
   }
 
-  final List<Events> events = [
-    Events('Donde Ñisqui', 'Toma cervecera por el moli', '',
+  final List<BrewEvents> events = [
+    BrewEvents('Donde Ñisqui', 'Toma cervecera por el moli', '',
         'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg'),
-    Events('Donde Ñisqui 2', 'Toma cervecera por el burro', '',
+    BrewEvents('Donde Ñisqui 2', 'Toma cervecera por el burro', '',
         'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg'),
-    Events('Donde Ñisqui 3', 'Toma cervecera por el Alfred', '',
+    BrewEvents('Donde Ñisqui 3', 'Toma cervecera por el Alfred', '',
         'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg'),
-    Events('Donde Ñisqui 4', 'Toma cervecera por el Gino', '',
+    BrewEvents('Donde Ñisqui 4', 'Toma cervecera por el Gino', '',
         'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg'),
-    Events('Donde Ñisqui 5', 'Toma cervecera por el Enzo', '',
+    BrewEvents('Donde Ñisqui 5', 'Toma cervecera por el Enzo', '',
         'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg')
   ];
 
@@ -50,70 +49,63 @@ class HomeState extends BaseViewState {
       return Center(child: Text('Connection Status: $connectionStatus\n'));
       //return _content(events, internet: false);
     } else {
-      return _content(events);
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.7),
+        ),
+        child: SafeArea(
+          child: StreamBuilder(
+            stream: Firestore.instance.collection('brewers').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: Text('There are no brewers loading...'),
+                );
+              } else {
+                if (snapshot.hasData) {
+                  return _homeContent(events);
+                } else {
+                  return Center(
+                    child: Text('No encontramos información...'),
+                  );
+                }
+              }
+            },
+          ),
+        ),
+      );
     }
   }
 }
 
-Widget _content(List<Events> events, {bool internet: true}) {
-  bool contentLoaded = false;
-  return Container(
-      child: StreamBuilder(
-          stream: Firestore.instance.collection('brewers').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: Text('There are no brewers loading...'),
-              );
-            } else {
-              return _buildInternetContent(events);
-            }
-          }));
-}
-
-Widget _buildInternetContent(List<Events> events) {
-  return Container(
-      child: ListView(
-        padding: EdgeInsets.all(2.0),
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: 2.0),
-            child: Image.asset(
-              'assets/icon.png',
-              alignment: Alignment.center,
-              height: 220.0,
-            ),
+Widget _homeContent(List<BrewEvents> events) {
+  return SingleChildScrollView(
+    scrollDirection: Axis.vertical,
+    child: Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: 2.0),
+          child: Image.asset(
+            'assets/icon.png',
+            alignment: Alignment.center,
+            height: 100.0,
           ),
-          Card(
-            child: Column(
-              children: <Widget>[
-                Utils('Promociones', Colors.black87, 50.0),
-                _buildPromotionsCards()
-              ],
-            ),
-            elevation: 2.0,
-          ),
-          Utils('Cervecerias Locales', Colors.white, 50.0),
-          _buildBrewersCarousel(),
-          Card(
-            child: Column(
-              children: <Widget>[
-                Utils('Eventos Locales', Colors.black87, 50.0),
-                _buildEventsCards(events)
-              ],
-            ),
-            elevation: 2.0,
-          ),
-          Utils('Tipos de cervezas', Colors.white, 50.0),
-          BeerTypes(),
-        ],
-      ),
-      decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage("assets/beer_blur.jpg"),
-        fit: BoxFit.cover,
-      )));
+        ),
+        Column(
+          children: <Widget>[
+            Utils('Promociones', Colors.black87, 50.0),
+            _buildPromotionsCards()
+          ],
+        ),
+        Utils('Cervecerias Locales', Colors.white, 50.0),
+        _buildBrewersCarousel(),
+        Utils('Eventos Locales', Colors.black87, 50.0),
+        _buildEventsCards(events),
+        Utils('Tipos de cervezas', Colors.white, 50.0),
+        BeerTypes(),
+      ],
+    ),
+  );
 }
 
 /* Widget _buidlWithOutInternetContent() {
@@ -150,7 +142,7 @@ Widget _buildInternetContent(List<Events> events) {
       )));
 } */
 
-Widget _buildEventsCards(List<Events> events) {
+Widget _buildEventsCards(List<BrewEvents> events) {
   return Container(
       margin: EdgeInsets.symmetric(vertical: 2.0),
       height: 200.0,
@@ -161,39 +153,6 @@ Widget _buildEventsCards(List<Events> events) {
           itemCount: events.length,
           itemBuilder: (BuildContext context, int index) {
             return _buildEvents(events[index], context);
-          }));
-}
-
-Widget _buildPromotionsCardsNoInternet(int loadingType) {
-  return Container(
-      margin: EdgeInsets.symmetric(vertical: 2.0),
-      height: 200.0,
-      child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          itemCount: 6,
-          itemBuilder: (BuildContext context, int index) {
-            //TODO LOADING GIF
-            if (loadingType == 1) {
-              return Card(
-                  elevation: 3.0,
-                  color: Colors.white70,
-                  semanticContainer: true,
-                  child: Container(
-                    child: EasingAnimationWidget(),
-                    width: 200.0,
-                    height: 100.0,
-                    color: Colors.white,
-                  ));
-            } else {
-              return Card(
-                  elevation: 3.0,
-                  color: Colors.white70,
-                  semanticContainer: true,
-                  child: Image.asset('assets/loading$loadingType.gif',
-                      width: 100.0, fit: BoxFit.cover));
-            }
           }));
 }
 
@@ -241,7 +200,7 @@ Widget _buildBrewersCarousel() {
   );
 }
 
-Widget _buildEvents(Events event, BuildContext context) {
+Widget _buildEvents(BrewEvents event, BuildContext context) {
   return GestureDetector(
       child: _buildCustomCard(event.imageUri),
       onTap: () => Navigator.push(

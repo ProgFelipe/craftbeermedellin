@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './famousrecipies.dart';
+import 'store/store.dart';
 import './Home/home.dart';
 import 'Events/events.dart';
 
@@ -13,19 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Craft Beer Colombia',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
-        // counter didn't reset back to zero; the application is not restarted.
-
-        //Emergency
-        //$ flutter update-packages --force-upgrade
-        //$ flutter clean
-        //$ flutter upgrade
         primarySwatch: Colors.orange,
       ),
       home: Navigator(),

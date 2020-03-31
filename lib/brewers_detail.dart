@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import './ProgressIndicators/progress_bar.dart';
-
 class BrewersDetail extends StatefulWidget {
   final int item;
   BrewersDetail(this.item);
@@ -13,7 +11,7 @@ class BrewersDetail extends StatefulWidget {
   }
 }
 
-class BrewersDetailState extends State<BrewersDetail>{
+class BrewersDetailState extends State<BrewersDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,27 +20,37 @@ class BrewersDetailState extends State<BrewersDetail>{
         title: Text('temp'),
       ),
       body: Center(
-          child:  StreamBuilder(
-            stream: Firestore.instance.collection('brewers').snapshots(),
-            builder: (context, snapshot){
-            if(!snapshot.hasData){ return Text('There are no brewers loading...');}
-            return  Column(
-            mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                   Text(snapshot.data.documents[widget.item]['name']),
-                   Row(
-                    children: <Widget>[
-                       Image.network(snapshot.data.documents[widget.item]['imageUri'], fit: BoxFit.cover),
-                       Text(snapshot.data.documents[widget.item]['description'],
-                      textAlign: TextAlign.center, maxLines: 5, overflow: TextOverflow.ellipsis,)
-                    ],
-                  ),
-                   Text('More information Web Site'),
-                   ProgressBar()
-                ],
-              );
-            })
-        ),
+          child: StreamBuilder(
+              stream: Firestore.instance.collection('brewers').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Text('There are no brewers loading...');
+                }
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Text(snapshot.data.documents[widget.item]['name']),
+                    Row(
+                      children: <Widget>[
+                        Image.network(
+                            snapshot.data.documents[widget.item]['imageUri'],
+                            fit: BoxFit.cover),
+                        Text(
+                          snapshot.data.documents[widget.item]['description'],
+                          textAlign: TextAlign.center,
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ],
+                    ),
+                    Text('More information Web Site'),
+                    LinearProgressIndicator(
+                      backgroundColor: Colors.lightBlue,
+                      value: 60.0,
+                    ),
+                  ],
+                );
+              })),
     );
   }
 }
