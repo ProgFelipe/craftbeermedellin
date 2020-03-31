@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Utils extends StatelessWidget{
+class TitleTextUtils extends StatelessWidget{
   Color color;
 
   String title;
 
   double size;
 
-  Utils(this.title, this.color, this.size);
+  TitleTextUtils(this.title, this.color, this.size);
 
   @override
   Widget build(BuildContext context) {

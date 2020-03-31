@@ -1,8 +1,7 @@
+import 'package:craftbeer/events/events_view.dart';
+import 'package:craftbeer/favorites_view.dart';
 import 'package:flutter/material.dart';
-
-import 'store/store.dart';
 import './Home/home.dart';
-import 'Events/events.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,12 +28,7 @@ class Navigator extends StatefulWidget {
 
 class _NavigatorState extends State<Navigator> {
   int _currentIndex = 0;
-  final List<Widget> _children = [
-    Home(),
-    Events(),
-    Store(),
-    Events()
-  ];
+  final List<Widget> _children = [Home(), EventsView(), Favorites()];
 
   @override
   Widget build(BuildContext context) {
@@ -57,22 +51,16 @@ class _NavigatorState extends State<Navigator> {
               ),
               backgroundColor: Colors.brown),
           BottomNavigationBarItem(
-            icon: Icon(Icons.filter_hdr),
-            activeIcon: Icon(
-              Icons.filter_hdr,
-              color: Colors.green,
-            ),
-            backgroundColor: Colors.grey,
-            title: Text('Eventos'),
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
             activeIcon: Icon(
               Icons.receipt,
               color: Colors.amber[700],
             ),
             backgroundColor: Colors.blueGrey,
-            title: Text('Compras'),
+            title: Text(
+              'Eventos',
+              style: TextStyle(color: Colors.amber[700]),
+            ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
@@ -81,7 +69,7 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.red,
             ),
             backgroundColor: Colors.blueGrey,
-            title: Text('Favoritas'),
+            title: Text('Favoritas', style: TextStyle(color: Colors.red[700])),
           ),
         ],
       ),

@@ -1,17 +1,12 @@
-import 'package:craftbeer/api/brewer_events.dart';
 import 'package:craftbeer/brewers_detail.dart';
-import 'package:craftbeer/components/awesome_cards.dart';
+import 'package:craftbeer/components/story_telling.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:story_view/story_view.dart';
-
 import '../utils.dart';
-import './beer_types.dart';
 import '../base_view.dart';
-import '../Events/event_detail.dart';
 
 class Home extends BaseView {
   @override
@@ -31,19 +26,6 @@ class HomeState extends BaseViewState {
     super.dispose();
   }
 
-  final List<BrewEvents> events = [
-    BrewEvents('Donde Ñisqui', 'Toma cervecera por el moli', '',
-        'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg'),
-    BrewEvents('Donde Ñisqui 2', 'Toma cervecera por el burro', '',
-        'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg'),
-    BrewEvents('Donde Ñisqui 3', 'Toma cervecera por el Alfred', '',
-        'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg'),
-    BrewEvents('Donde Ñisqui 4', 'Toma cervecera por el Gino', '',
-        'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg'),
-    BrewEvents('Donde Ñisqui 5', 'Toma cervecera por el Enzo', '',
-        'https://s3.amazonaws.com/ft-images/shows/2b69520f4033c28c02adf7b776ff7cc9f7afba3f.jpg')
-  ];
-
   @override
   Widget build(BuildContext context) {
     if (connectionStatus == 'ConnectivityResult.none') {
@@ -51,27 +33,47 @@ class HomeState extends BaseViewState {
       //return _content(events, internet: false);
     } else {
       return Container(
+        height: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.7),
+          gradient: LinearGradient(
+            begin: FractionalOffset.topCenter,
+            end: FractionalOffset.bottomCenter,
+            colors: [Colors.black, Colors.blueGrey],
+          ),
         ),
         child: SafeArea(
-          child: StreamBuilder(
-            stream: Firestore.instance.collection('brewers').snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: Text('There are no brewers loading...'),
-                );
-              } else {
-                if (snapshot.hasData) {
-                  return _homeContent(events);
-                } else {
-                  return Center(
-                    child: Text('No encontramos información...'),
-                  );
-                }
-              }
-            },
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 2.0),
+                  child: Image.asset(
+                    'assets/icon.png',
+                    alignment: Alignment.center,
+                    height: 100.0,
+                  ),
+                ),
+                storyTellingWidget(),
+                SizedBox(
+                  height: 10.0,
+                ),
+                TitleTextUtils('Cervecerias Locales', Colors.white, 50.0),
+                _buildBrewersGrid(context),
+                //_buildEventsCards(events),
+              ],
+              /*StreamBuilder(
+                  stream: Firestore.instance.collection('brewers').snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting ||
+                        !snapshot.hasData) {
+                      return _shimmerLoading();
+                    } else {
+                      return _shimmerLoading();
+                    }
+                  },
+                ),*/
+            ),
           ),
         ),
       );
@@ -79,298 +81,111 @@ class HomeState extends BaseViewState {
   }
 }
 
-Widget _homeContent(List<BrewEvents> events) {
-  return SingleChildScrollView(
-    scrollDirection: Axis.vertical,
-    child: Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 2.0),
-          child: Image.asset(
-            'assets/icon.png',
-            alignment: Alignment.center,
-            height: 100.0,
-          ),
-        ),
-        storyTellingWidget(),
-        Column(
-          children: <Widget>[
-            Utils('Promociones', Colors.black87, 50.0),
-            _buildPromotionsCards()
-          ],
-        ),
-        Utils('Cervecerias Locales', Colors.white, 50.0),
-        _buildBrewersCarousel(),
-        Utils('Eventos Locales', Colors.black87, 50.0),
-        _buildEventsCards(events),
-        Utils('Tipos de cervezas', Colors.white, 50.0),
-        BeerTypes(),
-      ],
-    ),
-  );
-}
-
-/* Widget _buidlWithOutInternetContent() {
-  return Container(
-      child: ListView(
-        padding: EdgeInsets.all(2.0),
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          Text(
-            'SIN INTERNET',
-            style: TextStyle(
-                color: Colors.redAccent[400],
-                wordSpacing: 4.0,
-                fontSize: 40.0,
-                fontFamily: 'Future'),
-            textAlign: TextAlign.center,
-          ),
-          Utils('Promociones', Colors.white, 50.0),
-          _buildPromotionsCardsNoInternet(1),
-          Utils('Cervecerias Locales', Colors.white, 50.0),
-          _buildPromotionsCardsNoInternet(2),
-          //_buildBrewersCarousel(),
-          Utils('Eventos Locales', Colors.white, 50.0),
-          //_buildEventsCards(events),
-          _buildPromotionsCardsNoInternet(3),
-          Utils('Tipos de cervezas', Colors.greenAccent, 50.0),
-          _buildPromotionsCardsNoInternet(4),
-        ],
-      ),
-      decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage("assets/beer_blur.jpg"),
-        fit: BoxFit.cover,
-      )));
-} */
-
-Widget _buildEventsCards(List<BrewEvents> events) {
-  return Container(
-      margin: EdgeInsets.symmetric(vertical: 2.0),
-      height: 200.0,
-      child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          itemCount: events.length,
-          itemBuilder: (BuildContext context, int index) {
-            return _buildEvents(events[index], context);
-          }));
-}
-
-Widget _buildPromotionsCards() {
-  return Container(
-      margin: EdgeInsets.symmetric(vertical: 2.0),
-      height: 200.0,
-      child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          itemCount: 5,
-          itemBuilder: (BuildContext context, int index) {
-            return AwesomeCards(2);
-          }));
-}
-
-Widget _buildBrewersCarousel() {
-  return Container(
-    margin: EdgeInsets.only(bottom: 20.0),
-    height: 200.0,
-    child: StreamBuilder(
-      stream: Firestore.instance.collection('brewers').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.none) {
-          return Text('There are no brewers loading...');
-        }
-        return ListView.builder(
+Widget _buildBrewersGrid(context) {
+  //https://stackoverflow.com/questions/48405123/how-to-set-custom-height-for-widget-in-gridview-in-flutter
+  //var size = MediaQuery.of(context).size;
+  //var statusBarHeight = 24;
+  //final double itemHeight = (size.height - kToolbarHeight - statusBarHeight) / 2;
+  //final double itemWidth = size.width / 2;
+  return StreamBuilder(
+    stream: Firestore.instance.collection('brewers').snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        debugPrint('Cargó ${snapshot.data.documents}');
+        return Container(
+          margin: EdgeInsets.only(bottom: 20.0),
+          child: GridView.count(
+            crossAxisCount: 3,
             shrinkWrap: true,
-            padding: EdgeInsets.symmetric(vertical: 2.0),
-            scrollDirection: Axis.horizontal,
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (BuildContext context, int index) {
-              var child;
-              child = _buildCarouselItem(snapshot.data.documents[index]);
-              return GestureDetector(
-                  child: child,
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BrewersDetail(index))));
-            });
-      },
-    ),
-  );
-}
-
-Widget _buildEvents(BrewEvents event, BuildContext context) {
-  return GestureDetector(
-      child: _buildCustomCard(event.imageUri),
-      onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => EventsDetail())));
-}
-
-Widget _buildCarouselItem(DocumentSnapshot event) {
-  return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Container(
-          child: Card(
-            child: _buildCustomCard(event.data['imageUri']),
-          ),
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: Colors.black,
-              blurRadius: 10.0,
+            children: List.generate(
+              snapshot.data.documents.length,
+              (index) => Container(
+                margin: EdgeInsets.symmetric(vertical: 10.0),
+                child: _buildCustomCard(context,
+                    snapshot.data.documents[index].data['imageUri'], index),
+              ),
             ),
-          ])));
-}
-
-Widget _buildCustomCard(String url) {
-  return Card(
-      child: CachedNetworkImage(
-          imageUrl: url,
-          placeholder: (context, url) => Shimmer.fromColors(
-              direction: ShimmerDirection.ltr,
-              baseColor: Colors.grey[300],
-              highlightColor: Colors.grey[100],
-              child: Card(
-                  elevation: 4.0,
-                  child: Container(
-                    width: 150.0,
-                    height: 48.0,
-                    color: Colors.white,
-                  ))),
-          errorWidget: (context, url, error) => Card(
-              elevation: 4.0,
-              child: Container(
-                width: 150.0,
-                height: 48.0,
-                color: Colors.white,
-                child: Icon(Icons.error),
-              ))));
-}
-
-class LoadingListPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-        child: Shimmer.fromColors(
+          ),
+        );
+      } else {
+        return Shimmer.fromColors(
           baseColor: Colors.grey[300],
           highlightColor: Colors.grey[100],
-          child: Column(
-            children: [0, 1, 2, 3, 4, 5, 6]
-                .map((_) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 48.0,
-                            height: 48.0,
-                            color: Colors.green,
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 8.0,
-                                  color: Colors.yellow,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  height: 8.0,
-                                  color: Colors.blue,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                Container(
-                                  width: 40.0,
-                                  height: 8.0,
-                                  color: Colors.red,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ))
-                .toList(),
+          child: Container(
+            margin: EdgeInsets.only(bottom: 20.0),
+            child: GridView.count(
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              children: List.generate(
+                6,
+                (index) => Container(
+                  margin: EdgeInsets.symmetric(vertical: 10.0),
+                  child: _shimmerCard(),
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
+        );
+      }
+    },
+  );
 }
 
-Widget storyTellingWidget() {
-  return Container(
-    height: 300,
-    child: StoryView(
-      [
-        StoryItem.text(
-          "Hello world!\nHave a look at some great Ghanaian delicacies. I'm sorry if your mouth waters. \n\nTap!",
-          Colors.orange,
-          roundedTop: true,
+Widget _shimmerCard() {
+  return Shimmer.fromColors(
+    direction: ShimmerDirection.ltr,
+    baseColor: Colors.grey[300],
+    highlightColor: Colors.grey[100],
+    child: Card(
+      elevation: 4.0,
+      child: Container(
+        width: 150.0,
+        height: 60.0,
+        color: Colors.white,
+      ),
+    ),
+  );
+}
+
+Widget _buildCustomCard(context, String url, int index) {
+  debugPrint('URL: $url');
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BrewersDetail(index)));
+    },
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(90.0),
         ),
-        // StoryItem.inlineImage(
-        //   NetworkImage(
-        //       "https://image.ibb.co/gCZFbx/Banku-and-tilapia.jpg"),
-        //   caption: Text(
-        //     "Banku & Tilapia. The food to keep you charged whole day.\n#1 Local food.",
-        //     style: TextStyle(
-        //       color: Colors.white,
-        //       backgroundColor: Colors.black54,
-        //       fontSize: 17,
-        //     ),
-        //   ),
-        // ),
-        StoryItem.inlineImage(
-          NetworkImage(
-              "https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg"),
-          caption: Text(
-            "Omotuo & Nkatekwan; You will love this meal if taken as supper.",
-            style: TextStyle(
-              color: Colors.white,
-              backgroundColor: Colors.black54,
-              fontSize: 17,
+        gradient: LinearGradient(
+          begin: FractionalOffset.topCenter,
+          end: FractionalOffset.bottomCenter,
+          colors: [Colors.black, Colors.white.withOpacity(0.4)],
+        ),
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 10.0),
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            child: CachedNetworkImage(
+              fadeInDuration: Duration(milliseconds: 1500),
+              imageUrl: url,
+              fit: BoxFit.scaleDown,
+              placeholder: (context, url) => Image.network(url),
+              errorWidget: (context, url, error) => Card(
+                elevation: 4.0,
+                child: Container(
+                  child: Icon(Icons.error),
+                ),
+              ),
             ),
           ),
-        ),
-        StoryItem.inlineGif(
-          "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif",
-          caption: Text(
-            "Hektas, sektas and skatad",
-            style: TextStyle(
-              color: Colors.white,
-              backgroundColor: Colors.black54,
-              fontSize: 17,
-            ),
-          ),
-        )
-      ],
-      onStoryShow: (s) {
-        print("Showing a story");
-      },
-      onComplete: () {
-        print("Completed a cycle");
-      },
-      progressPosition: ProgressPosition.bottom,
-      repeat: false,
-      inline: true,
+        ],
+      ),
     ),
   );
 }
