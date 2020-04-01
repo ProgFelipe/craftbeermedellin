@@ -1,110 +1,80 @@
+import 'package:craftbeer/base_view.dart';
+import 'package:craftbeer/components/beer_detail.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
+import 'package:craftbeer/main_bloc.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class BrewersDetail extends StatefulWidget {
+class BrewersDetail extends BaseView {
   final int item;
+
   BrewersDetail(this.item);
 
   @override
   State<StatefulWidget> createState() {
-    return BrewersDetailState();
+    return BrewersDetailState(item: item);
   }
 }
 
-class BrewersDetailState extends State<BrewersDetail> {
+class BrewersDetailState extends BaseViewState<BrewersDetail> {
   bool isFavorite = false;
+  final int item;
 
-  _isFavorite(brewerName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favorites = (prefs.getStringList('favorites') ?? List());
-    setState(() {
-      isFavorite = favorites.contains(brewerName);
+  BrewersDetailState({this.item});
+
+  static const String apiRoot = 'brewers';
+  static const String brewName = 'name';
+  static const String brewsReleases = 'brewingOn';
+  static const String ibu = 'ibu';
+  static const String abv = 'abv';
+
+  final bloc = MainBloc();
+
+  _isFavorite(String brewerName) async {
+    await bloc.isFavorite(brewerName).then((value) {
+      setState(() {
+        isFavorite = value;
+      });
     });
-  }
-
-  _changeFavorite(String brewerName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favorites = (prefs.getStringList('favorites') ?? List());
-    bool exist = favorites != null ?? favorites.contains(brewerName);
-    isFavorite ? favorites.remove(brewerName) : favorites.add(brewerName);
-    print('Brewer is favorite: $exist ?.');
-    await prefs.setStringList('favorites', favorites);
-    setState(() {
-      isFavorite = !isFavorite;
-    });
-  }
-
-  Color fetchBeerColor(String type) {
-    switch (type.toLowerCase()) {
-      case 'ipa':
-        return Colors.orange;
-      case 'pale ale':
-        return Colors.orange[500];
-      case 'stout':
-        return Colors.brown[700];
-      case 'pilsen':
-        return Colors.yellow[500];
-      case 'porter':
-        return Colors.black54;
-      case 'amber':
-        return Colors.orange[400];
-      case 'doppelbock':
-        return Colors.brown;
-      case 'bock':
-        return Colors.yellow[300];
-      case 'dunkel':
-        return Colors.brown[700];
-      case 'marzen':
-        return Colors.orange[200];
-      case 'raunchbier':
-        return Colors.orangeAccent;
-      case 'weizenbier':
-        return Colors.yellow[600];
-      case 'weizenbock':
-        return Colors.brown[400];
-      case 'kÖlsh':
-        return Colors.yellow;
-      default:
-        return Colors.orange;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    initInternetValidation();
+
     return StreamBuilder(
-      stream: Firestore.instance.collection('brewers').snapshots(),
+      stream: Firestore.instance.collection(apiRoot).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Scaffold(
               appBar: AppBar(
-                //title: Text(widget.event.data['name'], style:  TextStyle(fontFamily: 'Faster', fontSize: 40.0),),
+                //title: Text(widget.event.data[brewName], style:  TextStyle(fontFamily: 'Faster', fontSize: 40.0),),
                 title: Text(''),
               ),
               body: Center(
                 child: Text('There are no brewers loading...'),
               ));
         }
-        _isFavorite(snapshot.data.documents[widget.item]['name']);
+
+        _isFavorite(snapshot.data.documents[item][brewName]);
         return Scaffold(
           appBar: AppBar(
-            //title: Text(widget.event.data['name'], style:  TextStyle(fontFamily: 'Faster', fontSize: 40.0),),
-            title: Text("${snapshot.data.documents[widget.item]['name']}"),
+            //title: Text(widget.event.data[brewName], style:  TextStyle(fontFamily: 'Faster', fontSize: 40.0),),
+            title: Text("${snapshot.data.documents[item][brewName]}"),
           ),
           body: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              errorWidget(),
               Row(
                 children: <Widget>[
                   CachedNetworkImage(
                     fadeInCurve: Curves.bounceInOut,
-                    imageUrl:
-                        snapshot.data.documents[widget.item]['imageUri'] ?? '',
+                    imageUrl: snapshot.data.documents[item]['imageUri'] ?? '',
                     width: 100.0,
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) {
@@ -112,7 +82,7 @@ class BrewersDetailState extends State<BrewersDetail> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            snapshot.data.documents[widget.item]['name'],
+                            snapshot.data.documents[item][brewName],
                             style: TextStyle(color: Colors.black),
                           ),
                           Container(
@@ -133,7 +103,7 @@ class BrewersDetailState extends State<BrewersDetail> {
                             height: 20.0,
                           ),
                           Text(
-                            'Cerveceria ${snapshot.data.documents[widget.item]['name']}',
+                            'Cerveceria ${snapshot.data.documents[item][brewName]}',
                             style: TextStyle(
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
                             maxLines: 5,
@@ -142,7 +112,7 @@ class BrewersDetailState extends State<BrewersDetail> {
                             height: 10.0,
                           ),
                           Text(
-                            snapshot.data.documents[widget.item]['description'],
+                            snapshot.data.documents[item]['description'],
                             textAlign: TextAlign.left,
                             style: TextStyle(fontSize: 16.0),
                             maxLines: 5,
@@ -156,8 +126,8 @@ class BrewersDetailState extends State<BrewersDetail> {
                             color: Colors.green,
                             onPressed: () async {
                               FlutterOpenWhatsapp.sendSingleMessage(
-                                  snapshot.data.documents[widget.item]['phone'],
-                                  "${snapshot.data.documents[widget.item]['name']}\nMe gustaría comprar una cerveza\n[CraftBeer Colombia]");
+                                  snapshot.data.documents[item]['phone'],
+                                  "${snapshot.data.documents[item][brewName]}\nMe gustaría comprar una cerveza\n[CraftBeer Colombia]");
                             },
                             icon: Icon(Icons.phone),
                             label: RichText(
@@ -170,8 +140,11 @@ class BrewersDetailState extends State<BrewersDetail> {
                           ),
                           FlatButton.icon(
                             onPressed: () {
-                              _changeFavorite(
-                                  snapshot.data.documents[widget.item]['name']);
+                              bloc.changeFavorite(isFavorite,
+                                  snapshot.data.documents[item][brewName]);
+                              setState(() {
+                                isFavorite = !isFavorite;
+                              });
                             },
                             icon: Icon(
                               isFavorite
@@ -188,45 +161,58 @@ class BrewersDetailState extends State<BrewersDetail> {
                   ),
                 ],
               ),
-              TitleTextUtils('Nuestras Cervezas', Colors.black, 40.0),
+              titleView('Nuestras Cervezas', color: Colors.black, size: 40.0),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
                 child: GridView.count(
                   crossAxisCount: 3,
                   shrinkWrap: true,
                   children: List.generate(
-                    snapshot.data.documents[widget.item]['brewingOn'].length,
-                    (index) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              BeerIcon.beerglass,
-                              size: 60.0,
-                              color: fetchBeerColor(
-                                  snapshot.data.documents[widget.item]
-                                          ['brewingOn'][index]['name'] ??
-                                      ''),
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  'IBU: ${snapshot.data.documents[widget.item]['brewingOn'][index]['ibu'] ?? ''}',
-                                  style: TextStyle(fontSize: 9.0),
-                                ),
-                                Text(
-                                  'ABV: ${snapshot.data.documents[widget.item]['brewingOn'][index]['abv'] ?? ''}',
-                                  style: TextStyle(fontSize: 9.0),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Text(
-                            '${snapshot.data.documents[widget.item]['brewingOn'][index]['name']}'),
-                      ],
+                    snapshot.data.documents[item][brewsReleases].length,
+                    (index) => GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => BeerDetailDialog(
+                            title: snapshot.data.documents[item][brewsReleases]
+                                [index][brewName],
+                            description: "Es una cerveza",
+                            buttonText: "Cerrar",
+                          ),
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Icon(
+                                BeerIcon.beerglass,
+                                size: 60.0,
+                                color: bloc.fetchBeerColor(
+                                    snapshot.data.documents[item][brewsReleases]
+                                            [index][brewName] ??
+                                        ''),
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    'IBU: ${snapshot.data.documents[item][brewsReleases][index][ibu] ?? ''}',
+                                    style: TextStyle(fontSize: 9.0),
+                                  ),
+                                  Text(
+                                    'ABV: ${snapshot.data.documents[item][brewsReleases][index][abv] ?? ''}',
+                                    style: TextStyle(fontSize: 9.0),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Text(
+                              '${snapshot.data.documents[item][brewsReleases][index][brewName]}'),
+                        ],
+                      ),
                     ),
                   ),
                 ),

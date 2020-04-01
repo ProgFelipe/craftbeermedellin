@@ -1,27 +1,25 @@
+import 'package:craftbeer/app_localization.dart';
 import 'package:flutter/material.dart';
 
-class TitleTextUtils extends StatelessWidget{
-  Color color;
+Widget titleView(String title,
+    {Color color = Colors.white, double size = 50.0}) {
+  return Padding(
+      padding: EdgeInsets.all(20.0),
+      child: Text(
+        title,
+        style: TextStyle(fontFamily: 'Blessed', fontSize: size, color: color),
+        textAlign: TextAlign.left,
+      ));
+}
 
-  String title;
-
-  double size;
-
-  TitleTextUtils(this.title, this.color, this.size);
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildTitle(title, color, size: 52.00);
-  }
-
-  Widget _buildTitle(String title, Color color, {double size = 50.0}) {
-    return Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Text(
-          title,
-          style: TextStyle(
-              fontFamily: 'Blessed', fontSize: size, color: color),
-          textAlign: TextAlign.left,
-        ));
-  }
+///Localization
+const String HOME = "home";
+const String EVENTS = "events";
+const String FAVORITES = "favorites";
+const String NO_DATA_ERROR = "no_data";
+const String LOCAL_BREWERS_TITLE = "local_brewers";
+const String WELCOME = "welcome_story_telling";
+String localizedText(context, String key) {
+  debugPrint(AppLocalizations.of(context).translate(key));
+  return AppLocalizations.of(context).translate(key);
 }

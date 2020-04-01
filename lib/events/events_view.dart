@@ -20,9 +20,9 @@ class EventsView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              TitleTextUtils('Promociones', Colors.white, 50.0),
+              titleView('Promociones'),
               _buildPromotionsCards(),
-              TitleTextUtils('Eventos Locales', Colors.white, 50.0),
+              titleView('Eventos Locales'),
               StreamBuilder(
                 stream: Firestore.instance.collection('events').snapshots(),
                 builder: (context, snapshot) {

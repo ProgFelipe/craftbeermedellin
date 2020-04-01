@@ -1,13 +1,14 @@
+import 'package:craftbeer/base_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Favorites extends StatefulWidget {
+class Favorites extends BaseView {
   @override
   _FavoritesState createState() => _FavoritesState();
 }
 
-class _FavoritesState extends State<Favorites> {
+class _FavoritesState extends BaseViewState<Favorites> {
   List<String> favorites = List();
   @override
   void initState() {
@@ -114,7 +115,6 @@ class _FavoritesState extends State<Favorites> {
                               favorites[index],
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontFamily: 'Faster',
                                   fontSize: 20.0,
                                   color: Colors.white),
                             ));

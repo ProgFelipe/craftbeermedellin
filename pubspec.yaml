@@ -17,6 +17,8 @@ dependencies:
   cloud_firestore: 0.8.2+1
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   story_view: ^0.11.4
   flutter_open_whatsapp: ^0.1.2
   shared_preferences: ^0.5.6+3
@@ -52,6 +54,8 @@ flutter:
   assets:
     - assets/beer_blur.jpg
     - assets/icon.png
+    - i18n/en.json
+    - i18n/es.json
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -68,13 +72,7 @@ flutter:
   fonts:
     - family: Blessed
       fonts:
-      - asset: fonts/BLESD.otf
-    - family: Faster
-      fonts:
-      - asset: fonts/FasterOne-Regular.ttf
-    - family: Sup
-      fonts:
-      - asset: fonts/Bottomsup.ttf
+      - asset: fonts/Blesd.otf
     - family:  BeerIcon
       fonts:
        - asset: fonts/BeerIcon.ttf

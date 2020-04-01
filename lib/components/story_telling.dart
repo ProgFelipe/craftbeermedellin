@@ -1,43 +1,28 @@
+import 'package:craftbeer/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:story_view/story_view.dart';
 
-Widget storyTellingWidget() {
+Widget storyTellingWidget(context) {
+  final List<String> gifs = [
+    "https://media.giphy.com/media/zXubYhkWFc9uE/giphy.gif",
+    "https://media.giphy.com/media/Zw3oBUuOlDJ3W/giphy.gif",
+    "https://media.giphy.com/media/J0ySNzZ5APILC/giphy.gif",
+    "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif"
+  ];
+
   return Container(
-    height: 300,
+    height: 240,
     child: StoryView(
       [
         StoryItem.text(
-          "Bienvenido\nBrewers Colombia.!\n\nLa cerveza artesanal es nuestra pasión \n\nConoce sobre cercezas artesanales locales!",
+          localizedText(context, WELCOME),
           Colors.amber,
           roundedTop: true,
+          duration: Duration(milliseconds: 2000),
         ),
-        // StoryItem.inlineImage(
-        //   NetworkImage(
-        //       "https://image.ibb.co/gCZFbx/Banku-and-tilapia.jpg"),
-        //   caption: Text(
-        //     "Banku & Tilapia. The food to keep you charged whole day.\n#1 Local food.",
-        //     style: TextStyle(
-        //       color: Colors.white,
-        //       backgroundColor: Colors.black54,
-        //       fontSize: 17,
-        //     ),
-        //   ),
-        // ),
-        /*StoryItem.inlineImage(
-          NetworkImage(
-              "https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg"),
-          caption: Text(
-            "Omotuo & Nkatekwan; You will love this meal if taken as supper.",
-            style: TextStyle(
-              color: Colors.white,
-              backgroundColor: Colors.black54,
-              fontSize: 17,
-            ),
-          ),
-        ),*/
         StoryItem.inlineGif(
-          "https://media.giphy.com/media/zXubYhkWFc9uE/giphy.gif",
+          gifs[0],
           caption: Text(
             "Que es esto?",
             style: TextStyle(
@@ -48,7 +33,7 @@ Widget storyTellingWidget() {
           ),
         ),
         StoryItem.inlineGif(
-          "https://media.giphy.com/media/Zw3oBUuOlDJ3W/giphy.gif",
+          gifs[1],
           caption: Text(
             "No lo se pero Salud!!",
             style: TextStyle(
@@ -59,7 +44,7 @@ Widget storyTellingWidget() {
           ),
         ),
         StoryItem.inlineGif(
-          "https://media.giphy.com/media/J0ySNzZ5APILC/giphy.gif",
+          gifs[2],
           caption: Text(
             "Ooooh siiii!!",
             style: TextStyle(
@@ -70,7 +55,7 @@ Widget storyTellingWidget() {
           ),
         ),
         StoryItem.inlineGif(
-          "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif",
+          gifs[3],
           caption: Text(
             "Me encantaaaa",
             style: TextStyle(
@@ -89,7 +74,6 @@ Widget storyTellingWidget() {
       },
       progressPosition: ProgressPosition.bottom,
       repeat: false,
-      inline: true,
     ),
   );
 }

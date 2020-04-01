@@ -1,18 +1,29 @@
+import 'package:craftbeer/app_localization.dart';
 import 'package:craftbeer/events/events_view.dart';
-import 'package:craftbeer/favorites_view.dart';
+import 'package:craftbeer/favorites/favorites_view.dart';
+import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import './Home/home.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Craft Beer Colombia',
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('es', ''),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: Colors.blueGrey,
       ),
       home: Navigator(),
     );
@@ -36,30 +47,30 @@ class _NavigatorState extends State<Navigator> {
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.brown,
-        onTap: onTabTapped, //
-        currentIndex: _currentIndex, //
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
               activeIcon: Icon(
                 Icons.home,
-                color: Colors.blue[700],
+                color: Colors.amber[700],
               ),
               title: Text(
-                'Home',
-                style: TextStyle(color: Colors.blue[700]),
+                localizedText(context, HOME),
+                style: TextStyle(color: Colors.amber[700]),
               ),
               backgroundColor: Colors.brown),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
             activeIcon: Icon(
               Icons.receipt,
-              color: Colors.amber[700],
+              color: Colors.blue[700],
             ),
             backgroundColor: Colors.blueGrey,
             title: Text(
-              'Eventos',
-              style: TextStyle(color: Colors.amber[700]),
+              localizedText(context, EVENTS),
+              style: TextStyle(color: Colors.blue[700]),
             ),
           ),
           BottomNavigationBarItem(
@@ -69,7 +80,8 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.red,
             ),
             backgroundColor: Colors.blueGrey,
-            title: Text('Favoritas', style: TextStyle(color: Colors.red[700])),
+            title: Text(localizedText(context, FAVORITES),
+                style: TextStyle(color: Colors.red[700])),
           ),
         ],
       ),

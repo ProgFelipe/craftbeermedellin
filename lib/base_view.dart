@@ -1,19 +1,53 @@
+import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 
-class BaseView extends StatefulWidget{
+class BaseView extends StatefulWidget {
+  static const String NO_INTERNET_CONNECTION = 'ConnectivityResult.none';
+
   @override
   State<StatefulWidget> createState() {
     return BaseViewState();
   }
 }
 
-class BaseViewState extends State<BaseView>{
+class BaseViewState<T> extends State<BaseView> {
   String connectionStatus = 'Unknown';
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  bool isOffline = false;
+
+  void initInternetValidation() {
+    var online = connectionStatus == BaseView.NO_INTERNET_CONNECTION;
+    if (isOffline != online) {
+      setState(() {
+        isOffline = online;
+      });
+    }
+  }
+
+  Widget errorWidget() {
+    return isOffline
+        ? Container(
+            width: double.infinity,
+            height: 40.0,
+            color: Colors.redAccent,
+            child: Center(
+              child: Text(
+                localizedText(context, NO_DATA_ERROR),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
+        : SizedBox();
+  }
 
   @override
   void initState() {
@@ -31,7 +65,7 @@ class BaseViewState extends State<BaseView>{
     super.dispose();
   }
 
- // Platform messages are asynchronous, so we initialize in an async method.
+  // Platform messages are asynchronous, so we initialize in an async method.
   Future<Null> initConnectivity() async {
     String connectionStatus;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -54,15 +88,8 @@ class BaseViewState extends State<BaseView>{
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Plugin example app'),
-      ),
-      body: Center(child: Text('Connection Status: $connectionStatus\n')),
-    );
+    return Scaffold();
   }
-
 }
