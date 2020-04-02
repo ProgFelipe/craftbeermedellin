@@ -53,6 +53,15 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
               appBar: AppBar(
                 //title: Text(widget.event.data[brewName], style:  TextStyle(fontFamily: 'Faster', fontSize: 40.0),),
                 title: Text(''),
+                leading: FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    BeerIcon.beerglass,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               body: Center(
                 child: Text('There are no brewers loading...'),
@@ -63,7 +72,17 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
         return Scaffold(
           appBar: AppBar(
             //title: Text(widget.event.data[brewName], style:  TextStyle(fontFamily: 'Faster', fontSize: 40.0),),
+            centerTitle: true,
             title: Text("${snapshot.data.documents[item][brewName]}"),
+            leading: FlatButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Icon(
+                BeerIcon.beerglass,
+                color: Colors.white,
+              ),
+            ),
           ),
           body: Column(
             mainAxisSize: MainAxisSize.max,
@@ -72,25 +91,45 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
               errorWidget(),
               Row(
                 children: <Widget>[
-                  CachedNetworkImage(
-                    fadeInCurve: Curves.bounceInOut,
-                    imageUrl: snapshot.data.documents[item]['imageUri'] ?? '',
-                    width: 100.0,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, url, error) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            snapshot.data.documents[item][brewName],
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Container(
-                            child: Icon(Icons.error),
-                          ),
-                        ],
-                      );
-                    },
+                  Column(
+                    children: <Widget>[
+                      FlatButton.icon(
+                        onPressed: () {
+                          bloc.changeFavorite(isFavorite,
+                              snapshot.data.documents[item][brewName]);
+                          setState(() {
+                            isFavorite = !isFavorite;
+                          });
+                        },
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          size: 40.0,
+                          color: Colors.red,
+                        ),
+                        label: Text(''),
+                      ),
+                      CachedNetworkImage(
+                        fadeInCurve: Curves.bounceInOut,
+                        imageUrl:
+                            snapshot.data.documents[item]['imageUri'] ?? '',
+                        width: 100.0,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                snapshot.data.documents[item][brewName],
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Container(
+                                child: Icon(Icons.error),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   Expanded(
                     child: Container(
@@ -123,6 +162,36 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                             height: 20.0,
                           ),
                           FlatButton.icon(
+                            color: Colors.black54,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    BeerDetailDialog(
+                                  title: 'Oscar',
+                                  brewerImage: Image.network(
+                                      'https://d1ynl4hb5mx7r8.cloudfront.net/wp-content/uploads/2018/10/26174056/bonfire-head-brewer.jpg'),
+                                  brandImage: Image.network(snapshot
+                                      .data.documents[item]['imageUri']),
+                                  description:
+                                      "Soy un emprendedor con basta certificación internacional. Ganador de varios premios locales y nacionales.",
+                                  buttonText: "Volver",
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.info_outline,
+                              color: Colors.grey,
+                            ),
+                            label: RichText(
+                              text: TextSpan(
+                                text: 'Conocenos',
+                                style: new TextStyle(
+                                    color: Colors.white, fontSize: 20.0),
+                              ),
+                            ),
+                          ),
+                          FlatButton.icon(
                             color: Colors.green,
                             onPressed: () async {
                               FlutterOpenWhatsapp.sendSingleMessage(
@@ -138,23 +207,6 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                               ),
                             ),
                           ),
-                          FlatButton.icon(
-                            onPressed: () {
-                              bloc.changeFavorite(isFavorite,
-                                  snapshot.data.documents[item][brewName]);
-                              setState(() {
-                                isFavorite = !isFavorite;
-                              });
-                            },
-                            icon: Icon(
-                              isFavorite
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              size: 40.0,
-                              color: Colors.red,
-                            ),
-                            label: Text('Favorito'),
-                          )
                         ],
                       ),
                     ),
@@ -174,11 +226,17 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) => BeerDetailDialog(
-                            title: snapshot.data.documents[item][brewsReleases]
-                                [index][brewName],
-                            description: "Es una cerveza",
-                            buttonText: "Cerrar",
-                          ),
+                              title: snapshot.data.documents[item]
+                                  [brewsReleases][index][brewName],
+                              description:
+                                  "${snapshot.data.documents[item][brewsReleases][index][brewName]} esta cerveza fue creada con un toque amargo y jengibre ideal para el clima",
+                              buttonText: "Volver",
+                              circleAvatar: CircleAvatar(
+                                child: Image.network(
+                                    'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200'),
+                                backgroundColor: Colors.orangeAccent[200],
+                                radius: Consts.avatarRadius,
+                              )),
                         );
                       },
                       child: Column(
@@ -216,7 +274,37 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                     ),
                   ),
                 ),
-              )
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  FlatButton(
+                    onPressed: () {},
+                    child: Image.asset(
+                      'assets/instagram.png',
+                      width: 40.0,
+                      height: 40.0,
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {},
+                    child: Image.asset(
+                      'assets/facebook.png',
+                      width: 40.0,
+                      height: 40.0,
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {},
+                    child: Image.asset(
+                      'assets/youtube.png',
+                      width: 40.0,
+                      height: 40.0,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         );

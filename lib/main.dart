@@ -1,4 +1,6 @@
 import 'package:craftbeer/app_localization.dart';
+import 'package:craftbeer/categories/beer_category.dart';
+import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/events/events_view.dart';
 import 'package:craftbeer/favorites/favorites_view.dart';
 import 'package:craftbeer/utils.dart';
@@ -39,7 +41,12 @@ class Navigator extends StatefulWidget {
 
 class _NavigatorState extends State<Navigator> {
   int _currentIndex = 0;
-  final List<Widget> _children = [Home(), EventsView(), Favorites()];
+  final List<Widget> _children = [
+    Home(),
+    EventsView(),
+    BeerCategory(),
+    Favorites()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -54,34 +61,46 @@ class _NavigatorState extends State<Navigator> {
               icon: Icon(Icons.home),
               activeIcon: Icon(
                 Icons.home,
-                color: Colors.amber[700],
+                color: Colors.white,
               ),
               title: Text(
                 localizedText(context, HOME),
-                style: TextStyle(color: Colors.amber[700]),
+                style: TextStyle(color: Colors.white),
               ),
-              backgroundColor: Colors.brown),
+              backgroundColor: Colors.black),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
             activeIcon: Icon(
               Icons.receipt,
-              color: Colors.blue[700],
+              color: Colors.red[500],
             ),
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Colors.black,
             title: Text(
               localizedText(context, EVENTS),
-              style: TextStyle(color: Colors.blue[700]),
+              style: TextStyle(color: Colors.red[400]),
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(BeerIcon.beerglass),
+            activeIcon: Icon(
+              BeerIcon.beerglass,
+              color: Colors.orangeAccent,
+            ),
+            backgroundColor: Colors.black,
+            title: Text(
+              'Beer',
+              style: TextStyle(color: Colors.orangeAccent),
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             activeIcon: Icon(
               Icons.favorite,
-              color: Colors.red,
+              color: Colors.redAccent,
             ),
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Colors.orangeAccent,
             title: Text(localizedText(context, FAVORITES),
-                style: TextStyle(color: Colors.red[700])),
+                style: TextStyle(color: Colors.redAccent)),
           ),
         ],
       ),

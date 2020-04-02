@@ -27,7 +27,6 @@ class EventsView extends StatelessWidget {
                 stream: Firestore.instance.collection('events').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-
                     List<Widget> cities = List();
 
                     snapshot.data.documents.forEach((city) {
@@ -51,10 +50,6 @@ class EventsView extends StatelessWidget {
 
 List<Widget> _createEventsCards(DocumentSnapshot city) {
   List<Widget> events = List();
-  events.add(Text(
-    'Ciudad ${city['name']}',
-    style: TextStyle(color: Colors.white),
-  ));
   city['evento'].forEach((event) {
     events.add(
       Container(
@@ -65,8 +60,9 @@ List<Widget> _createEventsCards(DocumentSnapshot city) {
             child: Column(
               children: <Widget>[
                 Text(
-                  '${event['name']}',
+                  '${event['name']}\n${city['name']}',
                   style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(
                   height: 10.0,

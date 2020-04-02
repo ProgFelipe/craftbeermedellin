@@ -1,5 +1,7 @@
+import 'package:craftbeer/components/beer_filter.dart';
+import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/home/brewers_detail.dart';
-import 'package:craftbeer/components/story_telling.dart';
+import 'package:craftbeer/home/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
@@ -16,6 +18,8 @@ class Home extends BaseView {
 }
 
 class HomeState extends BaseViewState {
+  HomeBloc bloc = HomeBloc();
+
   @override
   void dispose() {
     super.dispose();
@@ -27,17 +31,19 @@ class HomeState extends BaseViewState {
 
     return Container(
       height: double.infinity,
-      decoration: BoxDecoration(
+      color: Colors.black87,
+      /*decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: FractionalOffset.topCenter,
           end: FractionalOffset.bottomCenter,
           colors: [Colors.black, Colors.blueGrey],
         ),
-      ),
+      ),*/
       child: SafeArea(
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               errorWidget(),
               Padding(
@@ -48,10 +54,28 @@ class HomeState extends BaseViewState {
                   height: 100.0,
                 ),
               ),
-              storyTellingWidget(context),
-              SizedBox(
-                height: 10.0,
+              //storyTellingWidget(context),
+              Container(
+                margin: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text(
+                    'Buscar cerveza',
+                    style: TextStyle(color: Colors.grey[400]),
+                  ),
+                ),
               ),
+              titleView('Top Week Selections'),
+              topBeersOfWeek(),
+              //buildCategorySearch(false),
+              titleView('Categories'),
+              buildCategorySearch(true),
               titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
               _buildBrewersGrid(context),
               //_buildEventsCards(events),

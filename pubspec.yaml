@@ -52,8 +52,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/beer_blur.jpg
-    - assets/icon.png
+    - assets/
     - i18n/en.json
     - i18n/es.json
   #  - images/a_dot_ham.jpeg
@@ -76,6 +75,9 @@ flutter:
     - family:  BeerIcon
       fonts:
        - asset: fonts/BeerIcon.ttf
+    - family: Patua
+      fonts:
+       - asset: fonts/PatuaOne.ttf
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
