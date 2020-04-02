@@ -1,7 +1,5 @@
 import 'dart:math';
 import 'dart:ui';
-
-import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/home/brewers_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -26,6 +24,7 @@ const List<String> beerCategories = [
 Widget buildCategorySearch(bool category) {
   return Container(
     height: 120.0,
+    margin: EdgeInsets.symmetric(horizontal: 5.0),
     decoration: BoxDecoration(),
     child: ListView.builder(
       scrollDirection: Axis.horizontal,

@@ -53,21 +53,22 @@ class _NavigatorState extends State<Navigator> {
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        fixedColor: Colors.brown,
+        //fixedColor: Colors.brown,
         onTap: onTabTapped,
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              activeIcon: Icon(
-                Icons.home,
-                color: Colors.white,
-              ),
-              title: Text(
+            icon: Icon(Icons.home),
+            activeIcon: Icon(
+              Icons.home,
+              color: Colors.white,
+            ),
+            title: Text(
                 localizedText(context, HOME),
                 style: TextStyle(color: Colors.white),
               ),
-              backgroundColor: Colors.black),
+            backgroundColor: Colors.black,
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
             activeIcon: Icon(

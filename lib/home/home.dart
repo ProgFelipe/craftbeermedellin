@@ -32,13 +32,6 @@ class HomeState extends BaseViewState {
     return Container(
       height: double.infinity,
       color: Colors.black87,
-      /*decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: FractionalOffset.topCenter,
-          end: FractionalOffset.bottomCenter,
-          colors: [Colors.black, Colors.blueGrey],
-        ),
-      ),*/
       child: SafeArea(
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -47,7 +40,7 @@ class HomeState extends BaseViewState {
             children: <Widget>[
               errorWidget(),
               Padding(
-                padding: EdgeInsets.only(top: 2.0),
+                padding: EdgeInsets.only(top: 4.0),
                 child: Image.asset(
                   'assets/icon.png',
                   alignment: Alignment.center,
@@ -55,22 +48,7 @@ class HomeState extends BaseViewState {
                 ),
               ),
               //storyTellingWidget(context),
-              Container(
-                margin: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.search),
-                  title: Text(
-                    'Buscar cerveza',
-                    style: TextStyle(color: Colors.grey[400]),
-                  ),
-                ),
-              ),
+              _searchView(),
               titleView('Top Week Selections'),
               topBeersOfWeek(),
               //buildCategorySearch(false),
@@ -85,6 +63,25 @@ class HomeState extends BaseViewState {
       ),
     );
   }
+}
+
+Widget _searchView() {
+  return Container(
+    margin: const EdgeInsets.all(10.0),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(
+        Radius.circular(10.0),
+      ),
+    ),
+    child: ListTile(
+      leading: Icon(Icons.search),
+      title: Text(
+        'Buscar cerveza',
+        style: TextStyle(color: Colors.grey[400]),
+      ),
+    ),
+  );
 }
 
 Widget _buildBrewersGrid(context) {
@@ -108,21 +105,7 @@ Widget _buildBrewersGrid(context) {
           ),
         );
       } else {
-        return Shimmer.fromColors(
-          baseColor: Colors.grey[300],
-          highlightColor: Colors.grey[100],
-          child: Container(
-            margin: EdgeInsets.only(bottom: 20.0),
-            child: GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              children: List.generate(
-                6,
-                (index) => _shimmerBrewerCard(),
-              ),
-            ),
-          ),
-        );
+        return _shimmerBrewers();
       }
     },
   );
@@ -141,16 +124,25 @@ BoxDecoration _brewersDecoration() {
   );
 }
 
-Widget _shimmerBrewerCard() {
+Widget _shimmerBrewers() {
   return Shimmer.fromColors(
-    direction: ShimmerDirection.ltr,
-    baseColor: Colors.grey[300],
-    highlightColor: Colors.grey[100],
-    child: Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      width: 150.0,
-      height: 60.0,
-      decoration: _brewersDecoration(),
+    baseColor: Colors.black,
+    highlightColor: Colors.white,
+    child: GridView.count(
+      crossAxisCount: 3,
+      shrinkWrap: true,
+      children: List.generate(
+        6,
+        (index) => Container(
+          margin: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(90.0),
+            ),
+            color: Colors.black54,
+          ),
+        ),
+      ),
     ),
   );
 }
@@ -163,28 +155,31 @@ Widget _brewerCard(context, String url, String name, int index) {
     },
     child: Container(
       decoration: _brewersDecoration(),
-      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      child: Container(
-        alignment: Alignment.center,
-        child: CachedNetworkImage(
-          fadeInDuration: Duration(milliseconds: 1500),
-          imageUrl: url ?? '',
-          fit: BoxFit.scaleDown,
-          placeholder: (context, url) => Image.network(url),
-          errorWidget: (context, url, error) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                name,
-                style: TextStyle(color: Colors.white),
-              ),
-              Container(
-                child: Icon(Icons.error),
-              ),
-            ],
-          ),
-        ),
-      ),
+      margin: EdgeInsets.all(10.0),
+      child: url != null && url.isNotEmpty
+          ? CachedNetworkImage(
+              fadeInDuration: Duration(milliseconds: 1500),
+              imageUrl: url ?? '',
+              fit: BoxFit.scaleDown,
+              placeholder: (context, url) => Image.network(url),
+              errorWidget: (context, url, error) => errorColumn(name),
+            )
+          : errorColumn(name),
     ),
+  );
+}
+
+Column errorColumn(String brewerName) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Text(
+        brewerName,
+        style: TextStyle(color: Colors.white),
+      ),
+      Container(
+        child: Icon(Icons.error),
+      ),
+    ],
   );
 }
