@@ -1,6 +1,6 @@
-import 'package:craftbeer/components/beer_filter.dart';
-import 'package:craftbeer/components/beer_icon_icons.dart';
+import 'package:craftbeer/home/components/beer_filter.dart';
 import 'package:craftbeer/home/brewers_detail.dart';
+import 'package:craftbeer/home/components/image_error.dart';
 import 'package:craftbeer/home/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +9,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import '../utils.dart';
 import '../base_view.dart';
+
+const int SHIMMER_BREWER_GRID_COUNT = 6;
 
 class Home extends BaseView {
   @override
@@ -50,10 +52,10 @@ class HomeState extends BaseViewState {
               //storyTellingWidget(context),
               _searchView(),
               titleView('Top Week Selections'),
-              topBeersOfWeek(),
+              topBeersOfWeek(context),
               //buildCategorySearch(false),
               titleView('Categories'),
-              buildCategorySearch(true),
+              buildCategorySearch(context),
               titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
               _buildBrewersGrid(context),
               //_buildEventsCards(events),
@@ -132,7 +134,7 @@ Widget _shimmerBrewers() {
       crossAxisCount: 3,
       shrinkWrap: true,
       children: List.generate(
-        6,
+        SHIMMER_BREWER_GRID_COUNT,
         (index) => Container(
           margin: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
@@ -166,20 +168,5 @@ Widget _brewerCard(context, String url, String name, int index) {
             )
           : errorColumn(name),
     ),
-  );
-}
-
-Column errorColumn(String brewerName) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      Text(
-        brewerName,
-        style: TextStyle(color: Colors.white),
-      ),
-      Container(
-        child: Icon(Icons.error),
-      ),
-    ],
   );
 }

@@ -64,9 +64,9 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.white,
             ),
             title: Text(
-                localizedText(context, HOME),
-                style: TextStyle(color: Colors.white),
-              ),
+              localizedText(context, HOME),
+              style: TextStyle(color: Colors.white),
+            ),
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
@@ -99,7 +99,7 @@ class _NavigatorState extends State<Navigator> {
               Icons.favorite,
               color: Colors.redAccent,
             ),
-            backgroundColor: Colors.orangeAccent,
+            backgroundColor: Colors.black,
             title: Text(localizedText(context, FAVORITES),
                 style: TextStyle(color: Colors.redAccent)),
           ),

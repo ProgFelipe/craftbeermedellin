@@ -21,7 +21,7 @@ class EventsView extends StatelessWidget {
           child: Column(
             children: <Widget>[
               titleView('Promociones'),
-              _buildPromotionsCards(),
+              _buildPromotionsCards(context),
               titleView('Eventos Locales'),
               StreamBuilder(
                 stream: Firestore.instance.collection('events').snapshots(),
@@ -59,19 +59,18 @@ List<Widget> _createEventsCards(DocumentSnapshot city) {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: <Widget>[
-                Text(
-                  '${event['name']}\n${city['name']}',
-                  style: TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                ),
+                _emptyOrNullSafetyText(event['name']),
+                _emptyOrNullSafetyText(city['name']),
                 SizedBox(
                   height: 10.0,
                 ),
-                Text('${event['description']}'),
-                ListTile(
-                  leading: Icon(Icons.date_range),
-                  title: Text('${event['date']}'),
-                ),
+                _emptyOrNullSafetyText(event['description']),
+                event['date'] != null
+                    ? ListTile(
+                        leading: Icon(Icons.date_range),
+                        title: Text('${event['date']}'),
+                      )
+                    : SizedBox(),
                 Container(
                   alignment: Alignment.center,
                   child: CachedNetworkImage(
@@ -97,16 +96,37 @@ List<Widget> _createEventsCards(DocumentSnapshot city) {
   return events;
 }
 
-Widget _buildPromotionsCards() {
-  return Container(
-      margin: EdgeInsets.symmetric(vertical: 2.0),
-      height: 200.0,
-      child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          itemCount: 5,
-          itemBuilder: (BuildContext context, int index) {
-            return AwesomeCards(2);
-          }));
+Widget _buildPromotionsCards(context) {
+  return StreamBuilder(
+      stream: Firestore.instance.collection('promotions').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+              margin: EdgeInsets.symmetric(vertical: 2.0),
+              height: 200.0,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return AwesomeCards(
+                        2, snapshot.data.documents[index]['imageUri']);
+                  }));
+        } else {
+          return Text('No hay promociones');
+        }
+      });
+}
+
+Widget _emptyOrNullSafetyText(String value) {
+  if (value == null) {
+    return SizedBox();
+  } else {
+    return Text(
+      value,
+      style: TextStyle(fontSize: 20.0),
+      textAlign: TextAlign.center,
+    );
+  }
 }
