@@ -60,7 +60,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
             ));
           }
 
-          debugPrint('Brewer data: ${snapshot.data}');
+          debugPrint('CERVEZAS ID ${snapshot.data['beers']}');
           //_isFavorite(bloc.getBrewerName(snapshot));
           return Container(
             child: Column(
@@ -209,7 +209,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                         children: <Widget>[
                           titleView('Nuestras Cervezas',
                               color: Colors.black, size: 40.0, padding: 0.0),
-                          _ourBeersWidget(bloc, brewerRef),
+                          _ourBeersWidget(bloc, snapshot.data['beers']),
                           titleView('Stoud Imperial',
                               color: Colors.black, size: 25.0, padding: 0.0),
                           Text(
@@ -295,64 +295,63 @@ Widget _beerDialog(String title, String description, String imageUri,
   }
 }
 
-Widget _ourBeersWidget(BrewerBloc bloc, String brewerDocumentRef) {
-  return StreamBuilder(
-      stream: bloc.fetchBeers(brewerDocumentRef),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          debugPrint('BEERS data: ${snapshot.data.documents}');
-          return GridView.count(
-            crossAxisCount: 3,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            children: List.generate(
-              0,
-              (index) => GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) => _beerDialog(
-                          bloc.getBeerName(snapshot, index),
-                          "${bloc.getBeerName(snapshot, index)} esta cerveza fue creada con un toque amargo y jengibre ideal para el clima",
-                          'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200'));
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+Widget _ourBeersWidget(BrewerBloc bloc, List<dynamic> beers) {
+  debugPrint('Get beers data: $beers');
+
+  return GridView.count(
+    crossAxisCount: 3,
+    physics: const NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    children: List.generate(
+      beers.length,
+      (index) => StreamBuilder(
+        stream: bloc.getBeer(beers[index].documentID),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Text('No data');
+          }
+          debugPrint("${snapshot.data['name']}");
+          return GestureDetector(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => _beerDialog(
+                      snapshot.data['name'],
+                      "${snapshot.data['name']} esta cerveza fue creada con un toque amargo y jengibre ideal para el clima",
+                      'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200'));
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
                   children: <Widget>[
-                    Row(
+                    Icon(
+                      BeerIcon.beerglass,
+                      size: 60.0,
+                      color: Colors.white,
+                    ),
+                    Column(
                       children: <Widget>[
-                        Icon(
-                          BeerIcon.beerglass,
-                          size: 60.0,
-                          color: bloc.fetchBeerColor(
-                              bloc.getBeerName(snapshot, index)),
+                        Text(
+                          'IBU', //'IBU: ${bloc.getBeerName(snapshot)}',
+                          style: TextStyle(fontSize: 9.0),
                         ),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              'IBU: ${bloc.getIbu(snapshot, index)}',
-                              style: TextStyle(fontSize: 9.0),
-                            ),
-                            Text(
-                              //'ABV: ${bloc.getAbv(snapshot, index)}',
-                              '',
-                              style: TextStyle(fontSize: 9.0),
-                            ),
-                          ],
+                        Text(
+                          //'ABV: ${bloc.getAbv(snapshot, index)}',
+                          '',
+                          style: TextStyle(fontSize: 9.0),
                         ),
                       ],
                     ),
-                    Text('${bloc.getBeerName(snapshot, index)}'),
                   ],
                 ),
-              ),
+                Text('${snapshot.data['name']}'),
+              ],
             ),
           );
-        } else {
-          return SizedBox(
-            height: 10.0,
-          );
-        }
-      });
+        },
+      ),
+    ),
+  );
 }

@@ -20,6 +20,7 @@ class Api {
   static const String brewsReleases = 'brewingOn';
   static const String ibu = 'ibu';
   static const String abv = 'abv';
+  static const String votes = 'votes';
 
   ///Beer Categories
 
@@ -48,12 +49,30 @@ class Api {
     }).asStream();*/
   }
 
+  Stream<DocumentSnapshot> fetchBeerByReference(String beerRef) {
+    return _fireStore.collection(beers).document(beerRef).snapshots();
+  }
+
   Stream<QuerySnapshot> fetchBrewerBeers(String brewerDocumentRef) {
-    debugPrint('Beers route: ${'/$brewer/$brewerDocumentRef'}');
+    //debugPrint('Beers $brewer : ${'/$brewers/$brewerDocumentRef'}');
+    fetchBeersTest(brewerDocumentRef);
     return _fireStore
         .collection(beers)
         .where(brewer, isEqualTo: '/$brewers/$brewerDocumentRef')
         .snapshots();
+  }
+
+  void fetchBeersTest(String brewerDocumentRef) {
+    _fireStore
+        .collection(beers)
+        .where(brewer, isEqualTo: '/$brewers/$brewerDocumentRef')
+        .getDocuments()
+        .then((value) {
+      debugPrint("${value}");
+      value.documents.forEach((element) {
+        debugPrint("${element}");
+      });
+    });
   }
 
   Future<int> getBrewerVotes(String brewerName) {
@@ -76,16 +95,12 @@ class Api {
         .updateData({ranking: currentRanking + 1});
   }
 
-  Future<void> beerVote(String brewerName, String password) async {
-    //Brewer -> Beer -> increase vote
-    _fireStore
-        .collection(brewers)
-        .where(name, isEqualTo: brewerName)
-        .getDocuments()
-        .then((doc) {
-      if (doc != null) {}
+  Future<void> beerVote(String beerRef) async {
+    var document = _fireStore.collection(beers).document(beerRef);
+    document.get().then((beer) {
+      int numVotes = beer[votes];
+      document.updateData({ranking: numVotes + 1});
     });
-    //.setData({'email': email, 'password': password, 'goalAdded': false});
   }
 
   ///Events

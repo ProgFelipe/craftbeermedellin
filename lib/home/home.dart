@@ -150,7 +150,6 @@ Widget _shimmerBrewers() {
 }
 
 Widget _brewerCard(context, String url, String name, String reference) {
-  debugPrint('REFERENCE $reference');
   return GestureDetector(
     onTap: () {
       Navigator.push(context,

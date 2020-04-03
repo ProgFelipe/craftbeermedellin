@@ -60,7 +60,8 @@ class BrewerBloc implements BlocBase {
     return documentSnapshot.data['description'] ?? '';
   }
 
-  Stream<QuerySnapshot> fetchBeers(String brewerDocumentRef) => db.fetchBrewerBeers(brewerDocumentRef);
+  Stream<QuerySnapshot> fetchBeers(String brewerDocumentRef) =>
+      db.fetchBrewerBeers(brewerDocumentRef);
 
   String getLogo(AsyncSnapshot snapshot) {
     return snapshot.data['imageUri'];
@@ -74,13 +75,14 @@ class BrewerBloc implements BlocBase {
     //return snapshot.data.documents[item][brewsReleases];
   }
 
-  String getBeer(int index) {
+  Stream<DocumentSnapshot> getBeer(String beerRef) {
+    return db.fetchBeerByReference(beerRef);
     //return snapshot.data.documents[item]
     //[brewsReleases][index];
   }
 
-  String getBeerName(AsyncSnapshot snapshot, int index) {
-    //return snapshot.data.documents[item]
+  String getBeerName(AsyncSnapshot snapshot) {
+    return snapshot.data.documents['name'] ?? 'Not found';
     //[brewsReleases][index];
     //[brewName] ??
     //    ''
