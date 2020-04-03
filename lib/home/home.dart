@@ -1,9 +1,9 @@
+import 'package:craftbeer/bloc_provider.dart';
 import 'package:craftbeer/home/components/beer_filter.dart';
 import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/home/components/image_error.dart';
 import 'package:craftbeer/home/home_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
@@ -20,8 +20,6 @@ class Home extends BaseView {
 }
 
 class HomeState extends BaseViewState {
-  HomeBloc bloc = HomeBloc();
-
   @override
   void dispose() {
     super.dispose();
@@ -29,6 +27,7 @@ class HomeState extends BaseViewState {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<HomeBloc>(context);
     initInternetValidation();
 
     return Container(
@@ -57,7 +56,7 @@ class HomeState extends BaseViewState {
               titleView('Categories'),
               buildCategorySearch(context),
               titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
-              _buildBrewersGrid(context),
+              _buildBrewersGrid(context, bloc),
               //_buildEventsCards(events),
             ],
           ),
@@ -86,14 +85,15 @@ Widget _searchView() {
   );
 }
 
-Widget _buildBrewersGrid(context) {
+Widget _buildBrewersGrid(context, HomeBloc bloc) {
   return StreamBuilder(
-    stream: Firestore.instance.collection('brewers').snapshots(),
+    stream: bloc.fetchBrewers(),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
         return Container(
           margin: EdgeInsets.only(bottom: 20.0),
           child: GridView.count(
+            physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 3,
             shrinkWrap: true,
             children: List.generate(
@@ -102,7 +102,7 @@ Widget _buildBrewersGrid(context) {
                   context,
                   snapshot.data.documents[index].data['imageUri'],
                   snapshot.data.documents[index].data['name'],
-                  index),
+                  snapshot.data.documents[index].documentID),
             ),
           ),
         );
@@ -149,11 +149,12 @@ Widget _shimmerBrewers() {
   );
 }
 
-Widget _brewerCard(context, String url, String name, int index) {
+Widget _brewerCard(context, String url, String name, String reference) {
+  debugPrint('REFERENCE $reference');
   return GestureDetector(
     onTap: () {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BrewersDetail(index)));
+          MaterialPageRoute(builder: (context) => BrewersDetail(reference)));
     },
     child: Container(
       decoration: _brewersDecoration(),

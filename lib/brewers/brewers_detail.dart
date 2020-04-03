@@ -1,38 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/base_view.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
-import 'package:craftbeer/brewers/main_bloc.dart';
+import 'package:craftbeer/brewers/brewer_bloc.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class BrewersDetail extends BaseView {
-  final int item;
+  final String brewerRef;
 
-  BrewersDetail(this.item);
+  BrewersDetail(this.brewerRef);
 
   @override
   State<StatefulWidget> createState() {
-    return BrewersDetailState(item: item);
+    return BrewersDetailState(brewerRef: brewerRef);
   }
 }
 
 class BrewersDetailState extends BaseViewState<BrewersDetail> {
   bool isFavorite = false;
-  final int item;
+  final String brewerRef;
+  BrewerBloc bloc;
+  BrewersDetailState({this.brewerRef});
 
-  BrewersDetailState({this.item});
-
-  static const String apiRoot = 'brewers';
-  static const String brewName = 'name';
-  static const String brewsReleases = 'brewingOn';
-  static const String ibu = 'ibu';
-  static const String abv = 'abv';
-
-  final bloc = MainBloc();
+  @override
+  void initState() {
+    super.initState();
+    bloc = BrewerBloc(brewerRef: brewerRef);
+  }
 
   _isFavorite(String brewerName) async {
     await bloc.isFavorite(brewerName).then((value) {
@@ -48,8 +46,13 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
 
     return Scaffold(
       body: StreamBuilder(
-        stream: Firestore.instance.collection(apiRoot).snapshots(),
+        stream: bloc.fetchBrewer(),
         builder: (context, snapshot) {
+          /*debugPrint('Brewer data: ${snapshot.data['name']}');
+          return Container(
+              child: Center(
+            child: Text('snapshot There are no brewers loading...'),
+          ));*/
           if (!snapshot.hasData) {
             return Container(
                 child: Center(
@@ -57,7 +60,8 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
             ));
           }
 
-          _isFavorite(snapshot.data.documents[item][brewName]);
+          debugPrint('Brewer data: ${snapshot.data}');
+          //_isFavorite(bloc.getBrewerName(snapshot));
           return Container(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -80,9 +84,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                           children: <Widget>[
                             CachedNetworkImage(
                               fadeInCurve: Curves.bounceInOut,
-                              imageUrl: snapshot.data.documents[item]
-                                      ['imageUri'] ??
-                                  '',
+                              imageUrl: bloc.getLogo(snapshot) ?? '',
                               width: 120.0,
                               fit: BoxFit.cover,
                               errorWidget: (context, url, error) {
@@ -90,7 +92,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      snapshot.data.documents[item][brewName],
+                                      bloc.getBrewerName(snapshot),
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     Container(
@@ -102,8 +104,8 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                             ),
                             FlatButton.icon(
                               onPressed: () {
-                                bloc.changeFavorite(isFavorite,
-                                    snapshot.data.documents[item][brewName]);
+                                bloc.changeFavorite(
+                                    isFavorite, bloc.getBrewerName(snapshot));
                                 setState(() {
                                   isFavorite = !isFavorite;
                                 });
@@ -130,7 +132,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                                   height: 10.0,
                                 ),
                                 Text(
-                                  '${snapshot.data.documents[item][brewName]}',
+                                  '${bloc.getBrewerName(snapshot)}',
                                   style: TextStyle(
                                       fontSize: 30.0,
                                       fontWeight: FontWeight.bold),
@@ -139,7 +141,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                                   height: 20.0,
                                 ),
                                 Text(
-                                  snapshot.data.documents[item]['description'],
+                                  bloc.getBrewerDescription(snapshot),
                                   textAlign: TextAlign.left,
                                   style: TextStyle(fontSize: 16.0),
                                   maxLines: 10,
@@ -154,12 +156,14 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                                   onPressed: () {
                                     showDialog(
                                         context: context,
-                                        builder: (BuildContext context) => _beerDialog(
-                                            'Oscar',
-                                            "Soy un emprendedor con basta certificación internacional. Ganador de varios premios locales y nacionales.",
-                                            'https://d1ynl4hb5mx7r8.cloudfront.net/wp-content/uploads/2018/10/26174056/bonfire-head-brewer.jpg',
-                                            brandImage: snapshot.data
-                                                .documents[item]['imageUri']));
+                                        builder: (BuildContext context) =>
+                                            _beerDialog(
+                                              'Oscar',
+                                              "Soy un emprendedor con basta certificación internacional. Ganador de varios premios locales y nacionales.",
+                                              'https://d1ynl4hb5mx7r8.cloudfront.net/wp-content/uploads/2018/10/26174056/bonfire-head-brewer.jpg',
+                                              brandImage:
+                                                  bloc.getLogo(snapshot),
+                                            ));
                                   },
                                   icon: Icon(
                                     Icons.info_outline,
@@ -177,8 +181,8 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                                   color: Colors.green,
                                   onPressed: () async {
                                     FlutterOpenWhatsapp.sendSingleMessage(
-                                        snapshot.data.documents[item]['phone'],
-                                        "${snapshot.data.documents[item][brewName]}\nMe gustaría comprar una cerveza\n[CraftBeer Colombia]");
+                                        bloc.getPhone(snapshot),
+                                        "${bloc.getBrewerName(snapshot)}\nMe gustaría comprar una cerveza\n[CraftBeer Colombia]");
                                   },
                                   icon: Icon(Icons.phone),
                                   label: RichText(
@@ -205,59 +209,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                         children: <Widget>[
                           titleView('Nuestras Cervezas',
                               color: Colors.black, size: 40.0, padding: 0.0),
-                          GridView.count(
-                            crossAxisCount: 3,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            children: List.generate(
-                              snapshot
-                                  .data.documents[item][brewsReleases].length,
-                              (index) => GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) => _beerDialog(
-                                          snapshot.data.documents[item]
-                                              [brewsReleases][index][brewName],
-                                          "${snapshot.data.documents[item][brewsReleases][index][brewName]} esta cerveza fue creada con un toque amargo y jengibre ideal para el clima",
-                                          'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200'));
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Icon(
-                                          BeerIcon.beerglass,
-                                          size: 60.0,
-                                          color: bloc.fetchBeerColor(
-                                              snapshot.data.documents[item]
-                                                          [brewsReleases][index]
-                                                      [brewName] ??
-                                                  ''),
-                                        ),
-                                        Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'IBU: ${snapshot.data.documents[item][brewsReleases][index][ibu] ?? ''}',
-                                              style: TextStyle(fontSize: 9.0),
-                                            ),
-                                            Text(
-                                              'ABV: ${snapshot.data.documents[item][brewsReleases][index][abv] ?? ''}',
-                                              style: TextStyle(fontSize: 9.0),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                        '${snapshot.data.documents[item][brewsReleases][index][brewName]}'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          _ourBeersWidget(bloc, brewerRef),
                           titleView('Stoud Imperial',
                               color: Colors.black, size: 25.0, padding: 0.0),
                           Text(
@@ -343,4 +295,64 @@ Widget _beerDialog(String title, String description, String imageUri,
   }
 }
 
-Widget beerDetail() {}
+Widget _ourBeersWidget(BrewerBloc bloc, String brewerDocumentRef) {
+  return StreamBuilder(
+      stream: bloc.fetchBeers(brewerDocumentRef),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          debugPrint('BEERS data: ${snapshot.data.documents}');
+          return GridView.count(
+            crossAxisCount: 3,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            children: List.generate(
+              0,
+              (index) => GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => _beerDialog(
+                          bloc.getBeerName(snapshot, index),
+                          "${bloc.getBeerName(snapshot, index)} esta cerveza fue creada con un toque amargo y jengibre ideal para el clima",
+                          'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200'));
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          BeerIcon.beerglass,
+                          size: 60.0,
+                          color: bloc.fetchBeerColor(
+                              bloc.getBeerName(snapshot, index)),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              'IBU: ${bloc.getIbu(snapshot, index)}',
+                              style: TextStyle(fontSize: 9.0),
+                            ),
+                            Text(
+                              //'ABV: ${bloc.getAbv(snapshot, index)}',
+                              '',
+                              style: TextStyle(fontSize: 9.0),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Text('${bloc.getBeerName(snapshot, index)}'),
+                  ],
+                ),
+              ),
+            ),
+          );
+        } else {
+          return SizedBox(
+            height: 10.0,
+          );
+        }
+      });
+}

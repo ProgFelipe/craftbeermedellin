@@ -1,8 +1,11 @@
 import 'package:craftbeer/app_localization.dart';
+import 'package:craftbeer/bloc_provider.dart';
 import 'package:craftbeer/categories/beer_category.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
+import 'package:craftbeer/events/events_bloc.dart';
 import 'package:craftbeer/events/events_view.dart';
 import 'package:craftbeer/favorites/favorites_view.dart';
+import 'package:craftbeer/home/home_bloc.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -42,8 +45,14 @@ class Navigator extends StatefulWidget {
 class _NavigatorState extends State<Navigator> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    Home(),
-    EventsView(),
+    BlocProvider(
+      bloc: HomeBloc(),
+      child: Home(),
+    ),
+    BlocProvider(
+      bloc: EventsBloc(),
+      child: EventsView(),
+    ),
     BeerCategory(),
     Favorites()
   ];

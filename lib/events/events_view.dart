@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/components/awesome_cards.dart';
+import 'package:craftbeer/events/events_bloc.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class EventsView extends StatelessWidget {
+  final bloc = EventsBloc();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,10 +24,10 @@ class EventsView extends StatelessWidget {
           child: Column(
             children: <Widget>[
               titleView('Promociones'),
-              _buildPromotionsCards(context),
+              _buildPromotionsCards(context, bloc),
               titleView('Eventos Locales'),
               StreamBuilder(
-                stream: Firestore.instance.collection('events').snapshots(),
+                stream: bloc.fetchEvents(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<Widget> cities = List();
@@ -96,9 +99,9 @@ List<Widget> _createEventsCards(DocumentSnapshot city) {
   return events;
 }
 
-Widget _buildPromotionsCards(context) {
+Widget _buildPromotionsCards(context, EventsBloc bloc) {
   return StreamBuilder(
-      stream: Firestore.instance.collection('promotions').snapshots(),
+      stream: bloc.fetchPromotions(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
