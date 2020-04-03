@@ -2,11 +2,11 @@ import 'package:craftbeer/app_localization.dart';
 import 'package:flutter/material.dart';
 
 Widget titleView(String title,
-    {Color color = Colors.white, double size = 30.0}) {
+    {Color color = Colors.white, double size = 30.0, double padding = 20.0}) {
   return Container(
     width: double.infinity,
     child: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(padding),
         child: Text(
           title,
           style: TextStyle(fontFamily: 'Patua', fontSize: size, color: color),

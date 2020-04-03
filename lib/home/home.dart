@@ -1,5 +1,5 @@
 import 'package:craftbeer/home/components/beer_filter.dart';
-import 'package:craftbeer/home/brewers_detail.dart';
+import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/home/components/image_error.dart';
 import 'package:craftbeer/home/home_bloc.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class HomeState extends BaseViewState {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              errorWidget(),
+              internetErrorWidget(),
               Padding(
                 padding: EdgeInsets.only(top: 4.0),
                 child: Image.asset(

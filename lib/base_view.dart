@@ -29,7 +29,7 @@ class BaseViewState<T> extends State<BaseView> {
     }
   }
 
-  Widget errorWidget() {
+  Widget internetErrorWidget() {
     return isOffline
         ? Container(
             width: double.infinity,
