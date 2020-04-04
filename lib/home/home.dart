@@ -3,6 +3,7 @@ import 'package:craftbeer/home/components/beer_filter.dart';
 import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/home/components/image_error.dart';
 import 'package:craftbeer/home/home_bloc.dart';
+import 'package:craftbeer/home/top_beers.dart';
 import 'package:craftbeer/search/search_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -52,10 +53,10 @@ class HomeState extends BaseViewState {
               //storyTellingWidget(context),
               SearchView(),
               titleView('Top Week Selections'),
-              topBeersOfWeek(context),
+              TopBeersView(),
               //buildCategorySearch(false),
               titleView('Categories'),
-              buildCategorySearch(context),
+              CategoriesView(),
               titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
               _buildBrewersGrid(context, bloc),
               //_buildEventsCards(events),

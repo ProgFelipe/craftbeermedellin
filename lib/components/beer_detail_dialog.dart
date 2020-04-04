@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 
 class BeerDetailDialog extends StatelessWidget {
-  final String title, description, buttonText;
-  final Image brewerImage;
-  final Image brandImage;
-  final CircleAvatar circleAvatar;
-
+  final String title, description, buttonText, actionText;
+  final String contentImage;
+  final Color avatarColor;
+  final String avatarImage;
+  final VoidCallback action;
+  final bool starts;
   BeerDetailDialog({
     @required this.title,
     @required this.description,
     @required this.buttonText,
-    this.brandImage,
-    this.brewerImage,
-    this.circleAvatar,
+    this.contentImage,
+    this.avatarColor,
+    this.avatarImage,
+    this.actionText,
+    this.action,
+    this.starts = false,
   });
 
   @override
@@ -48,7 +52,22 @@ class BeerDetailDialog extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min, // To make the card compact
               children: <Widget>[
-                brewerImage ?? SizedBox(),
+                Visibility(
+                  visible: starts,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/icon.png',
+                        height: 70.0,
+                      ),
+                      Image.asset(
+                        'assets/icon.png',
+                        height: 70.0,
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(
                   height: 10.0,
                 ),
@@ -68,14 +87,25 @@ class BeerDetailDialog extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 24.0),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(); // To close the dialog
-                    },
-                    child: Text(buttonText),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Visibility(
+                      visible: starts,
+                      child: FlatButton(
+                        onPressed: () {
+                          action(); // To close the dialog
+                        },
+                        child: actionText != null ? Text(actionText) : Text(''),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // To close the dialog
+                      },
+                      child: Text(buttonText),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -83,12 +113,17 @@ class BeerDetailDialog extends StatelessWidget {
           Positioned(
             left: Consts.padding,
             right: Consts.padding,
-            child: circleAvatar ??
-                CircleAvatar(
-                  child: brandImage,
-                  backgroundColor: Colors.blueAccent,
-                  radius: Consts.avatarRadius,
-                ),
+            child: avatarImage != null
+                ? CircleAvatar(
+                    child: Image.network(avatarImage),
+                    backgroundColor: avatarColor,
+                    radius: Consts.avatarRadius,
+                  )
+                : CircleAvatar(
+                    child: Image.network(contentImage),
+                    backgroundColor: Colors.blueAccent,
+                    radius: Consts.avatarRadius,
+                  ),
           ),
         ],
       ),

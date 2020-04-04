@@ -41,7 +41,7 @@ class SearchView extends StatelessWidget {
           return ListTile(
             leading: Icon(BeerIcon.beerglass),
             title: Text(suggestion.data['name']),
-            //subtitle: Text('\$${suggestion.data['abv']}'),
+            //subtitle: Text('\$${suggestion.data['type']}'),
           );
         },
         onSuggestionSelected: (suggestion) {

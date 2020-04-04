@@ -1,4 +1,4 @@
-import 'package:craftbeer/home/components/beer_filter.dart';
+import 'package:craftbeer/home/top_beers.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteCard extends StatelessWidget {
@@ -17,7 +17,7 @@ class FavoriteCard extends StatelessWidget {
             ),
             Text('20 votos'),
             Text('Beers you love'),
-            topBeersOfWeek(context)
+            TopBeersView()
           ],
         ),
       ),

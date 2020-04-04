@@ -276,22 +276,16 @@ Widget _beerDialog(String title, String description, String imageUri,
         title: title,
         description: description,
         buttonText: "Volver",
-        brandImage: Image.network(imageUri),
-        circleAvatar: CircleAvatar(
-          child: Image.network(brandImage),
-          backgroundColor: Colors.orangeAccent[200],
-          radius: Consts.avatarRadius,
-        ));
+        contentImage: imageUri,
+        avatarColor: Colors.orangeAccent[200],
+        avatarImage: brandImage,);
   } else {
     return BeerDetailDialog(
         title: title,
         description: description,
         buttonText: "Volver",
-        circleAvatar: CircleAvatar(
-          child: Image.network(imageUri),
-          backgroundColor: Colors.orangeAccent[200],
-          radius: Consts.avatarRadius,
-        ));
+        avatarColor: Colors.orangeAccent[200],
+        avatarImage: imageUri,);
   }
 }
 
