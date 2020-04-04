@@ -136,12 +136,15 @@ Widget _brewerCard(context, String url, String name, String reference) {
       decoration: _brewersDecoration(),
       margin: EdgeInsets.all(10.0),
       child: url != null && url.isNotEmpty
-          ? CachedNetworkImage(
-              fadeInDuration: Duration(milliseconds: 1500),
-              imageUrl: url ?? '',
-              fit: BoxFit.scaleDown,
-              placeholder: (context, url) => Image.network(url),
-              errorWidget: (context, url, error) => errorColumn(name),
+          ? Hero(
+              tag: '$reference',
+              child: CachedNetworkImage(
+                fadeInDuration: Duration(milliseconds: 1500),
+                imageUrl: url ?? '',
+                fit: BoxFit.scaleDown,
+                placeholder: (context, url) => Image.network(url),
+                errorWidget: (context, url, error) => errorColumn(name),
+              ),
             )
           : errorColumn(name),
     ),

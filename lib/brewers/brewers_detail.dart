@@ -30,14 +30,21 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
   void initState() {
     super.initState();
     bloc = BrewerBloc(brewerRef: brewerRef);
-    //_isFavorite(bloc.getBrewerName(snapshot));
   }
 
-  _isFavorite(String brewerName) async {
-    await bloc.isFavorite(brewerName).then((value) {
-      setState(() {
-        isFavorite = value;
-      });
+  Future<bool> _isFavorite(String brewerName) async {
+    bool result = await bloc.isFavorite(brewerName);
+    return result;
+  }
+
+  String brewerName = '';
+  void changeFavoriteState() {
+    debugPrint('BrewerName => $brewerName');
+
+    bloc.changeFavorite(!isFavorite, brewerName);
+    setState(() {
+      isFavorite = !isFavorite;
+      debugPrint('Is Favorite? => $isFavorite');
     });
   }
 
@@ -56,6 +63,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
             ));
           }
 
+          brewerName = bloc.getBrewerName(snapshot);
           return Container(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -80,43 +88,49 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            CachedNetworkImage(
-                              fadeInCurve: Curves.bounceInOut,
-                              imageUrl: bloc.getLogo(snapshot) ?? '',
-                              width: 120.0,
-                              fit: BoxFit.cover,
-                              errorWidget: (context, url, error) {
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      bloc.getBrewerName(snapshot),
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    Container(
-                                      child: Icon(Icons.error),
-                                    ),
-                                  ],
+                            Hero(
+                              tag: brewerRef,
+                              child: CachedNetworkImage(
+                                fadeInCurve: Curves.bounceInOut,
+                                imageUrl: bloc.getLogo(snapshot) ?? '',
+                                width: 120.0,
+                                fit: BoxFit.cover,
+                                errorWidget: (context, url, error) {
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        bloc.getBrewerName(snapshot),
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      Container(
+                                        child: Icon(Icons.error),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            FutureBuilder(
+                              future: _isFavorite(bloc.getBrewerName(snapshot)),
+                              builder: (context, snapshot) {
+                                isFavorite = snapshot.data;
+                                /*String brewerName =
+                                    bloc.getBrewerName(snapshot);*/
+                                debugPrint('Is Favorite? => $isFavorite');
+                                return FlatButton.icon(
+                                  onPressed: changeFavoriteState,
+                                  icon: Icon(
+                                    isFavorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    size: 40.0,
+                                    color: Colors.red,
+                                  ),
+                                  label: Text(''),
                                 );
                               },
-                            ),
-                            FlatButton.icon(
-                              onPressed: () {
-                                bloc.changeFavorite(
-                                    isFavorite, bloc.getBrewerName(snapshot));
-                                setState(() {
-                                  isFavorite = !isFavorite;
-                                });
-                              },
-                              icon: Icon(
-                                isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                size: 40.0,
-                                color: Colors.red,
-                              ),
-                              label: Text(''),
-                            ),
+                            )
                           ],
                         ),
                         Expanded(

@@ -81,9 +81,10 @@ class BrewerBloc implements BlocBase {
     //[brewsReleases][index];
   }
 
-  void setVoteBeer(String documentReferenceId, int vote) => db.beerVote(documentReferenceId, vote);
+  void setVoteBeer(String documentReferenceId, int vote) =>
+      db.beerVote(documentReferenceId, vote);
 
-  String getBeerHistory(AsyncSnapshot snapshot){
+  String getBeerHistory(AsyncSnapshot snapshot) {
     return snapshot.data.documents['history'] ?? 'Not found';
     //'Esta cerveza se elaboraba principalmente para ser enviada a Rusia, más específicamente a la corte del Zar donde se apreciaban las cervezas oscuras y amargas. La mayor graduación alcohólica evitaba que la cerveza se congelara en el largo viaje a través del frío clima ruso mientras que el lúpulo adicional actuaba como conservante.'
   }
@@ -114,9 +115,16 @@ class BrewerBloc implements BlocBase {
   changeFavorite(bool isFavorite, String brewerName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> favorites = (prefs.getStringList('favorites') ?? List());
-    bool exist = favorites != null ?? favorites.contains(brewerName);
-    isFavorite ? favorites.remove(brewerName) : favorites.add(brewerName);
-    print('Brewer is favorite: $exist ?.');
+    bool exist = favorites?.contains(brewerName);
+    debugPrint('Exist: $exist ?. New Value $isFavorite');
+    debugPrint('Favorites: $favorites ?.');
+
+    if (exist || isFavorite) {
+      isFavorite ? favorites.add(brewerName) : favorites.remove(brewerName);
+    }
+    debugPrint('Favorites: $favorites ?.');
+    debugPrint('Brewer is t0 favorite: $exist ?.');
+    debugPrint('Brewer is t1 favorite: $isFavorite ?.');
     await prefs.setStringList('favorites', favorites);
   }
 
