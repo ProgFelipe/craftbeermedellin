@@ -95,11 +95,18 @@ class Api {
         .updateData({ranking: currentRanking + 1});
   }
 
-  Future<void> beerVote(String beerRef) async {
-    var document = _fireStore.collection(beers).document(beerRef);
+  Future<void> beerVote(String beerRef, int vote) async {
+    debugPrint('VAMOS A VOTAR $beerRef, $vote');
+    var document = await _fireStore.collection(beers).document(beerRef);
     document.get().then((beer) {
       int numVotes = beer[votes];
-      document.updateData({ranking: numVotes + 1});
+      int currentRanking = beer[ranking];
+      numVotes == null
+          ? document.setData({votes: 1}, merge: true)
+          : document.updateData({votes: numVotes + 1});
+      currentRanking == null
+          ? document.setData({ranking: vote}, merge: true)
+          : document.updateData({ranking: currentRanking + vote});
     });
   }
 

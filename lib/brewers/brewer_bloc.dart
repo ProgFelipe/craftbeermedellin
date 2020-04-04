@@ -81,6 +81,8 @@ class BrewerBloc implements BlocBase {
     //[brewsReleases][index];
   }
 
+  void setVoteBeer(String documentReferenceId, int vote) => db.beerVote(documentReferenceId, vote);
+
   String getBeerName(AsyncSnapshot snapshot) {
     return snapshot.data.documents['name'] ?? 'Not found';
     //[brewsReleases][index];

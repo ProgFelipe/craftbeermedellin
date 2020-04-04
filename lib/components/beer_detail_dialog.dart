@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
-class BeerDetailDialog extends StatelessWidget {
+typedef IntCallback = Function(int num);
+
+class BeerDetailDialog extends StatefulWidget {
   final String title, description, buttonText, actionText;
   final String contentImage;
   final Color avatarColor;
   final String avatarImage;
   final VoidCallback action;
-  final bool starts;
+  final IntCallback voteAction;
+  final bool starts, showVotesBox;
+
   BeerDetailDialog({
     @required this.title,
     @required this.description,
@@ -15,9 +19,58 @@ class BeerDetailDialog extends StatelessWidget {
     this.avatarColor,
     this.avatarImage,
     this.actionText,
+    this.showVotesBox = false,
+    this.voteAction,
     this.action,
     this.starts = false,
   });
+
+  @override
+  _BeerDetailDialogState createState() => _BeerDetailDialogState(
+        title: title,
+        description: description,
+        buttonText: buttonText,
+        contentImage: contentImage,
+        avatarColor: avatarColor,
+        avatarImage: avatarImage,
+        actionText: actionText,
+        showVotesBox: showVotesBox,
+        voteAction: voteAction,
+        action: action,
+        starts: starts,
+      );
+}
+
+class _BeerDetailDialogState extends State<BeerDetailDialog> {
+  final String title, description, buttonText, actionText;
+  final String contentImage;
+  final Color avatarColor;
+  final String avatarImage;
+  final VoidCallback action;
+  final IntCallback voteAction;
+  final bool starts, showVotesBox;
+
+  _BeerDetailDialogState({
+    @required this.title,
+    @required this.description,
+    @required this.buttonText,
+    this.contentImage,
+    this.avatarColor,
+    this.avatarImage,
+    this.actionText,
+    this.showVotesBox = false,
+    this.voteAction,
+    this.action,
+    this.starts = false,
+  });
+
+  bool _canVote = true;
+  void onVote(int vote) {
+    setState(() {
+      _canVote = false;
+    });
+    voteAction(vote);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +139,37 @@ class BeerDetailDialog extends StatelessWidget {
                     fontSize: 16.0,
                   ),
                 ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                Visibility(
+                  visible: showVotesBox,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        'Que tanto te gustó?',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: Iterable<Widget>.generate(
+                            5,
+                            (index) => VoteItem(
+                                  index: index,
+                                  voteAction: onVote,
+                                  enableVotes: _canVote,
+                                )).toList(),
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 24.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -127,6 +211,62 @@ class BeerDetailDialog extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class VoteItem extends StatefulWidget {
+  final int index;
+  final IntCallback voteAction;
+  final bool enableVotes;
+  VoteItem({
+    @required this.index,
+    @required this.voteAction,
+    @required this.enableVotes,
+  });
+  @override
+  _VoteItemState createState() => _VoteItemState(
+      index: index, voteAction: voteAction, canVote: enableVotes);
+}
+
+class _VoteItemState extends State<VoteItem> {
+  Color color;
+  final int index;
+  final IntCallback voteAction;
+  final bool canVote;
+  _VoteItemState({
+    @required this.index,
+    @required this.voteAction,
+    @required this.canVote,
+  });
+
+  @override
+  void initState() {
+    super.initState();
+    color = Colors.grey;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (canVote) {
+          setState(() {
+            color = color == Colors.green ? Colors.grey : Colors.green;
+          });
+          voteAction(index + 1);
+        }
+      },
+      child: Container(
+          child: Center(
+        child: CircleAvatar(
+          backgroundColor: color,
+          child: new Text(
+            '${index + 1}',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      )),
     );
   }
 }

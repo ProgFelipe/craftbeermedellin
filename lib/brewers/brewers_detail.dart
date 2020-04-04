@@ -31,6 +31,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
   void initState() {
     super.initState();
     bloc = BrewerBloc(brewerRef: brewerRef);
+    //_isFavorite(bloc.getBrewerName(snapshot));
   }
 
   _isFavorite(String brewerName) async {
@@ -67,8 +68,6 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
             ));
           }
 
-          debugPrint('CERVEZAS ID ${snapshot.data['beers']}');
-          _isFavorite(bloc.getBrewerName(snapshot));
           return Container(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -77,10 +76,14 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                 internetErrorWidget(),
                 Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15.0),
-                          bottomRight: Radius.circular(15.0)),
-                      color: Colors.black54),
+                    image: DecorationImage(
+                      image: AssetImage('assets/beer3.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15.0),
+                        bottomRight: Radius.circular(15.0)),
+                  ),
                   child: SafeArea(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,6 +380,11 @@ class BeersWidget extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) => BeerDetailDialog(
                           title: snapshot.data['name'],
+                          showVotesBox: true,
+                          voteAction: (int vote) {
+                            debugPrint('Votó $vote');
+                            bloc.setVoteBeer(beers[index].documentID, vote);
+                          },
                           description:
                               "${snapshot.data['name']} esta cerveza fue creada con un toque amargo y jengibre ideal para el clima",
                           buttonText: "Volver",
