@@ -45,8 +45,11 @@ class SearchView extends StatelessWidget {
           );
         },
         onSuggestionSelected: (suggestion) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => BrewersDetail('XqHetWY4yy3BmRdDsS4C')));
+          var ref = suggestion.data[Api.brewer] != null
+              ? suggestion.data[Api.brewer].documentID
+              : suggestion.documentID;
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => BrewersDetail(ref)));
         },
       ),
     );
