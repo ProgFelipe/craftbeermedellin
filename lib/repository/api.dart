@@ -131,6 +131,15 @@ class Api {
     return documentList;
   }
 
+  //Home
+  Stream<QuerySnapshot> fetchTopBeers() {
+    return _fireStore
+        .collection(beers)
+        .orderBy('ranking', descending: true)
+        .limit(5)
+        .snapshots();
+  }
+
   ///Events
   static String events = 'events';
   Stream fetchEvents() => _fireStore.collection(events).snapshots();

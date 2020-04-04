@@ -1,17 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
+import 'package:craftbeer/repository/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-const List<String> beerFavorites = [
-  'IPA\nGuardian',
-  'PORTER\n20 Mission',
-  'SOUT\nApostol',
-  'IPA\nGuardian',
-  'PORTER\n20 Mission',
-  'SOUT\nApostol'
-];
+import 'package:cached_network_image/cached_network_image.dart';
 
 class TopBeersView extends StatelessWidget {
   final List<DocumentSnapshot> elements;
@@ -20,53 +13,71 @@ class TopBeersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100.0,
-      decoration: BoxDecoration(),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: beerFavorites.length,
-        itemBuilder: (context, index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 10.0),
-          child: GestureDetector(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => BeerDetailDialog(
-                        title: 'Cerveza Platinium',
-                        description:
-                            'Cerveza creada en las montañas de Colombia',
-                        avatarImage:
-                            'https://images.rappi.com/products/2091421499-1579543158965.png?d=200x200',
-                        buttonText: "Volver",
-                        starts: true,
-                        actionText: "Contactanos",
-                        action: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  BrewersDetail('XqHetWY4yy3BmRdDsS4C')));
-                        },
-                      ));
-            },
-            child: Card(
-              elevation: 20.0,
-              child: Stack(
-                fit: StackFit.passthrough,
-                alignment: AlignmentDirectional.bottomCenter,
-                children: <Widget>[
-                  Image.asset(
-                    'assets/beer.png',
-                    height: 60.0,
-                  ),
-                  Text(
-                    beerFavorites[index],
-                    textAlign: TextAlign.center,
-                  )
-                ],
-              ),
+        height: 100.0,
+        decoration: BoxDecoration(),
+        child: StreamBuilder(
+          stream: db.fetchTopBeers(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              debugPrint('Top cervezas ${snapshot.data.documents}');
+              return Row(
+                  children: List.generate(
+                      snapshot.data.documents.length,
+                      (index) => topBeerItem(
+                          snapshot.data.documents[index], context)));
+            } else {
+              return SizedBox(
+                height: 10.0,
+              );
+            }
+          },
+        ));
+  }
+}
+
+Widget topBeerItem(DocumentSnapshot beerSnapshot, context) {
+  return GestureDetector(
+    onTap: () {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => BeerDetailDialog(
+                title: beerSnapshot.data['name'],
+                description: beerSnapshot.data['description'] ?? '',
+                avatarImage: beerSnapshot.data['imageUri'],
+                buttonText: "Volver",
+                starts: true,
+                actionText: "Contactanos",
+                action: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BrewersDetail(
+                          beerSnapshot.data['brewer'].documentID)));
+                },
+              ));
+    },
+    child: Card(
+      elevation: 10.0,
+      child: Column(
+        children: <Widget>[
+          CachedNetworkImage(
+            height: 70.0,
+            fadeInDuration: Duration(milliseconds: 1500),
+            imageUrl: beerSnapshot.data['imageUri'] ?? '',
+            fit: BoxFit.scaleDown,
+            placeholder: (context, url) => Image.network(
+              url,
+              height: 70.0,
+            ),
+            errorWidget: (context, url, error) => Image.asset(
+              'assets/beer.png',
+              height: 70.0,
             ),
           ),
-        ),
+          Text(
+            beerSnapshot.data['name'],
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
