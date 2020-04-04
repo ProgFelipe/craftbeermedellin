@@ -16,8 +16,7 @@ class FavoriteCard extends StatelessWidget {
               height: 80.0,
             ),
             Text('20 votos'),
-            Text('Beers you love'),
-            TopBeersView()
+            Text('Beers you love')
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/home/components/image_error.dart';
 import 'package:craftbeer/home/home_bloc.dart';
 import 'package:craftbeer/home/top_beers.dart';
+import 'package:craftbeer/repository/api.dart';
 import 'package:craftbeer/search/search_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -14,24 +15,45 @@ import '../base_view.dart';
 
 const int SHIMMER_BREWER_GRID_COUNT = 6;
 
-class Home extends BaseView {
-  @override
-  State<StatefulWidget> createState() {
-    return HomeState();
+class Home extends StatelessWidget {
+  const Home({Key key}) : super(key: key);
+  /*static final Home _singleton = Home._internal();
+  factory Home() {
+    return _singleton;
   }
-}
-
-class HomeState extends BaseViewState {
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  Home._internal();*/
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<HomeBloc>(context);
-    initInternetValidation();
+    //final bloc = BlocProvider.of<HomeBloc>(context);
+    //initInternetValidation();
+    final grid = StreamBuilder(
+      stream: db.fetchBrewers(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+            margin: EdgeInsets.only(bottom: 20.0),
+            child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              children: List.generate(
+                snapshot.data.documents.length,
+                (index) => _brewerCard(
+                    context,
+                    snapshot.data.documents[index].data['imageUri'],
+                    snapshot.data.documents[index].data['name'],
+                    snapshot.data.documents[index].documentID),
+              ),
+            ),
+          );
+        } else {
+          return _shimmerBrewers();
+        }
+      },
+    );
 
+    final topBeers = TopBeersView();
     return Container(
       height: double.infinity,
       color: Colors.black87,
@@ -41,7 +63,7 @@ class HomeState extends BaseViewState {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              internetErrorWidget(),
+              //internetErrorWidget(),
               Padding(
                 padding: EdgeInsets.only(top: 4.0),
                 child: Image.asset(
@@ -53,12 +75,12 @@ class HomeState extends BaseViewState {
               //storyTellingWidget(context),
               SearchView(),
               titleView('Top Week Selections'),
-              TopBeersView(),
+              topBeers,
               //buildCategorySearch(false),
               titleView('Categories'),
               CategoriesView(),
               titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
-              _buildBrewersGrid(context, bloc),
+              grid,
               //_buildEventsCards(events),
             ],
           ),
@@ -66,34 +88,6 @@ class HomeState extends BaseViewState {
       ),
     );
   }
-}
-
-Widget _buildBrewersGrid(context, HomeBloc bloc) {
-  return StreamBuilder(
-    stream: bloc.fetchBrewers(),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        return Container(
-          margin: EdgeInsets.only(bottom: 20.0),
-          child: GridView.count(
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
-            shrinkWrap: true,
-            children: List.generate(
-              snapshot.data.documents.length,
-              (index) => _brewerCard(
-                  context,
-                  snapshot.data.documents[index].data['imageUri'],
-                  snapshot.data.documents[index].data['name'],
-                  snapshot.data.documents[index].documentID),
-            ),
-          ),
-        );
-      } else {
-        return _shimmerBrewers();
-      }
-    },
-  );
 }
 
 BoxDecoration _brewersDecoration() {

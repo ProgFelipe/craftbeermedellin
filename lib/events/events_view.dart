@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/components/awesome_cards.dart';
-import 'package:craftbeer/events/events_bloc.dart';
+import 'package:craftbeer/repository/api.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class EventsView extends StatelessWidget {
-  final bloc = EventsBloc();
+  const EventsView({Key key}) : super(key: key);
+
+  Stream fetchEvents() {
+    debugPrint('Fetching Events...');
+    return db.fetchEvents();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +30,10 @@ class EventsView extends StatelessWidget {
           child: Column(
             children: <Widget>[
               titleView('Promociones'),
-              _buildPromotionsCards(context, bloc),
+              _buildPromotionsCards(context),
               titleView('Eventos Locales'),
               StreamBuilder(
-                stream: bloc.fetchEvents(),
+                stream: fetchEvents(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Container(
@@ -94,9 +99,11 @@ Widget _eventCard(DocumentSnapshot event) {
   );
 }
 
-Widget _buildPromotionsCards(context, EventsBloc bloc) {
+Widget _buildPromotionsCards(context) {
+  Stream fetchPromotions() => db.fetchPromotions();
+
   return StreamBuilder(
-      stream: bloc.fetchPromotions(),
+      stream: fetchPromotions(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(

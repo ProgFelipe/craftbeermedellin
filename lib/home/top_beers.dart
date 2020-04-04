@@ -7,31 +7,27 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class TopBeersView extends StatelessWidget {
-  final List<DocumentSnapshot> elements;
-  TopBeersView({this.elements});
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 100.0,
-        decoration: BoxDecoration(),
-        child: StreamBuilder(
-          stream: db.fetchTopBeers(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              debugPrint('Top cervezas ${snapshot.data.documents}');
-              return Row(
-                  children: List.generate(
-                      snapshot.data.documents.length,
-                      (index) => topBeerItem(
-                          snapshot.data.documents[index], context)));
-            } else {
-              return SizedBox(
-                height: 10.0,
-              );
-            }
-          },
-        ));
+    final beers = StreamBuilder(
+      stream: db.fetchTopBeers(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          debugPrint('Top cervezas ${snapshot.data.documents}');
+          return Row(
+              children: List.generate(
+                  snapshot.data.documents.length,
+                  (index) =>
+                      topBeerItem(snapshot.data.documents[index], context)));
+        } else {
+          return SizedBox(
+            height: 10.0,
+          );
+        }
+      },
+    );
+
+    return Container(height: 100.0, decoration: BoxDecoration(), child: beers);
   }
 }
 

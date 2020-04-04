@@ -133,6 +133,7 @@ class Api {
 
   //Home
   Stream<QuerySnapshot> fetchTopBeers() {
+    debugPrint('Suscrito a top cervezas');
     return _fireStore
         .collection(beers)
         .orderBy('ranking', descending: true)
