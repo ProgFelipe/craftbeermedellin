@@ -1,6 +1,6 @@
 import 'package:craftbeer/base_view.dart';
+import 'package:craftbeer/brewers/brewer_beers.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
-import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/brewers/brewer_bloc.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,6 @@ class BrewersDetail extends BaseView {
 
 class BrewersDetailState extends BaseViewState<BrewersDetail> {
   bool isFavorite = false;
-  bool _showBeerDescription = false;
   final String brewerRef;
   BrewerBloc bloc;
   BrewersDetailState({this.brewerRef});
@@ -42,12 +41,6 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
     });
   }
 
-  _changeVisibilityBeerDesc() {
-    setState(() {
-      _showBeerDescription = !_showBeerDescription;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     initInternetValidation();
@@ -56,11 +49,6 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
       body: StreamBuilder(
         stream: bloc.fetchBrewer(),
         builder: (context, snapshot) {
-          /*debugPrint('Brewer data: ${snapshot.data['name']}');
-          return Container(
-              child: Center(
-            child: Text('snapshot There are no brewers loading...'),
-          ));*/
           if (!snapshot.hasData) {
             return Container(
                 child: Center(
@@ -226,58 +214,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                         children: <Widget>[
                           titleView('Nuestras Cervezas',
                               color: Colors.black, size: 40.0, padding: 0.0),
-                          BeersWidget(
-                              beers: snapshot.data['beers'],
-                              bloc: bloc,
-                              changeBeerDescriptionVisibility:
-                                  _changeVisibilityBeerDesc),
-                          Visibility(
-                            visible: _showBeerDescription,
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 40.0,
-                                ),
-                                FlatButton(
-                                  onPressed: _changeVisibilityBeerDesc,
-                                  color: Colors.grey[200],
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Text(
-                                          'Stoud Imperial',
-                                          style: TextStyle(
-                                              fontSize: 25.0,
-                                              fontFamily: 'Patua'),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.keyboard_arrow_up,
-                                        color: Colors.grey,
-                                        size: 60.0,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                                Text(
-                                  'Esta cerveza se elaboraba principalmente para ser enviada a Rusia, más específicamente a la corte del Zar donde se apreciaban las cervezas oscuras y amargas. La mayor graduación alcohólica evitaba que la cerveza se congelara en el largo viaje a través del frío clima ruso mientras que el lúpulo adicional actuaba como conservante.',
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      letterSpacing: 2.0,
-                                      color: Colors.grey[600]),
-                                ),
-                              ],
-                            ),
-                          ),
+                          BrewerBeers(beersIds: snapshot.data['beers']),
                           SizedBox(
                             height: 20.0,
                           ),
@@ -347,94 +284,4 @@ Future<void> _launchInBrowser(String url) async {
   } else {
     throw 'Could not launch $url';
   }
-}
-
-class BeersWidget extends StatelessWidget {
-  final List<dynamic> beers;
-  final VoidCallback changeBeerDescriptionVisibility;
-  final BrewerBloc bloc;
-  BeersWidget({this.beers, this.bloc, this.changeBeerDescriptionVisibility});
-
-  changeState() {
-    changeBeerDescriptionVisibility();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 3,
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      children: List.generate(
-        beers.length,
-        (index) => StreamBuilder(
-          stream: bloc.getBeer(beers[index].documentID),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Text('No data');
-            }
-            debugPrint("${snapshot.data['name']}");
-            return GestureDetector(
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => BeerDetailDialog(
-                          title: snapshot.data['name'],
-                          showVotesBox: true,
-                          voteAction: (int vote) {
-                            debugPrint('Votó $vote');
-                            bloc.setVoteBeer(beers[index].documentID, vote);
-                          },
-                          description:
-                              "${snapshot.data['name']} esta cerveza fue creada con un toque amargo y jengibre ideal para el clima",
-                          buttonText: "Volver",
-                          actionText: 'Conocé más',
-                          action: () {
-                            Navigator.of(context).pop();
-                            changeState();
-                          },
-                          avatarColor: Colors.orangeAccent[200],
-                          avatarImage:
-                              'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200',
-                        ));
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    BeerIcon.beerglass,
-                    size: 60.0,
-                    color: Colors.orangeAccent,
-                  ),
-                  SizedBox(height: 10.0),
-                  beerPropertiesText('IBU', '10'),
-                  beerPropertiesText('ABV', '5'),
-                  Text(
-                    //'ABV: ${bloc.getAbv(snapshot, index)}',
-                    '',
-                    style: TextStyle(
-                        fontSize: 10.0,
-                        fontFamily: 'Patua',
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text('${snapshot.data['name']}'),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-Widget beerPropertiesText(String propertyName, String value) {
-  return Visibility(
-    visible: value != null,
-    child: Text(
-      propertyName + value, //'IBU: ${bloc.getBeerName(snapshot)}',
-      style: TextStyle(fontSize: 9.0),
-    ),
-  );
 }

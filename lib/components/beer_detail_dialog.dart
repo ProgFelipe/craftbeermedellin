@@ -164,7 +164,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                             (index) => VoteItem(
                                   index: index,
                                   voteAction: onVote,
-                                  enableVotes: _canVote,
+                                  canVote: _canVote,
                                 )).toList(),
                       ),
                     ],
@@ -214,15 +214,15 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
 class VoteItem extends StatefulWidget {
   final int index;
   final IntCallback voteAction;
-  final bool enableVotes;
+  final bool canVote;
   VoteItem({
     @required this.index,
     @required this.voteAction,
-    @required this.enableVotes,
+    @required this.canVote,
   });
   @override
-  _VoteItemState createState() => _VoteItemState(
-      index: index, voteAction: voteAction, canVote: enableVotes);
+  _VoteItemState createState() =>
+      _VoteItemState(index: index, voteAction: voteAction, canVote: canVote);
 }
 
 class _VoteItemState extends State<VoteItem> {

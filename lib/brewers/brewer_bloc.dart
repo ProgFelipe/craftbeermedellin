@@ -83,6 +83,11 @@ class BrewerBloc implements BlocBase {
 
   void setVoteBeer(String documentReferenceId, int vote) => db.beerVote(documentReferenceId, vote);
 
+  String getBeerHistory(AsyncSnapshot snapshot){
+    return snapshot.data.documents['history'] ?? 'Not found';
+    //'Esta cerveza se elaboraba principalmente para ser enviada a Rusia, más específicamente a la corte del Zar donde se apreciaban las cervezas oscuras y amargas. La mayor graduación alcohólica evitaba que la cerveza se congelara en el largo viaje a través del frío clima ruso mientras que el lúpulo adicional actuaba como conservante.'
+  }
+
   String getBeerName(AsyncSnapshot snapshot) {
     return snapshot.data.documents['name'] ?? 'Not found';
     //[brewsReleases][index];
