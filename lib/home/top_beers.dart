@@ -27,8 +27,8 @@ class TopBeersView extends StatelessWidget {
         itemCount: beerFavorites.length,
         itemBuilder: (context, index) => Container(
           margin: EdgeInsets.symmetric(horizontal: 10.0),
-          child: FlatButton(
-            onPressed: () {
+          child: GestureDetector(
+            onTap: () {
               showDialog(
                   context: context,
                   builder: (BuildContext context) => BeerDetailDialog(

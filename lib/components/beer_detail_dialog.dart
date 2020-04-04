@@ -91,7 +91,7 @@ class BeerDetailDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Visibility(
-                      visible: starts,
+                      visible: actionText != null,
                       child: FlatButton(
                         onPressed: () {
                           action(); // To close the dialog
