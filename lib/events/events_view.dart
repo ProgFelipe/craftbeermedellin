@@ -31,30 +31,16 @@ class EventsView extends StatelessWidget {
                 stream: bloc.fetchEvents(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    /*
-                    List<Widget> cities = List();
-                    snapshot.data.documents.forEach((city) {
-                      cities = _createEventsCards(city);
-                    });
-                    return Column(
-                      children: cities,
-                    );*/
                     return Container(
                       child: StaggeredGridView.countBuilder(
                         crossAxisCount: 4,
                         shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (BuildContext context, int index) =>
-                            new Container(
-                                color: Colors.green,
-                                child: new Center(
-                                  child: new CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    child: new Text('$index'),
-                                  ),
-                                )),
+                            _eventCard(snapshot.data.documents[index]),
                         staggeredTileBuilder: (int index) =>
-                            new StaggeredTile.count(2, index.isEven ? 2 : 1),
+                            StaggeredTile.fit(2),
                         mainAxisSpacing: 4.0,
                         crossAxisSpacing: 4.0,
                       ),
@@ -72,92 +58,40 @@ class EventsView extends StatelessWidget {
   }
 }
 
-Widget _evetnCard(DocumentSnapshot event) {
+Widget _eventCard(DocumentSnapshot event) {
   return Card(
-    margin: EdgeInsets.all(10.0),
-    child: Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: <Widget>[
-          _emptyOrNullSafetyText(event['name']),
-          _emptyOrNullSafetyText(event['city']),
-          SizedBox(
-            height: 10.0,
-          ),
-          _emptyOrNullSafetyText(event['description']),
-          event['date'] != null
-              ? ListTile(
-                  leading: Icon(Icons.date_range),
-                  title: Text('${event['date']}'),
-                )
-              : SizedBox(),
-          Container(
-            alignment: Alignment.center,
-            child: CachedNetworkImage(
-              fadeInDuration: Duration(milliseconds: 1500),
-              imageUrl: event['imageUri'],
-              fit: BoxFit.scaleDown,
-              placeholder: (context, url) => Image.network(url),
-              errorWidget: (context, url, error) => Card(
-                elevation: 4.0,
-                child: Container(
-                  child: Icon(Icons.error),
-                ),
+    child: Column(
+      children: <Widget>[
+        _emptyOrNullSafetyText(event['name']),
+        _emptyOrNullSafetyText(event['city']),
+        SizedBox(
+          height: 10.0,
+        ),
+        _emptyOrNullSafetyText(event['description']),
+        event['date'] != null
+            ? ListTile(
+                leading: Icon(Icons.date_range),
+                title: Text('${event['date']}'),
+              )
+            : SizedBox(),
+        Container(
+          alignment: Alignment.center,
+          child: CachedNetworkImage(
+            fadeInDuration: Duration(milliseconds: 1500),
+            imageUrl: event['imageUri'],
+            fit: BoxFit.scaleDown,
+            placeholder: (context, url) => Image.network(url),
+            errorWidget: (context, url, error) => Card(
+              elevation: 4.0,
+              child: Container(
+                child: Icon(Icons.error),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
-}
-
-List<Widget> _createEventsCards(DocumentSnapshot city) {
-  List<Widget> events = List();
-  city['evento'].forEach((event) {
-    events.add(
-      Container(
-        child: Card(
-          margin: EdgeInsets.all(10.0),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                _emptyOrNullSafetyText(event['name']),
-                _emptyOrNullSafetyText(city['name']),
-                SizedBox(
-                  height: 10.0,
-                ),
-                _emptyOrNullSafetyText(event['description']),
-                event['date'] != null
-                    ? ListTile(
-                        leading: Icon(Icons.date_range),
-                        title: Text('${event['date']}'),
-                      )
-                    : SizedBox(),
-                Container(
-                  alignment: Alignment.center,
-                  child: CachedNetworkImage(
-                    fadeInDuration: Duration(milliseconds: 1500),
-                    imageUrl: event['imageUri'],
-                    fit: BoxFit.scaleDown,
-                    placeholder: (context, url) => Image.network(url),
-                    errorWidget: (context, url, error) => Card(
-                      elevation: 4.0,
-                      child: Container(
-                        child: Icon(Icons.error),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  });
-  return events;
 }
 
 Widget _buildPromotionsCards(context, EventsBloc bloc) {
