@@ -103,6 +103,27 @@ class Api {
     });
   }
 
+  List<DocumentSnapshot> documents;
+  Future<List<DocumentSnapshot>> searchBeers(String query) async {
+    if (documents == null || documents.isEmpty) {
+      await _fireStore
+          .collection(beers)
+          .getDocuments()
+          .then((value) => documents = value.documents);
+      await _fireStore
+          .collection(brewers)
+          .getDocuments()
+          .then((value) => documents..addAll(value.documents));
+    }
+    List<DocumentSnapshot> documentList = List();
+    documentList = documents.where((doc) {
+      debugPrint('Searching ${doc.data['name']}');
+      return doc['name'].toLowerCase().contains(query.toLowerCase());
+    }).toList();
+
+    return documentList;
+  }
+
   ///Events
   static String events = 'events';
   Stream fetchEvents() => _fireStore.collection(events).snapshots();

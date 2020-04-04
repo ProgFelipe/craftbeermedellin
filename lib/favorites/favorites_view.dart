@@ -1,5 +1,6 @@
 import 'package:craftbeer/base_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
+import 'package:craftbeer/favorites/favorite_brewer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -94,21 +95,22 @@ class _FavoritesState extends BaseViewState<Favorites> {
                     title: Text(
                       'Favoritos',
                       style: TextStyle(
-                        fontSize: 40.0,
-                        fontFamily: 'Blessed',
+                        fontSize: 20.0,
+                        fontFamily: 'Patua',
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 40.0,
+                    height: 10.0,
                   ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: favorites.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(
+                        return FavoriteCard();
+                        /*Container(
                             width: double.infinity,
                             margin: EdgeInsets.symmetric(vertical: 10.0),
                             child: Text(
@@ -117,7 +119,7 @@ class _FavoritesState extends BaseViewState<Favorites> {
                               style: TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.white),
-                            ));
+                            ));*/
                       },
                     ),
                   ),

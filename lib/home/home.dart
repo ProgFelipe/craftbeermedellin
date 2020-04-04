@@ -3,6 +3,7 @@ import 'package:craftbeer/home/components/beer_filter.dart';
 import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/home/components/image_error.dart';
 import 'package:craftbeer/home/home_bloc.dart';
+import 'package:craftbeer/search/search_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -49,7 +50,7 @@ class HomeState extends BaseViewState {
                 ),
               ),
               //storyTellingWidget(context),
-              _searchView(),
+              SearchView(),
               titleView('Top Week Selections'),
               topBeersOfWeek(context),
               //buildCategorySearch(false),
@@ -64,25 +65,6 @@ class HomeState extends BaseViewState {
       ),
     );
   }
-}
-
-Widget _searchView() {
-  return Container(
-    margin: const EdgeInsets.all(10.0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      ),
-    ),
-    child: ListTile(
-      leading: Icon(Icons.search),
-      title: Text(
-        'Buscar cerveza',
-        style: TextStyle(color: Colors.grey[400]),
-      ),
-    ),
-  );
 }
 
 Widget _buildBrewersGrid(context, HomeBloc bloc) {

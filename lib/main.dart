@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+        primarySwatch: Colors.orange,
+        cursorColor: Colors.orange,
       ),
       home: Navigator(),
     );
