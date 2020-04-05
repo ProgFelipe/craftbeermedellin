@@ -14,6 +14,7 @@ class Api {
   static const String brewers = 'brewers';
   static const String brewer = 'brewer';
   static const String beers = 'beers';
+  static const String beerType = 'type';
   static const String name = 'name';
   static const String ranking = 'ranking';
   static const String brewName = 'name';
@@ -32,21 +33,6 @@ class Api {
   Stream<DocumentSnapshot> fetchBrewer(String brewerRef) {
     debugPrint('Collection /brewers/$brewerRef');
     return _fireStore.collection(brewers).document(brewerRef).snapshots();
-    /*.where(name, isEqualTo: brewerName)
-        .limit(1)
-        .getDocuments()
-        .then((querySnapshot) {
-      debugPrint('SNAPSHOT $querySnapshot');
-      if (querySnapshot != null) {
-        var result = querySnapshot.documents[0];
-        debugPrint('Encontramos este document $result');
-        debugPrint('Encontramos este document ${result.data}');
-        return result;
-      } else {
-        debugPrint('NO ENCONTRAMOS este document null');
-        return null;
-      }
-    }).asStream();*/
   }
 
   Stream<DocumentSnapshot> fetchBeerByReference(String beerRef) {
@@ -54,34 +40,23 @@ class Api {
   }
 
   Stream<QuerySnapshot> fetchBrewerBeers(String brewerDocumentRef) {
-    //debugPrint('Beers $brewer : ${'/$brewers/$brewerDocumentRef'}');
-    fetchBeersTest(brewerDocumentRef);
     return _fireStore
         .collection(beers)
         .where(brewer, isEqualTo: '/$brewers/$brewerDocumentRef')
         .snapshots();
   }
 
-  void fetchBeersTest(String brewerDocumentRef) {
-    _fireStore
-        .collection(beers)
-        .where(brewer, isEqualTo: '/$brewers/$brewerDocumentRef')
-        .getDocuments()
-        .then((value) {
-      debugPrint("${value}");
-      value.documents.forEach((element) {
-        debugPrint("${element}");
-      });
-    });
-  }
-
   Future<int> getBrewerVotes(String brewerName) {
-    _fireStore.collection(brewers).document(brewerName).get().then((doc) {
+    return _fireStore
+        .collection(brewers)
+        .document(brewerName)
+        .get()
+        .then((doc) {
       if (doc.exists) {
         return doc.data[ranking];
       } else {
         debugPrint("No such document!");
-        return -1;
+        return 0;
       }
     });
   }
@@ -97,7 +72,7 @@ class Api {
 
   Future<void> beerVote(String beerRef, int vote) async {
     debugPrint('VAMOS A VOTAR $beerRef, $vote');
-    var document = await _fireStore.collection(beers).document(beerRef);
+    var document = _fireStore.collection(beers).document(beerRef);
     document.get().then((beer) {
       int numVotes = beer[votes];
       int currentRanking = beer[ranking];
@@ -162,6 +137,15 @@ class Api {
   ///Promotions
   static String promotions = 'promotions';
   Stream fetchPromotions() => _fireStore.collection(promotions).snapshots();
+
+  ///Categories
+  Stream fetchBeersByType(String categoryRef) {
+    debugPrint('Beer of type ${'/beertypes/$categoryRef'}');
+    return _fireStore
+        .collection(beers)
+        .where(beerType, isEqualTo: '/beertypes/$categoryRef')
+        .snapshots();
+  }
 }
 
 Api db = Api();

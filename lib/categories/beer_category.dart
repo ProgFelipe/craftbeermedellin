@@ -1,3 +1,5 @@
+import 'package:craftbeer/home/components/beer_filter.dart';
+import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 
 class BeerCategory extends StatelessWidget {
@@ -11,6 +13,8 @@ class BeerCategory extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                titleView('Categories', color: Colors.black),
+                CategoriesView(),
                 Image.asset('assets/tiposcerveza.png'),
                 Image.asset('assets/colorescerveza.jpg'),
               ],

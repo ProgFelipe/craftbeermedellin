@@ -19,7 +19,6 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final bloc = BlocProvider.of<HomeBloc>(context);
     final brewersGrid = StreamBuilder(
       stream: db.fetchBrewers(),
       builder: (context, snapshot) {
@@ -74,9 +73,6 @@ class Home extends StatelessWidget {
               titleView('Top Week Selections'),
               topBeers,
               BeerReleases(),
-              //buildCategorySearch(false),
-              titleView('Categories'),
-              CategoriesView(),
               titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
               brewersGrid,
               //_buildEventsCards(events),
