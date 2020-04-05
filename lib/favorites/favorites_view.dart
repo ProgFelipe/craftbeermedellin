@@ -1,3 +1,4 @@
+import 'package:craftbeer/base_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/favorites/favorite_brewer_card.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class Favorites extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    ConnectivityWidget(),
                     Stack(
                       children: <Widget>[
                         Icon(
@@ -81,6 +83,7 @@ class Favorites extends StatelessWidget {
               child: SafeArea(
                 child: Stack(
                   children: <Widget>[
+                    //Background
                     Container(
                         height: double.infinity,
                         child: Image.asset(
@@ -90,6 +93,7 @@ class Favorites extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
+                        ConnectivityWidget(),
                         SizedBox(
                           height: 40.0,
                         ),
@@ -116,30 +120,9 @@ class Favorites extends StatelessWidget {
                           child: ListView.builder(
                             itemCount: snapshot.data.length,
                             itemBuilder: (BuildContext context, int index) {
-                              if (index == 0) {
-                                return FavoriteCard(
-                                    imageUri: 'assets/girlgif2.gif',
-                                    title: 'Guardian');
-                              }
-                              if (index == 1) {
-                                return FavoriteCard(
-                                  imageUri: 'assets/girlgif.gif',
-                                  title: 'Madre Monte',
-                                );
-                              }
                               return FavoriteCard(
-                                imageUri: 'assets/beertype.png',
+                                brewerId: snapshot.data[index],
                               );
-                              /*Container(
-                            width: double.infinity,
-                            margin: EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              favorites[index],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white),
-                            ));*/
                             },
                           ),
                         ),

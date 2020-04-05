@@ -1,11 +1,12 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/brewers/brewers_detail.dart';
+import 'package:craftbeer/models.dart';
 import 'package:craftbeer/repository/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:provider/provider.dart';
 
 class CategoriesView extends StatefulWidget {
   @override
@@ -24,7 +25,59 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    List<BeerType> categories = Provider.of<List<BeerType>>(context);
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5.0),
+      decoration: BoxDecoration(),
+      child: Column(
+        children: <Widget>[
+          GridView.count(
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            children: List.generate(
+              categories.length,
+              (index) => GestureDetector(
+                onTap: () => changeBeerTypeSelection(categories[index].name),
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 10.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: FractionalOffset.topLeft,
+                      end: FractionalOffset.bottomRight,
+                      colors: [Colors.black54, Colors.indigo],
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CachedNetworkImage(
+                        height: 60.0,
+                        fadeInDuration: Duration(milliseconds: 1500),
+                        imageUrl: categories[index].imageUri,
+                        fit: BoxFit.scaleDown,
+                        placeholder: (context, url) => Image.network(url),
+                        errorWidget: (context, url, error) => SizedBox(
+                          height: 60.0,
+                        ),
+                      ),
+                      Text(
+                        categories[index].name,
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          FilterBeersByTypeView(beerType: _beerTypeRef),
+        ],
+      ),
+    );
+    /*StreamBuilder(
         stream: Firestore.instance.collection('beertypes').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -104,7 +157,7 @@ class _CategoriesViewState extends State<CategoriesView> {
               ),
             );
           }
-        });
+        });*/
   }
 }
 /*

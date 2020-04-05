@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:craftbeer/base_view.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/repository/api.dart';
 import 'package:craftbeer/utils.dart';
@@ -29,6 +30,7 @@ class EventsView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              ConnectivityWidget(),
               titleView('Promociones'),
               _buildPromotionsCards(context),
               titleView('Eventos Locales'),

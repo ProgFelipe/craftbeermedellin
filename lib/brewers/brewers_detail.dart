@@ -21,7 +21,7 @@ class BrewersDetail extends BaseView {
 }
 
 class BrewersDetailState extends BaseViewState<BrewersDetail> {
-  bool isFavorite = false;
+  bool isFavorite;
   final String brewerRef;
   BrewerBloc bloc;
   BrewersDetailState({this.brewerRef});
@@ -29,6 +29,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
   @override
   void initState() {
     super.initState();
+    isFavorite = false;
     bloc = BrewerBloc(brewerRef: brewerRef);
   }
 
@@ -111,7 +112,7 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                             FutureBuilder(
                               future: _isFavorite(bloc.getBrewerName(snapshot)),
                               builder: (context, snapshot) {
-                                isFavorite = snapshot.data;
+                                isFavorite = snapshot.data ?? false;
                                 /*String brewerName =
                                     bloc.getBrewerName(snapshot);*/
                                 debugPrint('Is Favorite? => $isFavorite');

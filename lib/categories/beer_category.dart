@@ -1,9 +1,10 @@
+import 'package:craftbeer/base_view.dart';
 import 'package:craftbeer/home/components/beer_filter.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 
-class BeerCategory extends StatelessWidget {
-  const BeerCategory({Key key}) : super(key: key);
+class BeerCategoryView extends StatelessWidget {
+  const BeerCategoryView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +14,7 @@ class BeerCategory extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                ConnectivityWidget(),
                 titleView('Categories', color: Colors.black),
                 CategoriesView(),
                 Image.asset('assets/tiposcerveza.png'),

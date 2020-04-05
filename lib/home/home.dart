@@ -4,11 +4,13 @@ import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/home/components/image_error.dart';
 import 'package:craftbeer/home/new_releases.dart';
 import 'package:craftbeer/home/top_beers.dart';
+import 'package:craftbeer/models.dart';
 import 'package:craftbeer/repository/api.dart';
 import 'package:craftbeer/search/search_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import '../utils.dart';
 
@@ -19,32 +21,6 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final brewersGrid = StreamBuilder(
-      stream: db.fetchBrewers(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            margin: EdgeInsets.only(bottom: 40.0, left: 10.0, right: 10.0),
-            child: GridView.count(
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              children: List.generate(
-                snapshot.data.documents.length,
-                (index) => _brewerCard(
-                    context,
-                    snapshot.data.documents[index].data['imageUri'],
-                    snapshot.data.documents[index].data['name'],
-                    snapshot.data.documents[index].documentID),
-              ),
-            ),
-          );
-        } else {
-          return _shimmerBrewers();
-        }
-      },
-    );
-
     final topBeers = TopBeersView();
     return Container(
       height: double.infinity,
@@ -55,7 +31,6 @@ class Home extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //internetErrorWidget(),
               ConnectivityWidget(),
               Padding(
                 padding: EdgeInsets.only(top: 4.0),
@@ -74,7 +49,8 @@ class Home extends StatelessWidget {
               topBeers,
               BeerReleases(),
               titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
-              brewersGrid,
+              //brewersGrid,
+              BrewersGrid(),
               //_buildEventsCards(events),
             ],
           ),
@@ -140,4 +116,49 @@ Widget _brewerCard(context, String url, String name, String reference) {
           : errorColumn(name),
     ),
   );
+}
+
+class BrewersGrid extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var brewers = Provider.of<List<Brewer>>(context);
+
+    final brewersGrid = StreamBuilder(
+      stream: db.fetchBrewers(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+            margin: EdgeInsets.only(bottom: 40.0, left: 10.0, right: 10.0),
+            child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              children: List.generate(
+                snapshot.data.documents.length,
+                (index) => _brewerCard(
+                    context,
+                    snapshot.data.documents[index].data['imageUri'],
+                    snapshot.data.documents[index].data['name'],
+                    snapshot.data.documents[index].documentID),
+              ),
+            ),
+          );
+        } else {
+          return _shimmerBrewers();
+        }
+      },
+    );
+    return Container(
+      margin: EdgeInsets.only(bottom: 40.0, left: 10.0, right: 10.0),
+      child: GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 3,
+        shrinkWrap: true,
+        children: List.generate(
+            brewers.length,
+            (index) => _brewerCard(context, brewers[index].imageUri,
+                brewers[index].name, brewers[index].id)),
+      ),
+    );
+  }
 }

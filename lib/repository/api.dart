@@ -26,8 +26,10 @@ class Api {
   ///Beer Categories
 
   ///Brewers
-  Stream<QuerySnapshot> fetchBrewers() =>
-      _fireStore.collection(brewers).snapshots();
+  Stream<QuerySnapshot> fetchBrewers() {
+    debugPrint('--BREWERS SERVICE SNAPSHOT--');
+    return _fireStore.collection(brewers).snapshots();
+  }
 
   ///Brewer Detail -> Brewer
   Stream<DocumentSnapshot> fetchBrewer(String brewerRef) {
@@ -35,8 +37,20 @@ class Api {
     return _fireStore.collection(brewers).document(brewerRef).snapshots();
   }
 
+  ///BeerCategory
+  Stream<QuerySnapshot> fetchBeerCategories(){
+    return _fireStore.collection('beertypes').snapshots();
+  }
   Stream<DocumentSnapshot> fetchBeerByReference(String beerRef) {
     return _fireStore.collection(beers).document(beerRef).snapshots();
+  }
+
+  Stream<QuerySnapshot> fetchBrewerByName(String brewerName) {
+    return _fireStore
+        .collection(brewer)
+        .where(name, isEqualTo: brewerName)
+        .limit(1)
+        .snapshots();
   }
 
   Stream<QuerySnapshot> fetchBrewerBeers(String brewerDocumentRef) {

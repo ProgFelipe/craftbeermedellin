@@ -1,33 +1,44 @@
 import 'package:craftbeer/app_localization.dart';
 import 'package:craftbeer/categories/beer_category.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
+import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/events_view.dart';
 import 'package:craftbeer/favorites/favorites_view.dart';
+import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './Home/home.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Craft Beer Colombia',
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('es', ''),
+    return MultiProvider(
+      providers: [
+        StreamProvider<List<Brewer>>.value(
+            value: DataBaseService().streamBrewers()),
+        StreamProvider<List<BeerType>>.value(
+            value: DataBaseService().streamBeerTypes()),
       ],
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-        cursorColor: Colors.orange,
+      child: MaterialApp(
+        title: 'Craft Beer Colombia',
+        supportedLocales: [
+          Locale('en', 'US'),
+          Locale('es', ''),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        theme: ThemeData(
+          primarySwatch: Colors.orange,
+          cursorColor: Colors.orange,
+        ),
+        home: Navigator(),
       ),
-      home: Navigator(),
     );
   }
 }
@@ -40,7 +51,7 @@ class Navigator extends StatefulWidget {
     EventsView(
       key: PageStorageKey('EventPage'),
     ),
-    BeerCategory(
+    BeerCategoryView(
       key: PageStorageKey('BeerCategoryPage'),
     ),
     Favorites(
