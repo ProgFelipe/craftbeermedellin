@@ -13,6 +13,7 @@ const List<String> beerFavorites = [
   'PORTER\n20 Mission',
   'SOUT\nApostol'
 ];
+
 class CategoriesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class CategoriesView extends StatelessWidget {
                     child: CachedNetworkImage(
                       fadeInDuration: Duration(milliseconds: 1500),
                       imageUrl:
-                      snapshot.data.documents[index].data['imageUri'] ?? '',
+                          snapshot.data.documents[index].data['imageUri'] ?? '',
                       fit: BoxFit.scaleDown,
                       placeholder: (context, url) => Image.network(url),
                       errorWidget: (context, url, error) => Text(
@@ -71,7 +72,7 @@ class CategoriesView extends StatelessWidget {
                 shrinkWrap: true,
                 children: List.generate(
                   5,
-                      (index) => Container(
+                  (index) => Container(
                     margin: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(

@@ -141,6 +141,20 @@ class Api {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> fetchReleases() {
+    debugPrint('Suscrito a releases cervezas');
+    var currentDate = DateTime.now();
+    DateTime _starDate = DateTime(
+        currentDate.year, currentDate.month - 1, currentDate.day, 0, 0);
+    debugPrint("Release from ${_starDate.month}-${_starDate.day}");
+    return _fireStore
+        .collection(beers)
+        .where('release', isGreaterThanOrEqualTo: _starDate)
+        .orderBy('release', descending: true)
+        .limit(5)
+        .snapshots();
+  }
+
   ///Events
   static String events = 'events';
   Stream fetchEvents() => _fireStore.collection(events).snapshots();

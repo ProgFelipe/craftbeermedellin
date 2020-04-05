@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:craftbeer/components/awesome_cards.dart';
+import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/repository/api.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
@@ -65,38 +65,82 @@ class EventsView extends StatelessWidget {
 
 Widget _eventCard(DocumentSnapshot event) {
   return Card(
+    shape: cardDecoration(),
+    elevation: 0.0,
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _emptyOrNullSafetyText(event['name']),
-        _emptyOrNullSafetyText(event['city']),
-        SizedBox(
-          height: 10.0,
-        ),
-        _emptyOrNullSafetyText(event['description']),
-        event['date'] != null
-            ? ListTile(
-                leading: Icon(Icons.date_range),
-                title: Text('${event['date']}'),
-              )
-            : SizedBox(),
         Container(
-          alignment: Alignment.center,
-          child: CachedNetworkImage(
-            fadeInDuration: Duration(milliseconds: 1500),
-            imageUrl: event['imageUri'],
-            fit: BoxFit.scaleDown,
-            placeholder: (context, url) => Image.network(url),
-            errorWidget: (context, url, error) => Card(
-              elevation: 4.0,
-              child: Container(
-                child: Icon(Icons.error),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(DecorationConsts.cardRadius),
+                topRight: Radius.circular(DecorationConsts.cardRadius)),
+            child: CachedNetworkImage(
+              fadeInDuration: Duration(milliseconds: 1500),
+              imageUrl: event['imageUri'],
+              fit: BoxFit.scaleDown,
+              placeholder: (context, url) => Image.network(url),
+              errorWidget: (context, url, error) => Card(
+                elevation: 4.0,
+                child: Container(
+                  child: Icon(Icons.error),
+                ),
               ),
             ),
           ),
         ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Icon(Icons.date_range, color: Colors.grey),
+            Text(
+              event['date'] != null ? '${event['date']}' : '',
+              style: TextStyle(
+                fontSize: 12.0,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+        cardTitle(event['name']),
+        cardTitle(event['city']),
+        Center(child: _buildTimerButton()),
+        SizedBox(
+          height: 10.0,
+        )
+        //cardTitle(event['description']),
       ],
     ),
   );
+}
+
+Widget _buildTimerButton() {
+  return Container(
+      alignment: Alignment.center,
+      width: 130.0,
+      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
+      decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border.all(color: Colors.blue),
+          borderRadius: new BorderRadius.all(Radius.circular(10.0))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Icon(
+            Icons.access_time,
+            color: Colors.blue,
+          ),
+          Text(
+            '8 hours 20 min',
+            style: TextStyle(
+              fontSize: 12.0,
+              color: Colors.blue,
+            ),
+          ),
+        ],
+      ));
 }
 
 Widget _buildPromotionsCards(context) {
@@ -115,23 +159,19 @@ Widget _buildPromotionsCards(context) {
                   padding: EdgeInsets.symmetric(vertical: 10.0),
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return AwesomeCards(
-                        2, snapshot.data.documents[index]['imageUri']);
+                    return Card(
+                        shape: cardDecoration(),
+                        elevation: 3.0,
+                        color: Colors.white,
+                        semanticContainer: true,
+                        child: Image.network(
+                            snapshot.data.documents[index]['imageUri'] ??
+                                'http://morganfields.com.sg/wp-content/uploads/img-home-promo3.jpg',
+                            width: 100.0,
+                            fit: BoxFit.cover));
                   }));
         } else {
           return Text('No hay promociones');
         }
       });
-}
-
-Widget _emptyOrNullSafetyText(String value) {
-  if (value == null) {
-    return SizedBox();
-  } else {
-    return Text(
-      value,
-      style: TextStyle(fontSize: 20.0),
-      textAlign: TextAlign.center,
-    );
-  }
 }

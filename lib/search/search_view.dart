@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
+import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/repository/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -10,24 +11,27 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50.0,
-      margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
+          Radius.circular(DecorationConsts.cardRadius),
         ),
       ),
       child: TypeAheadField(
         suggestionsBoxDecoration: SuggestionsBoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(DecorationConsts.cardRadius),
           elevation: 10.0,
         ),
         textFieldConfiguration: TextFieldConfiguration(
           autofocus: false,
           style: TextStyle(fontSize: 20.0),
           decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: Icon(
+                Icons.search,
+                color: DecorationConsts.hintGreyColor,
+              ),
               hintText: 'Busca tú Cerveza ó Cervecero',
+              hintStyle: TextStyle(color: DecorationConsts.hintGreyColor),
               border: InputBorder.none),
         ),
         suggestionsCallback: (pattern) async {

@@ -97,11 +97,12 @@ class Favorites extends StatelessWidget {
                           leading: Icon(
                             Icons.favorite,
                             color: Colors.redAccent,
+                            size: 40.0,
                           ),
                           title: Text(
                             'Favoritos',
                             style: TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 40.0,
                               fontFamily: 'Patua',
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -115,7 +116,20 @@ class Favorites extends StatelessWidget {
                           child: ListView.builder(
                             itemCount: snapshot.data.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return FavoriteCard();
+                              if (index == 0) {
+                                return FavoriteCard(
+                                    imageUri: 'assets/girlgif2.gif',
+                                    title: 'Guardian');
+                              }
+                              if (index == 1) {
+                                return FavoriteCard(
+                                  imageUri: 'assets/girlgif.gif',
+                                  title: 'Madre Monte',
+                                );
+                              }
+                              return FavoriteCard(
+                                imageUri: 'assets/beertype.png',
+                              );
                               /*Container(
                             width: double.infinity,
                             margin: EdgeInsets.symmetric(vertical: 10.0),

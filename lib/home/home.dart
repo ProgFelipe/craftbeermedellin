@@ -1,8 +1,8 @@
-import 'package:craftbeer/bloc_provider.dart';
+import 'package:craftbeer/base_view.dart';
 import 'package:craftbeer/home/components/beer_filter.dart';
 import 'package:craftbeer/brewers/brewers_detail.dart';
 import 'package:craftbeer/home/components/image_error.dart';
-import 'package:craftbeer/home/home_bloc.dart';
+import 'package:craftbeer/home/new_releases.dart';
 import 'package:craftbeer/home/top_beers.dart';
 import 'package:craftbeer/repository/api.dart';
 import 'package:craftbeer/search/search_view.dart';
@@ -11,28 +11,21 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import '../utils.dart';
-import '../base_view.dart';
 
 const int SHIMMER_BREWER_GRID_COUNT = 6;
 
 class Home extends StatelessWidget {
   const Home({Key key}) : super(key: key);
-  /*static final Home _singleton = Home._internal();
-  factory Home() {
-    return _singleton;
-  }
-  Home._internal();*/
 
   @override
   Widget build(BuildContext context) {
     //final bloc = BlocProvider.of<HomeBloc>(context);
-    //initInternetValidation();
-    final grid = StreamBuilder(
+    final brewersGrid = StreamBuilder(
       stream: db.fetchBrewers(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
-            margin: EdgeInsets.only(bottom: 20.0),
+            margin: EdgeInsets.only(bottom: 40.0, left: 10.0, right: 10.0),
             child: GridView.count(
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 3,
@@ -64,6 +57,7 @@ class Home extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               //internetErrorWidget(),
+              ConnectivityWidget(),
               Padding(
                 padding: EdgeInsets.only(top: 4.0),
                 child: Image.asset(
@@ -73,14 +67,18 @@ class Home extends StatelessWidget {
                 ),
               ),
               //storyTellingWidget(context),
-              SearchView(),
+              Padding(
+                  padding:
+                      EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
+                  child: SearchView()),
               titleView('Top Week Selections'),
               topBeers,
+              BeerReleases(),
               //buildCategorySearch(false),
               titleView('Categories'),
               CategoriesView(),
               titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
-              grid,
+              brewersGrid,
               //_buildEventsCards(events),
             ],
           ),
@@ -136,15 +134,12 @@ Widget _brewerCard(context, String url, String name, String reference) {
       decoration: _brewersDecoration(),
       margin: EdgeInsets.all(10.0),
       child: url != null && url.isNotEmpty
-          ? Hero(
-              tag: '$reference',
-              child: CachedNetworkImage(
-                fadeInDuration: Duration(milliseconds: 1500),
-                imageUrl: url ?? '',
-                fit: BoxFit.scaleDown,
-                placeholder: (context, url) => Image.network(url),
-                errorWidget: (context, url, error) => errorColumn(name),
-              ),
+          ? CachedNetworkImage(
+              fadeInDuration: Duration(milliseconds: 1500),
+              imageUrl: url ?? '',
+              fit: BoxFit.scaleDown,
+              placeholder: (context, url) => Image.network(url),
+              errorWidget: (context, url, error) => errorColumn(name),
             )
           : errorColumn(name),
     ),

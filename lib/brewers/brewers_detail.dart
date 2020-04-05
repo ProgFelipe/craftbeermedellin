@@ -88,28 +88,25 @@ class BrewersDetailState extends BaseViewState<BrewersDetail> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Hero(
-                              tag: brewerRef,
-                              child: CachedNetworkImage(
-                                fadeInCurve: Curves.bounceInOut,
-                                imageUrl: bloc.getLogo(snapshot) ?? '',
-                                width: 120.0,
-                                fit: BoxFit.cover,
-                                errorWidget: (context, url, error) {
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        bloc.getBrewerName(snapshot),
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      Container(
-                                        child: Icon(Icons.error),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
+                            CachedNetworkImage(
+                              fadeInCurve: Curves.bounceInOut,
+                              imageUrl: bloc.getLogo(snapshot) ?? '',
+                              width: 120.0,
+                              fit: BoxFit.cover,
+                              errorWidget: (context, url, error) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      bloc.getBrewerName(snapshot),
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    Container(
+                                      child: Icon(Icons.error),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                             FutureBuilder(
                               future: _isFavorite(bloc.getBrewerName(snapshot)),

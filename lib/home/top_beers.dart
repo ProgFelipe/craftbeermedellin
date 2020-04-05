@@ -27,7 +27,10 @@ class TopBeersView extends StatelessWidget {
       },
     );
 
-    return Container(height: 100.0, decoration: BoxDecoration(), child: beers);
+    return Container(
+        decoration: BoxDecoration(),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: beers);
   }
 }
 
@@ -50,30 +53,37 @@ Widget topBeerItem(DocumentSnapshot beerSnapshot, context) {
                 },
               ));
     },
-    child: Card(
-      elevation: 10.0,
-      child: Column(
-        children: <Widget>[
-          CachedNetworkImage(
-            height: 70.0,
-            fadeInDuration: Duration(milliseconds: 1500),
-            imageUrl: beerSnapshot.data['imageUri'] ?? '',
-            fit: BoxFit.scaleDown,
-            placeholder: (context, url) => Image.network(
-              url,
-              height: 70.0,
-            ),
-            errorWidget: (context, url, error) => Image.asset(
-              'assets/beer.png',
-              height: 70.0,
+    child: Stack(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 20.0),
+          child: Card(
+            child: CachedNetworkImage(
+              height: 90.0,
+              fadeInDuration: Duration(milliseconds: 1500),
+              imageUrl: beerSnapshot.data['imageUri'] ?? '',
+              fit: BoxFit.scaleDown,
+              placeholder: (context, url) => Image.network(
+                url,
+                height: 90.0,
+              ),
+              errorWidget: (context, url, error) => Image.asset(
+                'assets/beer.png',
+                height: 90.0,
+              ),
             ),
           ),
-          Text(
+        ),
+        Positioned(
+          top: 0.0,
+          left: 10.0,
+          child: Text(
             beerSnapshot.data['name'],
             textAlign: TextAlign.center,
-          )
-        ],
-      ),
+            style: TextStyle(color: Colors.white30),
+          ),
+        )
+      ],
     ),
   );
 }

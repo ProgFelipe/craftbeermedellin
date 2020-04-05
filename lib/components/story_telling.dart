@@ -1,4 +1,4 @@
-import 'package:craftbeer/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:story_view/story_view.dart';
@@ -18,41 +18,36 @@ const List<String> defaultDescriptions = [
 ];
 
 Widget storyTellingWidget(context,
-    {bool home = false,
-    List<String> imagesOrGif = gifs,
-    List<String> descriptions = defaultDescriptions}) {
-  List<StoryItem> _createStoryItems() {
-    List<StoryItem> stories = List();
-    if (home) {
-      stories.add(StoryItem.text(
-        localizedText(context, WELCOME),
-        Colors.amber,
-        roundedTop: true,
-        duration: Duration(milliseconds: 2000),
-      ));
-    }
-    imagesOrGif.asMap().forEach((index, element) {
-      stories.add(StoryItem.inlineGif(
-        imagesOrGif[index],
-        caption: Text(
-          descriptions[index] ?? '',
-          style: TextStyle(
-            color: Colors.white,
-            backgroundColor: Colors.black54,
-            fontSize: 17,
-          ),
+    {bool home = false, QuerySnapshot beersSnapshot}) {
+  debugPrint('Releases: ${beersSnapshot.documents}');
+  List<StoryItem> stories = List();
+  beersSnapshot.documents.forEach((beerItem) {
+    stories.add(StoryItem.inlineGif(
+      beerItem['imageUri'] ?? '',
+      roundedTop: false,
+      imageFit: BoxFit.scaleDown,
+      caption: Text(
+        beerItem['name'] ?? '',
+        style: TextStyle(
+          color: Colors.white,
+          backgroundColor: Colors.black54,
+          fontSize: 17,
         ),
-      ));
-    });
-    return stories;
+      ),
+    ));
+  });
+  if (stories.isNotEmpty) {
+    return Container(
+        height: 240,
+        child: StoryView(
+          stories,
+          progressPosition: ProgressPosition.bottom,
+          repeat: false,
+        ));
+  } else {
+    return Text(
+      'No New Releases',
+      style: TextStyle(color: Colors.grey[500]),
+    );
   }
-
-  return Container(
-    height: 240,
-    child: StoryView(
-      _createStoryItems(),
-      progressPosition: ProgressPosition.bottom,
-      repeat: true,
-    ),
-  );
 }
