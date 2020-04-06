@@ -11,7 +11,7 @@ class BeerReleases extends StatelessWidget {
       child: StreamBuilder(
         stream: db.fetchReleases(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data.documents.length > 0) {
             return Column(
               children: <Widget>[
                 titleView('Releases'),

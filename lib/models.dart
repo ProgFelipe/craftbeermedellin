@@ -119,12 +119,14 @@ class BeerType {
 
 class Event {
   String city, date, description, imageUri, name;
-  Event({this.city, this.date, this.description, this.imageUri, this.name});
+  final DateTime dateTime;
+  Event({this.city, this.date, this.dateTime, this.description, this.imageUri, this.name});
 
   factory Event.fromMap(DocumentSnapshot data) {
     return Event(
         city: data['city'] ?? '',
         date: data['date'] ?? '',
+        dateTime: data['dateTime'] ?? null,
         description: data['description'] ?? '',
         imageUri: data['imageUri'] ?? '',
         name: data['name'] ?? '');

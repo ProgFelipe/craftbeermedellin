@@ -12,11 +12,6 @@ import 'package:provider/provider.dart';
 class EventsView extends StatelessWidget {
   const EventsView({Key key}) : super(key: key);
 
-  Stream fetchEvents() {
-    debugPrint('Fetching Events...');
-    return db.fetchEvents();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(

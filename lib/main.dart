@@ -57,9 +57,7 @@ class Navigator extends StatefulWidget {
     Home(
       key: PageStorageKey('HomePage'),
     ),
-    EventsView(
-      key: PageStorageKey('EventPage'),
-    ),
+    EventsView(),
     BeerCategoryView(
       key: PageStorageKey('BeerCategoryPage'),
     ),
@@ -74,7 +72,7 @@ class Navigator extends StatefulWidget {
 }
 
 class _NavigatorState extends State<Navigator> {
-  final PageStorageBucket bucket = PageStorageBucket();
+  //final PageStorageBucket bucket = PageStorageBucket();
   int _currentIndex = 0;
 
   @override
