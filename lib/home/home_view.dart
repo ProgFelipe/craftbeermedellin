@@ -1,12 +1,10 @@
-import 'package:craftbeer/base_view.dart';
-import 'package:craftbeer/home/components/beer_filter.dart';
-import 'package:craftbeer/brewers/brewers_detail.dart';
+import 'package:craftbeer/connectivity_widget.dart';
+import 'package:craftbeer/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/home/components/image_error.dart';
 import 'package:craftbeer/home/new_releases.dart';
 import 'package:craftbeer/home/top_beers.dart';
 import 'package:craftbeer/models.dart';
-import 'package:craftbeer/repository/api.dart';
-import 'package:craftbeer/search/search_view.dart';
+import 'package:craftbeer/home/search_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -44,7 +42,7 @@ class Home extends StatelessWidget {
               Padding(
                   padding:
                       EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
-                  child: SearchView()),
+                  child: SearchWidget()),
               titleView('Top Week Selections'),
               topBeers,
               BeerReleases(),
@@ -96,25 +94,27 @@ Widget _shimmerBrewers() {
   );
 }
 
-Widget _brewerCard(context, String url, String name, String reference) {
+Widget _brewerCard(context, Brewer brewer) {
   return GestureDetector(
     onTap: () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BrewersDetail(reference)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BrewersDetail(
+                    brewer.id,
+                    brewer: brewer,
+                  )));
     },
     child: Container(
-      decoration: _brewersDecoration(),
-      margin: EdgeInsets.all(10.0),
-      child: url != null && url.isNotEmpty
-          ? CachedNetworkImage(
-              fadeInDuration: Duration(milliseconds: 1500),
-              imageUrl: url ?? '',
-              fit: BoxFit.scaleDown,
-              placeholder: (context, url) => Image.network(url),
-              errorWidget: (context, url, error) => errorColumn(name),
-            )
-          : errorColumn(name),
-    ),
+        decoration: _brewersDecoration(),
+        margin: EdgeInsets.all(10.0),
+        child: CachedNetworkImage(
+          fadeInDuration: Duration(milliseconds: 1500),
+          imageUrl: brewer.imageUri,
+          fit: BoxFit.scaleDown,
+          placeholder: (context, url) => Image.network(url),
+          errorWidget: (context, url, error) => errorColumn(brewer.name),
+        )),
   );
 }
 
@@ -123,41 +123,14 @@ class BrewersGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     var brewers = Provider.of<List<Brewer>>(context);
 
-    final brewersGrid = StreamBuilder(
-      stream: db.fetchBrewers(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            margin: EdgeInsets.only(bottom: 40.0, left: 10.0, right: 10.0),
-            child: GridView.count(
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              children: List.generate(
-                snapshot.data.documents.length,
-                (index) => _brewerCard(
-                    context,
-                    snapshot.data.documents[index].data['imageUri'],
-                    snapshot.data.documents[index].data['name'],
-                    snapshot.data.documents[index].documentID),
-              ),
-            ),
-          );
-        } else {
-          return _shimmerBrewers();
-        }
-      },
-    );
     return Container(
       margin: EdgeInsets.only(bottom: 40.0, left: 10.0, right: 10.0),
       child: GridView.count(
         physics: const NeverScrollableScrollPhysics(),
         crossAxisCount: 3,
         shrinkWrap: true,
-        children: List.generate(
-            brewers.length,
-            (index) => _brewerCard(context, brewers[index].imageUri,
-                brewers[index].name, brewers[index].id)),
+        children: List.generate(brewers?.length ?? 0,
+            (index) => _brewerCard(context, brewers[index])),
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:craftbeer/brewers/brewers_detail.dart';
+import 'package:craftbeer/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/repository/api.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,9 +20,7 @@ class TopBeersView extends StatelessWidget {
                   (index) =>
                       topBeerItem(snapshot.data.documents[index], context)));
         } else {
-          return SizedBox(
-            height: 10.0,
-          );
+          return Text('Cargando ... ');
         }
       },
     );

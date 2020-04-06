@@ -1,8 +1,11 @@
 {
-  "home": "Home",
-  "events": "Eventos",
-  "favorites": "Favoritos",
+  "home_nav_title": "Inicio",
+  "events_nav_title": "Eventos",
+  "beer_nav_title": "Cerveza",
+  "favorites_nav_title": "Favoritos",
   "no_data": "No tienes datos",
   "local_brewers": "Cervecerias Locales",
-  "welcome_story_telling": "Bienvenido\nBrewers Colombia.!\n\nLa cerveza artesanal es nuestra pasión \n\nConoce sobre cervezas artesanales locales!"
+  "welcome_story_telling": "Bienvenido\nBrewers Colombia.!\n\nLa cerveza artesanal es nuestra pasión \n\nConoce sobre cervezas artesanales locales!",
+  "promotions_title": "Promotions",
+  "events_title": "Events"
 }

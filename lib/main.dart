@@ -1,16 +1,21 @@
 import 'package:craftbeer/app_localization.dart';
-import 'package:craftbeer/categories/beer_category.dart';
+import 'package:craftbeer/categories/beer_category_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/events_view.dart';
 import 'package:craftbeer/favorites/favorites_view.dart';
 import 'package:craftbeer/models.dart';
+import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import './Home/home.dart';
+import './Home/home_view.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_stetho/flutter_stetho.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  Stetho.initialize();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -21,6 +26,10 @@ class MyApp extends StatelessWidget {
             value: DataBaseService().streamBrewers()),
         StreamProvider<List<BeerType>>.value(
             value: DataBaseService().streamBeerTypes()),
+        StreamProvider<List<Promotion>>.value(
+            value: DataBaseService().streamPromotions()),
+        StreamProvider<List<Event>>.value(
+            value: DataBaseService().streamEvents()),
       ],
       child: MaterialApp(
         title: 'Craft Beer Colombia',
@@ -70,7 +79,6 @@ class _NavigatorState extends State<Navigator> {
 
   @override
   Widget build(BuildContext context) {
-    Text subtree = const Text("Hello World");
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -80,14 +88,14 @@ class _NavigatorState extends State<Navigator> {
         //fixedColor: Colors.brown,
         onTap: onTabTapped,
         currentIndex: _currentIndex,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             activeIcon: Icon(
               Icons.home,
               color: Colors.white,
             ),
-            title: Text('Home'),
+            title: Text(localizedText(context, HOME_NAV_TITLE)),
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
@@ -98,7 +106,7 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.red,
             ),
             backgroundColor: Colors.black,
-            title: Text('Events'),
+            title: Text(localizedText(context, EVENTS_NAV_TITLE)),
           ),
           BottomNavigationBarItem(
             icon: Icon(BeerIcon.beerglass),
@@ -108,7 +116,7 @@ class _NavigatorState extends State<Navigator> {
             ),
             backgroundColor: Colors.black,
             title: Text(
-              'Beer',
+              localizedText(context, BEER_NAV_TITLE),
               style: TextStyle(color: Colors.orangeAccent),
             ),
           ),
@@ -119,7 +127,7 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.redAccent,
             ),
             backgroundColor: Colors.black,
-            title: Text('Favorites'),
+            title: Text(localizedText(context, FAVORITES_NAV_TITLE)),
           ),
         ],
       ),

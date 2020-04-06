@@ -1,5 +1,5 @@
-import 'package:craftbeer/base_view.dart';
-import 'package:craftbeer/home/components/beer_filter.dart';
+import 'package:craftbeer/connectivity_widget.dart';
+import 'package:craftbeer/categories/beer_filter.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 

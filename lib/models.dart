@@ -3,14 +3,16 @@ import 'package:flutter/cupertino.dart';
 
 class Beer {
   final String id;
-  final String name, description, history;
-  final double abv, ibu;
+  final String name;
+  final String description;
+  final String history;
+  final num abv, ibu;
   final String brewerRef;
   final String imageUri;
-  final int ranking, votes;
-  final Timestamp release;
+  final num ranking, votes;
+  final DateTime release;
   final bool sell;
-  final BeerType type;
+  final String type;
 
   Beer(
       {this.id,
@@ -28,24 +30,21 @@ class Beer {
       this.type});
 
   factory Beer.fromMap(DocumentSnapshot data) {
-    return Beer(
-        id: data.documentID,
-        name: data['name'],
-        brewerRef: data['brewer']
-                ?.map<String>(
-                    (reference) => (reference as DocumentReference).documentID)
-                ?.toList() ??
-            [''],
-        description: data['description'],
+    var beer = Beer(
+        id: data?.documentID ?? '',
+        name: data['name'] ?? '',
+        brewerRef: data['brewer']?.documentID ?? '',
+        description: data['description'] ?? '',
         history: data['history'] ?? '',
-        abv: data['abv'] ?? 0.0,
-        ibu: data['ibu'] ?? 0.0,
+        abv: data['abv']?.toDouble() ?? 0.0,
+        ibu: data['ibu']?.toDouble() ?? 0.0,
         imageUri: data['imageUri'] ?? '',
-        ranking: data['ranking'] ?? 0,
+        ranking: data['ranking'] as num ?? 0,
         votes: data['votes'] ?? 0,
-        release: data['release'] ?? Timestamp.now(),
+        release: data['release'] ?? DateTime.now(),
         sell: data['sell'] ?? false,
-        type: data['type']);
+        type: data['type']?.documentID ?? '');
+    return beer;
   }
 }
 
@@ -98,11 +97,19 @@ class Brewer {
 }
 
 class BeerType {
+  DocumentReference id;
   String name, description, imageUri;
-  BeerType({this.name, this.description, this.imageUri});
+  List<String> beers;
+  BeerType({this.id, this.name, this.description, this.imageUri, this.beers});
 
   factory BeerType.fromMap(DocumentSnapshot data) {
     return BeerType(
+      id: data.reference,
+      beers: data['beers']
+              ?.map<String>(
+                  (beerRef) => (beerRef as DocumentReference).documentID)
+              ?.toList() ??
+          [''],
       name: data['name'] ?? '',
       description: data['description'] ?? '',
       imageUri: data['imageUri'] ?? '',
@@ -124,13 +131,14 @@ class Event {
   }
 }
 
-class Promotions {
+class Promotion {
   String imageUri;
-  Promotions({this.imageUri});
+  Promotion({this.imageUri});
 
-  factory Promotions.fromMap(DocumentSnapshot data) {
-    return Promotions(
-      imageUri: data['imageUri'] ?? '',
+  factory Promotion.fromMap(DocumentSnapshot data) {
+    return Promotion(
+      imageUri: data['imageUri'] ??
+          'http://morganfields.com.sg/wp-content/uploads/img-home-promo3.jpg',
     );
   }
 }

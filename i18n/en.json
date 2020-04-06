@@ -1,8 +1,12 @@
 {
-  "home": "Home",
-  "events": "Events",
-  "favorites": "Favorites",
+  "home_nav_title": "Home",
+  "events_nav_title": "Events",
+  "beer_nav_title": "Beer",
+  "favorites_nav_title": "Favorites",
   "no_data": "No internet connection",
   "local_brewers": "Local Brewers",
-  "welcome_story_telling": "Welcome\nLocal Colombian Brewers.!\n\nThe Craft Beer is our pasion \n\nDiscover local Craft Beers!"
+  "welcome_story_telling": "Welcome\nLocal Colombian Brewers.!\n\nThe Craft Beer is our pasion \n\nDiscover local Craft Beers!",
+
+  "promotions_title": "Promociones",
+  "events_title": "Eventos Locales"
 }

@@ -143,7 +143,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                   height: 15.0,
                 ),
                 Visibility(
-                  visible: showVotesBox,
+                  visible: showVotesBox && _canVote,
                   child: Column(
                     children: <Widget>[
                       Text(
@@ -164,10 +164,16 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                             (index) => VoteItem(
                                   index: index,
                                   voteAction: onVote,
-                                  canVote: _canVote,
                                 )).toList(),
                       ),
                     ],
+                  ),
+                ),
+                Visibility(
+                  visible: showVotesBox && !_canVote,
+                  child: Text(
+                    'Gracias por votar!',
+                    style: TextStyle(color: Colors.amberAccent),
                   ),
                 ),
                 SizedBox(height: 24.0),
@@ -214,26 +220,22 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
 class VoteItem extends StatefulWidget {
   final int index;
   final IntCallback voteAction;
-  final bool canVote;
   VoteItem({
     @required this.index,
     @required this.voteAction,
-    @required this.canVote,
   });
   @override
   _VoteItemState createState() =>
-      _VoteItemState(index: index, voteAction: voteAction, canVote: canVote);
+      _VoteItemState(index: index, voteAction: voteAction);
 }
 
 class _VoteItemState extends State<VoteItem> {
   Color color;
   final int index;
   final IntCallback voteAction;
-  final bool canVote;
   _VoteItemState({
     @required this.index,
     @required this.voteAction,
-    @required this.canVote,
   });
 
   @override
@@ -246,12 +248,10 @@ class _VoteItemState extends State<VoteItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (canVote) {
-          setState(() {
-            color = color == Colors.green ? Colors.grey : Colors.green;
-          });
-          voteAction(index + 1);
-        }
+        setState(() {
+          color = color == Colors.green ? Colors.grey : Colors.green;
+        });
+        voteAction(index + 1);
       },
       child: Container(
           child: Center(

@@ -32,17 +32,23 @@ class Api {
   }
 
   ///Brewer Detail -> Brewer
-  Stream<DocumentSnapshot> fetchBrewer(String brewerRef) {
+  Stream<DocumentSnapshot> fetchBrewerByRef(String brewerRef) {
     debugPrint('Collection /brewers/$brewerRef');
     return _fireStore.collection(brewers).document(brewerRef).snapshots();
   }
 
   ///BeerCategory
-  Stream<QuerySnapshot> fetchBeerCategories(){
+  Stream<QuerySnapshot> fetchBeerCategories() {
     return _fireStore.collection('beertypes').snapshots();
   }
+
   Stream<DocumentSnapshot> fetchBeerByReference(String beerRef) {
+    debugPrint('Collection /beers/$beerRef');
     return _fireStore.collection(beers).document(beerRef).snapshots();
+  }
+
+  Stream<QuerySnapshot> fetchBeers() {
+    return _fireStore.collection(beers).snapshots();
   }
 
   Stream<QuerySnapshot> fetchBrewerByName(String brewerName) {
@@ -146,20 +152,13 @@ class Api {
 
   ///Events
   static String events = 'events';
-  Stream fetchEvents() => _fireStore.collection(events).snapshots();
+  Stream<QuerySnapshot> fetchEvents() =>
+      _fireStore.collection(events).snapshots();
 
   ///Promotions
   static String promotions = 'promotions';
-  Stream fetchPromotions() => _fireStore.collection(promotions).snapshots();
-
-  ///Categories
-  Stream fetchBeersByType(String categoryRef) {
-    debugPrint('Beer of type ${'/beertypes/$categoryRef'}');
-    return _fireStore
-        .collection(beers)
-        .where(beerType, isEqualTo: '/beertypes/$categoryRef')
-        .snapshots();
-  }
+  Stream<QuerySnapshot> fetchPromotions() =>
+      _fireStore.collection(promotions).snapshots();
 }
 
 Api db = Api();

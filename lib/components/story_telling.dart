@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:story_view/story_view.dart';
 
-const List<String> gifs = [
+/*const List<String> gifs = [
   "https://media.giphy.com/media/zXubYhkWFc9uE/giphy.gif",
   "https://media.giphy.com/media/Zw3oBUuOlDJ3W/giphy.gif",
   "https://media.giphy.com/media/J0ySNzZ5APILC/giphy.gif",
@@ -15,7 +15,7 @@ const List<String> defaultDescriptions = [
   "No lo se pero Salud!!",
   "https://media.giphy.com/media/J0ySNzZ5APILC/giphy.gif",
   "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif"
-];
+];*/
 
 Widget storyTellingWidget(context,
     {bool home = false, QuerySnapshot beersSnapshot}) {

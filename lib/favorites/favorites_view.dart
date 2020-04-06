@@ -1,4 +1,4 @@
-import 'package:craftbeer/base_view.dart';
+import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/favorites/favorite_brewer_card.dart';
 import 'package:flutter/material.dart';
@@ -21,30 +21,29 @@ class Favorites extends StatelessWidget {
     }
   }*/
 
-  Future<List<String>> _getFavorites() async {
+  Future<List<String>> getFutureFavorites() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return (prefs.getStringList('favorites') ?? List());
+    return prefs.getStringList('favorites') ?? List();
+  }
+
+  Stream<List<String>> _getFavorites() {
+    return Stream.fromFuture(getFutureFavorites());
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _getFavorites(),
+    return StreamBuilder(
+        stream: _getFavorites(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Center(child: Text('Fetching favorites..'));
-          }
           if (snapshot.data.length == 0) {
             return SafeArea(
-              child: Container(
-                height: double.infinity,
-                alignment: Alignment.center,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ConnectivityWidget(),
-                    Stack(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: <Widget>[
                         Icon(
                           BeerIcon.beerglass,
@@ -62,13 +61,13 @@ class Favorites extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      'Agrega Favoritos',
-                      style: TextStyle(color: Colors.grey, fontSize: 20.0),
-                    ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    'Agrega Favoritos',
+                    style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                  ),
+                ],
               ),
             );
           } else {
