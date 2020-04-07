@@ -1,3 +1,4 @@
+import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/brewers/brewer_beers.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
@@ -6,30 +7,32 @@ import 'package:craftbeer/models.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BrewersDetail extends StatefulWidget {
-  final String brewerRef;
   final Brewer brewer;
+  final String brewerRef;
 
-  BrewersDetail(this.brewerRef, {this.brewer});
+  BrewersDetail({this.brewer, this.brewerRef});
 
   @override
   State<StatefulWidget> createState() {
-    return BrewersDetailState(brewerRef, brewer: brewer);
+    return BrewersDetailState(brewer: brewer);
   }
 }
 
 class BrewersDetailState extends State<BrewersDetail> {
   bool isFavorite;
+
+  final Brewer brewer;
   final String brewerRef;
-  Brewer brewer;
+
+  BrewersDetailState({this.brewer, this.brewerRef});
+
   final DataBaseService db = DataBaseService();
-  BrewersDetailState(this.brewerRef, {this.brewer});
 
   @override
   void initState() {
@@ -37,52 +40,57 @@ class BrewersDetailState extends State<BrewersDetail> {
     isFavorite = false;
   }
 
-  Future<bool> isFavoritePreference(brewerName) async {
+  Future<void> _isFavorite(String brewerName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return (prefs.getStringList('favorites') ?? List()).contains(brewerName);
+    isFavorite =
+        (prefs.getStringList('favorites') ?? List()).contains(brewerName);
   }
 
-  Future<bool> _isFavorite(String brewerName) async {
-    bool result = await isFavoritePreference(brewerName);
-    return result;
+  void openWhatsApp() async {
+    String message =
+        "${brewer.name}\nMe gustaría comprar una cerveza\n[CraftBeer Colombia]";
+    String url = 'whatsapp://send?phone=${brewer.phone}&text=$message';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
-  String brewerName = '';
-  void changeFavoriteState() {
-    debugPrint('BrewerName => $brewerName');
-
-    changeFavorite(!isFavorite, brewerName);
-    setState(() {
-      isFavorite = !isFavorite;
-      debugPrint('Is Favorite? => $isFavorite');
-    });
-  }
-
-  void changeFavorite(bool isFavorite, String brewerName) async {
+  void changeFavorite() async {
+    String brewerName = brewer.name;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> favorites = (prefs.getStringList('favorites') ?? List());
     bool exist = favorites?.contains(brewerName);
-    debugPrint('Exist: $exist ?. New Value $isFavorite');
-    debugPrint('Favorites: $favorites ?.');
+    debugPrint('Exist $brewerName: $exist ?. New Value $isFavorite');
 
-    if (exist || isFavorite) {
-      isFavorite ? favorites.add(brewerName) : favorites.remove(brewerName);
+    if (exist && isFavorite) {
+      favorites.remove(brewerName);
     }
+    if (!exist && !isFavorite) {
+      favorites.add(brewerName);
+    }
+
     debugPrint('Favorites: $favorites ?.');
-    debugPrint('Brewer is t0 favorite: $exist ?.');
-    debugPrint('Brewer is t1 favorite: $isFavorite ?.');
     await prefs.setStringList('favorites', favorites);
+
+    setState(() {
+      isFavorite = !isFavorite;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (brewer == null) {
-      return StreamProvider<Brewer>.value(
+    if (brewer == null && brewerRef != null) {
+      return StreamProvider.value(
           value: db.streamBrewerByRef(brewerRef),
-          child: Consumer<Brewer>(builder: (context, brewerModel, child) {
-            brewer = brewerModel;
-            return Text('BEER ${brewerModel.name}]');
-          }));
+          child: Consumer<Brewer>(
+            builder: (context, brewerModel, child) {
+              return Scaffold(
+                body: Center(child: Text('Cervecero ${brewerModel.name}')),
+              );
+            },
+          ));
     }
     return Scaffold(
       body: Container(
@@ -109,7 +117,8 @@ class BrewersDetailState extends State<BrewersDetail> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        CachedNetworkImage(
+                        ImageProviderWidget(brewer.imageUri),
+                        /*CachedNetworkImage(
                           fadeInCurve: Curves.bounceInOut,
                           imageUrl: brewer.imageUri,
                           width: 120.0,
@@ -128,16 +137,12 @@ class BrewersDetailState extends State<BrewersDetail> {
                               ],
                             );
                           },
-                        ),
+                        ),*/
                         FutureBuilder(
                           future: _isFavorite(brewer.name),
                           builder: (context, snapshot) {
-                            isFavorite = snapshot.data ?? false;
-                            /*String brewerName =
-                                        bloc.getBrewerName(snapshot);*/
-                            debugPrint('Is Favorite? => $isFavorite');
                             return FlatButton.icon(
-                              onPressed: changeFavoriteState,
+                              onPressed: changeFavorite,
                               icon: Icon(
                                 isFavorite
                                     ? Icons.favorite
@@ -210,22 +215,23 @@ class BrewersDetailState extends State<BrewersDetail> {
                                 ),
                               ),
                             ),
-                            FlatButton.icon(
-                              color: Colors.green,
-                              onPressed: () async {
-                                FlutterOpenWhatsapp.sendSingleMessage(
-                                    brewer.phone,
-                                    "${brewer.name}\nMe gustaría comprar una cerveza\n[CraftBeer Colombia]");
-                              },
-                              icon: Icon(
-                                Icons.phone,
-                                color: Colors.white,
-                              ),
-                              label: RichText(
-                                text: TextSpan(
-                                  text: 'Pedir Whatsapp',
-                                  style: new TextStyle(
-                                      color: Colors.white, fontSize: 20.0),
+                            Visibility(
+                              visible: brewer.phone.isNotEmpty,
+                              child: FlatButton.icon(
+                                color: Colors.green,
+                                onPressed: () async {
+                                  openWhatsApp;
+                                },
+                                icon: Icon(
+                                  Icons.phone,
+                                  color: Colors.white,
+                                ),
+                                label: RichText(
+                                  text: TextSpan(
+                                    text: 'Pedir Whatsapp',
+                                    style: new TextStyle(
+                                        color: Colors.white, fontSize: 20.0),
+                                  ),
                                 ),
                               ),
                             ),

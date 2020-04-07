@@ -19,7 +19,6 @@ const List<String> defaultDescriptions = [
 
 Widget storyTellingWidget(context,
     {bool home = false, QuerySnapshot beersSnapshot}) {
-  debugPrint('Releases: ${beersSnapshot.documents}');
   List<StoryItem> stories = List();
   beersSnapshot.documents.forEach((beerItem) {
     stories.add(StoryItem.inlineGif(

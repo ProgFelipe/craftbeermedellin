@@ -1,9 +1,10 @@
 import 'dart:async';
-
+import 'dart:core';
+import 'package:craftbeer/components/image_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class EventCardWidget extends StatefulWidget {
   final Event event;
@@ -14,37 +15,76 @@ class EventCardWidget extends StatefulWidget {
 
 class _EventCardWidgetState extends State<EventCardWidget> {
   final Event event;
-  _EventCardWidgetState({this.event});
+  final DateFormat _dateFormat = new DateFormat(" dd \'de\' MMMM");
 
+  _EventCardWidgetState({this.event});
   Timer _timer;
-  int _start = 10;
-  DateTime eventLeftTime;
+  Duration eventLeftTime;
+
+  String remainEventCountDown;
+  bool showTodayCounter = false;
+  bool showRemainEventDaysLabel = false;
+
+  String twoDigits(int n) {
+    if (n >= 10) return "$n";
+    return "0$n";
+  }
+
+  String getFormattedDurationString(Duration duration) {
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  String getFormattedDayHoursDurationString(Duration duration) =>
+      "días: ${twoDigits(duration.inDays)}\n horas:${twoDigits(duration.inHours)}";
+
+  bool isSameDate(DateTime one, DateTime other) {
+    return one.year == other.year &&
+        one.month == other.month &&
+        one.day == other.day;
+  }
 
   void startTimer() {
-    debugPrint('START TIMER');
-    if (event.dateTime != null) {
-      eventLeftTime = event.dateTime;
-      const oneSec = const Duration(seconds: 2);
-      const oneMinute = const Duration(minutes: 1);
-      _timer = new Timer.periodic(
-        oneSec,
-        (Timer timer) => setState(
-          () {
-            if (_start < 1) {
-              timer.cancel();
-            } else {
-              eventLeftTime = eventLeftTime.subtract(oneMinute);
-              _start = _start - 1;
-            }
-          },
-        ),
-      );
+    if (event.dateTime != null &&
+        (!event.dateTime.isBefore(DateTime.now()) ||
+            isSameDate(event.dateTime, DateTime.now()))) {
+      eventLeftTime = event.dateTime.difference(DateTime.now());
+      if (eventLeftTime.inHours <= 24) {
+        todayEventTimer();
+      } else {
+        setState(() {
+          showRemainEventDaysLabel = true;
+        });
+      }
+    } else {
+      debugPrint('EVENT IN PASS ${event.name}');
     }
+  }
+
+  void todayEventTimer() {
+    const oneSecond = Duration(seconds: 1);
+    setState(() {
+      showTodayCounter = true;
+      showRemainEventDaysLabel = true;
+    });
+    _timer = new Timer.periodic(
+      oneSecond,
+      (Timer timer) => setState(
+        () {
+          if (eventLeftTime.inSeconds <= 0) {
+            timer.cancel();
+          } else {
+            eventLeftTime = eventLeftTime - oneSecond;
+            remainEventCountDown = getFormattedDurationString(eventLeftTime);
+          }
+        },
+      ),
+    );
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     startTimer();
   }
@@ -60,54 +100,78 @@ class _EventCardWidgetState extends State<EventCardWidget> {
     return Card(
       shape: cardDecoration(),
       elevation: 0.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: <Widget>[
-          Container(
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(DecorationConsts.cardRadius),
-                  topRight: Radius.circular(DecorationConsts.cardRadius)),
-              child: CachedNetworkImage(
-                fadeInDuration: Duration(milliseconds: 1500),
-                imageUrl: event.imageUri,
-                fit: BoxFit.scaleDown,
-                placeholder: (context, url) => Image.network(url),
-                errorWidget: (context, url, error) => Card(
-                  elevation: 4.0,
-                  child: Container(
-                    child: Icon(Icons.error),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(DecorationConsts.cardRadius),
+                        topRight: Radius.circular(DecorationConsts.cardRadius)),
+                    child: ImageProviderWidget(event.imageUri)
+                    /*CachedNetworkImage(
+                    fadeInDuration: Duration(milliseconds: 1500),
+                    imageUrl: event.imageUri,
+                    fit: BoxFit.scaleDown,
+                    placeholder: (context, url) => Image.network(url),
+                    errorWidget: (context, url, error) => Card(
+                      elevation: 4.0,
+                      child: Container(
+                        child: Icon(Icons.error),
+                      ),
+                    ),
+                  ),*/
+                    ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 8.0,
+                ),
+                child: Visibility(
+                  visible: event?.dateTime != null,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Icon(Icons.date_range, color: Colors.grey),
+                      Text(
+                        event.dateTime != null
+                            ? _dateFormat.format(event.dateTime)
+                            : '',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
+              cardTitle(event.name),
+              cardTitle(event.city),
+              Visibility(
+                  visible: showRemainEventDaysLabel,
+                  child: Center(child: _buildTimerButton())),
+              SizedBox(
+                height: 10.0,
+              )
+              //cardTitle(event['description']),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 8.0,
+          Visibility(
+            visible: showTodayCounter,
+            child: Positioned(
+              child: Text(
+                remainEventCountDown ?? '',
+                style: TextStyle(
+                    color: Colors.redAccent, fontWeight: FontWeight.bold),
+              ),
+              top: 10.0,
+              right: 10.0,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Icon(Icons.date_range, color: Colors.grey),
-                Text(
-                  event.date,
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          cardTitle(event.name),
-          cardTitle(event.city),
-          Center(child: _buildTimerButton()),
-          SizedBox(
-            height: 10.0,
           )
-          //cardTitle(event['description']),
         ],
       ),
     );
@@ -117,7 +181,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
     return Container(
         alignment: Alignment.center,
         width: 130.0,
-        margin: const EdgeInsets.symmetric(horizontal: 20.0),
+        margin: const EdgeInsets.symmetric(horizontal: 10.0),
         padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
         decoration: BoxDecoration(
             color: Colors.transparent,
@@ -132,7 +196,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
             ),
             Text(
               //'8 hours 20 min',
-              "$_start ${eventLeftTime?.hour ?? ''}: ${eventLeftTime?.minute ?? ''}: ${eventLeftTime?.second ?? ''}",
+              "${eventLeftTime?.inDays ?? ''} días ${eventLeftTime?.inHours ?? ''} hrs",
               style: TextStyle(
                 fontSize: 12.0,
                 color: Colors.blue,

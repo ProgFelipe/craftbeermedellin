@@ -4,23 +4,14 @@ import 'package:craftbeer/favorites/favorite_brewer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Favorites extends StatelessWidget {
+class Favorites extends StatefulWidget {
   const Favorites({Key key}) : super(key: key);
 
-  //final AsyncMemoizer _memoizer = AsyncMemoizer();
+  @override
+  _FavoritesState createState() => _FavoritesState();
+}
 
-  /*@override
-  void didUpdateWidget(FutureBuilder<T> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.future != widget.future) {
-      if (_activeCallbackIdentity != null) {
-        _unsubscribe();
-        _snapshot = _snapshot.inState(ConnectionState.none);
-      }
-      _subscribe();
-    }
-  }*/
-
+class _FavoritesState extends State<Favorites> {
   Future<List<String>> getFutureFavorites() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getStringList('favorites') ?? List();
@@ -30,12 +21,16 @@ class Favorites extends StatelessWidget {
     return Stream.fromFuture(getFutureFavorites());
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return Center(
+      child: Text('FAVS'),
+    );
+    /*StreamBuilder(
         stream: _getFavorites(),
         builder: (context, snapshot) {
-          if (snapshot.data.length == 0) {
+          if (snapshot.data != null && snapshot.data.length == 0) {
             return SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,6 +127,6 @@ class Favorites extends StatelessWidget {
               ),
             );
           }
-        });
+        });*/
   }
 }

@@ -13,7 +13,10 @@ class FavoriteCard extends StatelessWidget {
     brewers.forEach((element) {
       debugPrint('Brewer id ${element.id}');
     });
-    Brewer brewer = brewers.where((element) => element.name == brewerId).first;
+    return Container(
+      child: Text('SOME'),
+    );
+    Brewer brewer = brewers.where((element) => element.name == brewerId)?.first;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
       child: Card(

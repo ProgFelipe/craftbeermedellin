@@ -48,8 +48,11 @@ class SearchWidget extends StatelessWidget {
           var ref = suggestion.data[Api.brewer] != null
               ? suggestion.data[Api.brewer].documentID
               : suggestion.documentID;
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => BrewersDetail(ref)));
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BrewersDetail(
+              brewerRef: ref,
+            ),
+          ));
         },
       ),
     );

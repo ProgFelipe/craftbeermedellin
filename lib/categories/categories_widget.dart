@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:craftbeer/brewers/brewers_detail_view.dart';
+import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesView extends StatefulWidget {
@@ -13,29 +13,21 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
-  List<String> _beersRef;
+  BeerType _selectedCategory;
 
-  changeBeerTypeSelection(List<String> beerTypeSelected) {
+  changeBeerTypeSelection(BeerType category) {
     setState(() {
-      debugPrint('New documentID $beerTypeSelected');
-      if (beerTypeSelected.length == 0) {
-        _beersRef = null;
-      } else {
-        _beersRef = beerTypeSelected;
+      if (category != _selectedCategory) {
+        _selectedCategory = category;
       }
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _beersRef = null;
   }
 
   @override
   Widget build(BuildContext context) {
     List<BeerType> categories = Provider.of<List<BeerType>>(context);
 
+    if(categories == null || categories.isEmpty){return Text('Loading...');}
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(),
@@ -46,10 +38,10 @@ class _CategoriesViewState extends State<CategoriesView> {
             crossAxisCount: 3,
             shrinkWrap: true,
             children: List.generate(
-              categories.length,
+              categories.length ?? 0,
               (index) => GestureDetector(
                 onTap: () {
-                  changeBeerTypeSelection(categories[index]?.beers);
+                  changeBeerTypeSelection(categories[index]);
                 },
                 child: Container(
                   margin: EdgeInsets.only(bottom: 10.0),
@@ -64,16 +56,17 @@ class _CategoriesViewState extends State<CategoriesView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CachedNetworkImage(
+                      ImageProviderWidget(categories[index].imageUri,height: 60.0,),
+                      /*CachedNetworkImage(
                         height: 60.0,
                         fadeInDuration: Duration(milliseconds: 1500),
-                        imageUrl: categories[index].imageUri,
+                        imageUrl:,
                         fit: BoxFit.scaleDown,
                         placeholder: (context, url) => Image.network(url),
                         errorWidget: (context, url, error) => SizedBox(
                           height: 60.0,
                         ),
-                      ),
+                      ),*/
                       Text(
                         categories[index].name,
                         style: TextStyle(color: Colors.white),
@@ -84,7 +77,9 @@ class _CategoriesViewState extends State<CategoriesView> {
               ),
             ),
           ),
-          FilterBeersByTypeView(beersRef: _beersRef),
+          _selectedCategory != null
+              ? FilterBeersByTypeView(category: _selectedCategory)
+              : Container(),
         ],
       ),
     );
@@ -92,25 +87,23 @@ class _CategoriesViewState extends State<CategoriesView> {
 }
 
 class FilterBeersByTypeView extends StatelessWidget {
-  final List<String> beersRef;
+  final BeerType category;
   final db = DataBaseService();
-  FilterBeersByTypeView({this.beersRef});
+  FilterBeersByTypeView({this.category});
 
   @override
   Widget build(BuildContext context) {
-    if (beersRef == null || beersRef.isEmpty) {
-      return Text('EMPTY');
-    }
+    debugPrint('${category.beers?.length}');
+    debugPrint('${category.name}');
     return Container(
       decoration: BoxDecoration(),
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Row(
         children: List.generate(
-          beersRef?.length ?? 0,
+          category.beers?.length ?? 0,
           (index) => StreamProvider<Beer>.value(
-            value: db.streamBeerByType(beersRef[index]),
+            value: db.streamBeerByType(category.beers[index]),
             child: Consumer<Beer>(
-              //                    <--- Consumer
               builder: (context, myModel, child) {
                 if (myModel == null) return SizedBox();
                 return BeerItem();
@@ -128,18 +121,19 @@ class BeerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var beer = Provider.of<Beer>(context);
 
+    if(beer == null){return Text('NO BEER');}
     return GestureDetector(
       onTap: () {
-        //Go to brewer
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => BrewersDetail(beer.id)));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BrewersDetail(brewerRef: beer.id)));
       },
       child: Stack(
         children: <Widget>[
           Container(
             margin: EdgeInsets.symmetric(vertical: 20.0),
             child: Card(
-              child: CachedNetworkImage(
+              child: ImageProviderWidget(beer.imageUri)
+              /*CachedNetworkImage(
                 height: 90.0,
                 fadeInDuration: Duration(milliseconds: 1500),
                 imageUrl: beer.imageUri,
@@ -152,7 +146,7 @@ class BeerItem extends StatelessWidget {
                   'assets/beer.png',
                   height: 90.0,
                 ),
-              ),
+              ),*/
             ),
           ),
           Positioned(

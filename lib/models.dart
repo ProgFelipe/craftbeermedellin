@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 class Beer {
   final String id;
@@ -73,8 +72,6 @@ class Brewer {
       this.website});
 
   factory Brewer.fromMap(DocumentSnapshot data) {
-    debugPrint('--BREWER INITIAL PARSE---');
-
     var brewer = Brewer(
       id: data.documentID,
       beersRef: data['beers']
@@ -91,7 +88,6 @@ class Brewer {
       youtube: data['youtube'] ?? '',
       website: data['website'] ?? '',
     );
-    debugPrint('BEERS LENGHT ${brewer.beersRef.length}');
     return brewer;
   }
 }
@@ -106,10 +102,11 @@ class BeerType {
     return BeerType(
       id: data.reference,
       beers: data['beers']
-              ?.map<String>(
-                  (beerRef) => (beerRef as DocumentReference).documentID)
+              ?.map<String>((beerRef) => beerRef != null
+                  ? (beerRef as DocumentReference).documentID
+                  : null)
               ?.toList() ??
-          [''],
+          List(0),
       name: data['name'] ?? '',
       description: data['description'] ?? '',
       imageUri: data['imageUri'] ?? '',
@@ -120,7 +117,13 @@ class BeerType {
 class Event {
   String city, date, description, imageUri, name;
   final DateTime dateTime;
-  Event({this.city, this.date, this.dateTime, this.description, this.imageUri, this.name});
+  Event(
+      {this.city,
+      this.date,
+      this.dateTime,
+      this.description,
+      this.imageUri,
+      this.name});
 
   factory Event.fromMap(DocumentSnapshot data) {
     return Event(

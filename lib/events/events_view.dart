@@ -2,16 +2,14 @@ import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/event_card_widget.dart';
+import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
-import 'package:craftbeer/repository/api.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
 class EventsView extends StatelessWidget {
-  const EventsView({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,6 +43,10 @@ class PromotionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Promotion> promotions = Provider.of<List<Promotion>>(context);
 
+    if (promotions == null || promotions.isEmpty) {
+      return Text('No promotions');
+    }
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 2.0),
       height: 200.0,
@@ -72,7 +74,9 @@ class EventsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Event> events = Provider.of<List<Event>>(context);
-
+    if (events == null || events.isEmpty) {
+      return LoadingWidget();
+    }
     return Container(
       child: StaggeredGridView.countBuilder(
         crossAxisCount: 4,

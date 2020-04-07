@@ -10,12 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './Home/home_view.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_stetho/flutter_stetho.dart';
 
-void main() {
-  Stetho.initialize();
-  runApp(MyApp());
-}
+void main() =>runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -24,6 +20,8 @@ class MyApp extends StatelessWidget {
       providers: [
         StreamProvider<List<Brewer>>.value(
             value: DataBaseService().streamBrewers()),
+        StreamProvider<List<Beer>>.value(
+            value: DataBaseService().streamBeers()),
         StreamProvider<List<BeerType>>.value(
             value: DataBaseService().streamBeerTypes()),
         StreamProvider<List<Promotion>>.value(
@@ -54,16 +52,10 @@ class MyApp extends StatelessWidget {
 
 class Navigator extends StatefulWidget {
   final List<Widget> screens = [
-    Home(
-      key: PageStorageKey('HomePage'),
-    ),
+    Home(),
     EventsView(),
-    BeerCategoryView(
-      key: PageStorageKey('BeerCategoryPage'),
-    ),
-    Favorites(
-      key: PageStorageKey('FavoritesPage'),
-    )
+    BeerCategoryView(),
+    Favorites()
   ];
   @override
   State<StatefulWidget> createState() {
@@ -72,7 +64,6 @@ class Navigator extends StatefulWidget {
 }
 
 class _NavigatorState extends State<Navigator> {
-  //final PageStorageBucket bucket = PageStorageBucket();
   int _currentIndex = 0;
 
   @override

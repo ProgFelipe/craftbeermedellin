@@ -1,3 +1,4 @@
+import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/home/components/image_error.dart';
@@ -15,8 +16,6 @@ import '../utils.dart';
 const int SHIMMER_BREWER_GRID_COUNT = 6;
 
 class Home extends StatelessWidget {
-  const Home({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final topBeers = TopBeersView();
@@ -101,20 +100,21 @@ Widget _brewerCard(context, Brewer brewer) {
           context,
           MaterialPageRoute(
               builder: (context) => BrewersDetail(
-                    brewer.id,
                     brewer: brewer,
                   )));
     },
     child: Container(
         decoration: _brewersDecoration(),
         margin: EdgeInsets.all(10.0),
-        child: CachedNetworkImage(
+        child: ImageProviderWidget(brewer.imageUri),
+        /*CachedNetworkImage(
           fadeInDuration: Duration(milliseconds: 1500),
           imageUrl: brewer.imageUri,
           fit: BoxFit.scaleDown,
           placeholder: (context, url) => Image.network(url),
           errorWidget: (context, url, error) => errorColumn(brewer.name),
-        )),
+        )*/
+        ),
   );
 }
 
