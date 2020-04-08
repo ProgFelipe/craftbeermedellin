@@ -1,6 +1,5 @@
 import 'package:craftbeer/components/story_telling.dart';
-import 'package:craftbeer/repository/api.dart';
-import 'package:craftbeer/utils.dart';
+import 'package:craftbeer/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,12 +11,8 @@ class BeerReleases extends StatelessWidget {
         stream: db.fetchReleases(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data.documents.length > 0) {
-            return Column(
-              children: <Widget>[
-                titleView('Releases'),
-                storyTellingWidget(context, beersSnapshot: snapshot.data)
-              ],
-            );
+            return storyTellingWidget(context, beersSnapshot: snapshot.data);
+            //titleView('Releases'),
           } else {
             return SizedBox();
           }

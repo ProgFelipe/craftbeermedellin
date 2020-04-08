@@ -148,9 +148,6 @@ class Promotion {
   }
 }
 
-/**
- * Get document avoiding searching all beers for release date
- */
 class Releases {
   List<String> beersRef;
   Releases({this.beersRef});

@@ -57,16 +57,6 @@ class _CategoriesViewState extends State<CategoriesView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       ImageProviderWidget(categories[index].imageUri,height: 60.0,),
-                      /*CachedNetworkImage(
-                        height: 60.0,
-                        fadeInDuration: Duration(milliseconds: 1500),
-                        imageUrl:,
-                        fit: BoxFit.scaleDown,
-                        placeholder: (context, url) => Image.network(url),
-                        errorWidget: (context, url, error) => SizedBox(
-                          height: 60.0,
-                        ),
-                      ),*/
                       Text(
                         categories[index].name,
                         style: TextStyle(color: Colors.white),
@@ -79,7 +69,7 @@ class _CategoriesViewState extends State<CategoriesView> {
           ),
           _selectedCategory != null
               ? FilterBeersByTypeView(category: _selectedCategory)
-              : Container(),
+              : SizedBox(height: 0.0,),
         ],
       ),
     );

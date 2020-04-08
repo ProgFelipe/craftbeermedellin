@@ -27,15 +27,3 @@ RoundedRectangleBorder cardDecoration() {
     borderRadius: BorderRadius.circular(DecorationConsts.cardRadius),
   );
 }
-
-Widget _emptyOrNullSafetyText(String value) {
-  if (value == null) {
-    return SizedBox();
-  } else {
-    return Text(
-      value,
-      style: TextStyle(fontSize: 20.0),
-      textAlign: TextAlign.left,
-    );
-  }
-}

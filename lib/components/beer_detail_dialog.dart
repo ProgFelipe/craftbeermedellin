@@ -184,6 +184,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                       visible: actionText != null,
                       child: FlatButton(
                         onPressed: () {
+                          Navigator.of(context).pop();
                           action(); // To close the dialog
                         },
                         child: actionText != null ? Text(actionText) : Text(''),

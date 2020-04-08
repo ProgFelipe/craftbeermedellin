@@ -3,7 +3,6 @@ import 'package:craftbeer/categories/beer_category_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/events_view.dart';
-import 'package:craftbeer/favorites/favorites_view.dart';
 import 'package:craftbeer/models.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import './Home/home_view.dart';
 import 'package:provider/provider.dart';
 
-void main() =>runApp(MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -51,12 +50,6 @@ class MyApp extends StatelessWidget {
 }
 
 class Navigator extends StatefulWidget {
-  final List<Widget> screens = [
-    Home(),
-    EventsView(),
-    BeerCategoryView(),
-    Favorites()
-  ];
   @override
   State<StatefulWidget> createState() {
     return _NavigatorState();
@@ -65,24 +58,53 @@ class Navigator extends StatefulWidget {
 
 class _NavigatorState extends State<Navigator> {
   int _currentIndex = 0;
+  PageController _pageController;
+  final List<Widget> screens = [
+    Home(),
+    EventsView(),
+    BeerCategoryView(),
+    //Favorites()
+  ];
 
+  @override
+  void initState() {
+    _pageController = PageController(
+      initialPage: _currentIndex,
+    );
+    super.initState();
+  }
+
+  /*
+  IndexedStack(
+          index: _currentIndex,
+          children: widget.screens,
+        )
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: widget.screens,
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (newPage) {
+          setState(() {
+            this._currentIndex = newPage;
+          });
+        },
+        children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
         //fixedColor: Colors.brown,
-        onTap: onTabTapped,
+        onTap: (index) {
+          this._pageController.animateToPage(index,
+              duration: Duration(microseconds: 500), curve: Curves.easeInOut);
+        },
         currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             activeIcon: Icon(
               Icons.home,
-              color: Colors.white,
+              color: Colors.green,
             ),
             title: Text(localizedText(context, HOME_NAV_TITLE)),
             backgroundColor: Colors.black,
@@ -106,26 +128,10 @@ class _NavigatorState extends State<Navigator> {
             backgroundColor: Colors.black,
             title: Text(
               localizedText(context, BEER_NAV_TITLE),
-              style: TextStyle(color: Colors.orangeAccent),
             ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            activeIcon: Icon(
-              Icons.favorite,
-              color: Colors.redAccent,
-            ),
-            backgroundColor: Colors.black,
-            title: Text(localizedText(context, FAVORITES_NAV_TITLE)),
           ),
         ],
       ),
     );
-  }
-
-  void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
   }
 }

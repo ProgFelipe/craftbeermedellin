@@ -1,5 +1,4 @@
 import 'package:craftbeer/components/beer_detail_dialog.dart';
-import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +35,28 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
     });
   }
 
+  showBeerDialog(context, Beer beer, String beerRef) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => BeerDetailDialog(
+              title: beer.name,
+              showVotesBox: true,
+              voteAction: (int vote) {
+                db.futureSetVoteBeer(beerRef, vote);
+              },
+              description: beer.description,
+              buttonText: "Volver",
+              actionText: 'Conocé más',
+              action: () {
+                Navigator.of(context).pop();
+                _showBeerHistory(beer.name, beer.history);
+              },
+              avatarColor: Colors.orangeAccent[200],
+              avatarImage:
+                  'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200',
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -52,48 +73,18 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                 builder: (context, beer, child) {
                   if (beer == null) return SizedBox();
                   return GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) => BeerDetailDialog(
-                                title: beer.name,
-                                showVotesBox: true,
-                                voteAction: (int vote) {
-                                  debugPrint('Votó $vote');
-                                  db.futureSetVoteBeer(beers[index], vote);
-                                },
-                                description: beer.description,
-                                buttonText: "Volver",
-                                actionText: 'Conocé más',
-                                action: () {
-                                  Navigator.of(context).pop();
-                                  _showBeerHistory(beer.name, beer.history);
-                                },
-                                avatarColor: Colors.orangeAccent[200],
-                                avatarImage:
-                                    'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200',
-                              ));
-                    },
+                    onTap: () => showBeerDialog(context, beer, beers[index]),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(
-                          BeerIcon.beerglass,
-                          size: 60.0,
-                          color: Colors.orangeAccent,
+                        Image.asset(
+                          'assets/beer.png',
+                          fit: BoxFit.scaleDown,
                         ),
                         SizedBox(height: 10.0),
                         beerPropertiesText('IBU: ', beer.ibu),
                         beerPropertiesText('ABV: ', beer.abv),
-                        Text(
-                          //'ABV: ${bloc.getAbv(snapshot, index)}',
-                          '',
-                          style: TextStyle(
-                              fontSize: 10.0,
-                              fontFamily: 'Patua',
-                              fontWeight: FontWeight.bold),
-                        ),
                         Text('${beer.name}'),
                       ],
                     ),

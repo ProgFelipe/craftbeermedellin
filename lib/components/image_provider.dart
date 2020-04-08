@@ -1,4 +1,3 @@
-import 'package:craftbeer/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -6,16 +5,24 @@ class ImageProviderWidget extends StatelessWidget {
   final String imageUri;
   final Widget errorWidget;
   final double height;
-  ImageProviderWidget(this.imageUri, {this.errorWidget, this.height});
+  final double width;
+  ImageProviderWidget(this.imageUri,
+      {this.errorWidget, this.height, this.width});
   @override
   Widget build(BuildContext context) {
     if (imageUri == null || imageUri.isEmpty) {
-      return SizedBox();
+      return Image.asset(
+        'assets/beer.png',
+        height: height,
+        width: width,
+        fit: BoxFit.scaleDown,
+      );
     } else {
       return CachedNetworkImage(
         fadeInDuration: Duration(milliseconds: 1500),
         imageUrl: imageUri,
         height: height,
+        width: width,
         fit: BoxFit.scaleDown,
         placeholder: (context, url) => Image.network(url),
         errorWidget: (context, url, error) => SizedBox(

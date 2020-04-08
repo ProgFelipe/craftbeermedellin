@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
-import 'package:craftbeer/repository/api.dart';
+import 'package:craftbeer/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 

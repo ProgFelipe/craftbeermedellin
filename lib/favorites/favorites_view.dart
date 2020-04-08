@@ -21,11 +21,18 @@ class _FavoritesState extends State<Favorites> {
     return Stream.fromFuture(getFutureFavorites());
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('FAVS'),
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/favorites.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Center(
+        child: Text('FAVS'),
+      ),
     );
     /*StreamBuilder(
         stream: _getFavorites(),

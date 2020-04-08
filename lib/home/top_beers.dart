@@ -6,7 +6,6 @@ import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 
 class TopBeersView extends StatelessWidget {
@@ -40,24 +39,25 @@ class TopBeersView extends StatelessWidget {
 }
 
 Widget topBeerItem(Beer beer, context) {
+  void goToBrewerDetail(Beer beer) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => BrewersDetail(
+              brewerRef: beer.brewerRef,
+            )));
+  }
+
   return GestureDetector(
     onTap: () {
       showDialog(
           context: context,
           builder: (BuildContext context) => BeerDetailDialog(
-                title: beer.name,
-                description: beer.description,
-                avatarImage: beer.imageUri,
-                buttonText: "Volver",
-                starts: true,
-                actionText: "Contactanos",
-                action: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BrewersDetail(
-                            brewerRef: beer.brewerRef,
-                          )));
-                },
-              ));
+              title: beer.name,
+              description: beer.description,
+              avatarImage: beer.imageUri,
+              buttonText: "Volver",
+              starts: true,
+              actionText: "Contactanos",
+              action: () => goToBrewerDetail(beer)));
     },
     child: Stack(
       alignment: Alignment.topCenter,

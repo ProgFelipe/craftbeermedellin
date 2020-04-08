@@ -1,5 +1,5 @@
 import 'package:craftbeer/models.dart';
-import 'package:craftbeer/repository/api.dart';
+import 'package:craftbeer/api.dart';
 
 class DataBaseService {
 
