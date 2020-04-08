@@ -1,3 +1,4 @@
+import 'package:craftbeer/brewers/offers.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/brewers/brewer_beers.dart';
@@ -253,6 +254,9 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                     margin: EdgeInsets.symmetric(horizontal: 15.0),
                     child: Column(
                       children: <Widget>[
+                        titleView('Ofertas',
+                            color: Colors.black, size: 30.0, padding: 0.0),
+                        Offers(),
                         titleView('Nuestras Cervezas',
                             color: Colors.black, size: 30.0, padding: 0.0),
                         BrewerBeersWidget(beersIds: brewer.beersRef),
