@@ -1,4 +1,5 @@
 import 'package:craftbeer/components/beer_detail_dialog.dart';
+import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
@@ -78,10 +79,7 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Expanded(
-                          child: Image.asset(
-                            'assets/beer.png',
-                            fit: BoxFit.scaleDown,
-                          ),
+                          child: ImageProviderWidget(beer.imageUri),
                         ),
                         SizedBox(height: 10.0),
                         beerPropertiesText('IBU: ', beer.ibu),
