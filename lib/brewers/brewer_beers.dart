@@ -48,7 +48,6 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
               buttonText: "Volver",
               actionText: 'Conocé más',
               action: () {
-                Navigator.of(context).pop();
                 _showBeerHistory(beer.name, beer.history);
               },
               avatarColor: Colors.orangeAccent[200],
@@ -68,7 +67,7 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
           children: List.generate(
             beers.length,
             (index) => StreamProvider<Beer>.value(
-              value: db.streamBeerByType(beers[index]),
+              value: db.streamBeerByReference(beers[index]),
               child: Consumer<Beer>(
                 builder: (context, beer, child) {
                   if (beer == null) return SizedBox();
@@ -78,9 +77,11 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Image.asset(
-                          'assets/beer.png',
-                          fit: BoxFit.scaleDown,
+                        Expanded(
+                          child: Image.asset(
+                            'assets/beer.png',
+                            fit: BoxFit.scaleDown,
+                          ),
                         ),
                         SizedBox(height: 10.0),
                         beerPropertiesText('IBU: ', beer.ibu),

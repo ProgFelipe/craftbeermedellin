@@ -25,7 +25,7 @@ class DataBaseService {
         .toList());
   }
 
-  Stream<Beer> streamBeerByType(String beerRef) {
+  Stream<Beer> streamBeerByReference(String beerRef) {
     return db.fetchBeerByReference(beerRef).map((beer) => Beer.fromMap(beer));
   }
 
@@ -33,11 +33,6 @@ class DataBaseService {
     return db.fetchTopBeers().map(
         (beers) => beers.documents.map((beer) => Beer.fromMap(beer)).toList());
   }
-
-  /*List<Beer> fetchTopBeersFromBeers(List<Beer> beers) async {
-    beers.sort((a,b){return a.ranking.compareTo(b.ranking);});
-    return await beers.sublist(0, beers.length > 3 ? 4 : beers.length);
-  }*/
 
   Future<void> futureSetVoteBeer(String brewerId, int vote) {
     return db.beerVote(brewerId, vote);

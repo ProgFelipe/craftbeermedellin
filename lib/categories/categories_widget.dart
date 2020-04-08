@@ -56,7 +56,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      ImageProviderWidget(categories[index].imageUri,height: 60.0,),
+                      Expanded(child: ImageProviderWidget(categories[index].imageUri,height: 60.0,)),
                       Text(
                         categories[index].name,
                         style: TextStyle(color: Colors.white),
@@ -92,11 +92,11 @@ class FilterBeersByTypeView extends StatelessWidget {
         children: List.generate(
           category.beers?.length ?? 0,
           (index) => StreamProvider<Beer>.value(
-            value: db.streamBeerByType(category.beers[index]),
+            value: db.streamBeerByReference(category.beers[index]),
             child: Consumer<Beer>(
-              builder: (context, myModel, child) {
-                if (myModel == null) return SizedBox();
-                return BeerItem();
+              builder: (context, beer, child) {
+                if (beer == null) return SizedBox();
+                return BeerItem(beer);
               },
             ),
           ),
@@ -107,36 +107,23 @@ class FilterBeersByTypeView extends StatelessWidget {
 }
 
 class BeerItem extends StatelessWidget {
+  final Beer beer;
+  BeerItem(this.beer);
+
   @override
   Widget build(BuildContext context) {
-    var beer = Provider.of<Beer>(context);
-
-    if(beer == null){return Text('NO BEER');}
+    if(beer == null){return Container(child: Text('NO BEER'));}
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BrewersDetail(brewerRef: beer.id)));
+            builder: (context) => BrewersDetail(brewerRef: beer.brewerRef)));
       },
       child: Stack(
         children: <Widget>[
           Container(
             margin: EdgeInsets.symmetric(vertical: 20.0),
             child: Card(
-              child: ImageProviderWidget(beer.imageUri)
-              /*CachedNetworkImage(
-                height: 90.0,
-                fadeInDuration: Duration(milliseconds: 1500),
-                imageUrl: beer.imageUri,
-                fit: BoxFit.scaleDown,
-                placeholder: (context, url) => Image.network(
-                  url,
-                  height: 90.0,
-                ),
-                errorWidget: (context, url, error) => Image.asset(
-                  'assets/beer.png',
-                  height: 90.0,
-                ),
-              ),*/
+              child: ImageProviderWidget(beer.imageUri, height: 90.0,)
             ),
           ),
           Positioned(

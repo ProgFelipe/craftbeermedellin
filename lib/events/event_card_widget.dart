@@ -50,15 +50,13 @@ class _EventCardWidgetState extends State<EventCardWidget> {
         (!event.dateTime.isBefore(DateTime.now()) ||
             isSameDate(event.dateTime, DateTime.now()))) {
       eventLeftTime = event.dateTime.difference(DateTime.now());
-      if (eventLeftTime.inHours <= 24) {
+      if (eventLeftTime.inHours >= 0 && eventLeftTime.inHours <= 24) {
         todayEventTimer();
-      } else {
+      } else if(eventLeftTime.inDays > 0){
         setState(() {
           showRemainEventDaysLabel = true;
         });
       }
-    } else {
-      debugPrint('EVENT IN PASS ${event.name}');
     }
   }
 
@@ -85,13 +83,13 @@ class _EventCardWidgetState extends State<EventCardWidget> {
 
   @override
   void initState() {
-    super.initState();
     startTimer();
+    super.initState();
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 

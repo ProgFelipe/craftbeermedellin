@@ -136,7 +136,7 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/brewer.png'),
+                    image: AssetImage('assets/brewerblur.png'),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.only(
@@ -185,7 +185,7 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                                 style: TextStyle(
                                     fontSize: 30.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.green),
+                                    color: Colors.deepOrange),
                               ),
                               SizedBox(
                                 height: 20.0,
@@ -194,9 +194,9 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                                 brewer.description,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 18.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
                                 maxLines: 10,
                                 softWrap: true,
                                 overflow: TextOverflow.ellipsis,

@@ -131,9 +131,11 @@ class _BrewerItemState extends State<BrewerItem> {
                 brewer: brewer,
               )),
         );
-        setState(() {
-          isFavorite = result;
-        });
+        if(result != null) {
+          setState(() {
+            isFavorite = result;
+          });
+        }
       },
       child: Container(
         decoration: _brewersDecoration(),
