@@ -18,15 +18,17 @@ class ImageProviderWidget extends StatelessWidget {
         fit: BoxFit.scaleDown,
       );
     } else {
-      return CachedNetworkImage(
-        fadeInDuration: Duration(milliseconds: 1500),
-        imageUrl: imageUri,
-        height: height,
-        width: width,
-        fit: BoxFit.scaleDown,
-        placeholder: (context, url) => Image.network(url),
-        errorWidget: (context, url, error) => SizedBox(
-          height: 60.0,
+      return Center(
+        child: CachedNetworkImage(
+          fadeInDuration: Duration(milliseconds: 1500),
+          imageUrl: imageUri,
+          height: height,
+          width: width,
+          fit: BoxFit.scaleDown,
+          placeholder: (context, url) => Image.network(url),
+          errorWidget: (context, url, error) => SizedBox(
+            height: 60.0,
+          ),
         ),
       );
     }

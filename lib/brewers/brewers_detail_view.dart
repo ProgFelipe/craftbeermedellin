@@ -150,7 +150,9 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                     children: <Widget>[
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
+                          SizedBox(height: 30.0,),
                           ImageProviderWidget(brewer.imageUri, width: 120.0),
                           FutureBuilder(
                             future: _isFavorite(brewer.name),
@@ -178,14 +180,14 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               SizedBox(
-                                height: 10.0,
+                                height: 20.0,
                               ),
                               Text(
                                 brewer.name,
                                 style: TextStyle(
                                     fontSize: 30.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.deepOrange),
+                                    color: Colors.black87),
                               ),
                               SizedBox(
                                 height: 20.0,

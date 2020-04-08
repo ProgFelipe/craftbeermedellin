@@ -143,8 +143,13 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
 }
 
 Widget beerPropertiesText(String propertyName, num value) {
-  return Text(
-    propertyName + value.toString(),
-    style: TextStyle(fontSize: 9.0),
+  return RichText(
+    text: TextSpan(
+      style: TextStyle(
+        fontSize: 9.0,
+        color: Colors.black,
+      ),
+        children: [TextSpan(text: propertyName , style: TextStyle(fontWeight: FontWeight.bold),
+    ),TextSpan(text:  value.toString(), style: TextStyle(fontSize: 9.0),)],)
   );
 }
