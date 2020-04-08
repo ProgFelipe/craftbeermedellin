@@ -15,6 +15,18 @@ class CategoriesView extends StatefulWidget {
 class _CategoriesViewState extends State<CategoriesView> {
   BeerType _selectedCategory;
 
+  @override
+  void initState() {
+    debugPrint('INIT STATE CATEGORIES');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    debugPrint('DISPOSE STATE CATEGORIES');
+    super.dispose();
+  }
+
   changeBeerTypeSelection(BeerType category) {
     setState(() {
       if (category != _selectedCategory) {

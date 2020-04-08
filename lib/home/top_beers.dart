@@ -9,32 +9,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TopBeersView extends StatelessWidget {
-  final db = DataBaseService();
-
-  /*Future<List<Beer>> getTopBeers(List<Beer> allBeers) async{
-    return await db.fetchTopBeersFromBeers(allBeers);
-  }*/
-
   @override
   Widget build(BuildContext context) {
-    return StreamProvider.value(
-      value: db.fetchTopBeers(),
-      child: Consumer<List<Beer>>(builder: (context, beers, child) {
-        if (beers == null || beers.isEmpty) {
-          return LoadingWidget();
-        }
+    List<Beer> beers = Provider.of<List<Beer>>(context);
+
+    if(beers == null){
+      return LoadingWidget();
+    }else{
+      return Consumer<List<Beer>>(builder: (context, beers, child) {
         return Container(
           child: Row(
             children: List.generate(
               beers.length ?? 0,
-              (index) => Flexible(
+                  (index) => Flexible(
                 child: topBeerItem(beers[index], context),
               ),
             ),
           ),
         );
-      }),
-    );
+      });
+    }
   }
 }
 

@@ -9,11 +9,6 @@ class DataBaseService {
         brewersList.documents.map((brewer) => Brewer.fromMap(brewer)).toList());
   }
 
-  Stream<List<Beer>> streamBeers() {
-    return db.fetchBrewers().map((beers) =>
-        beers.documents.map((beer) => Beer.fromMap(beer)).toList());
-  }
-
   Stream<Brewer> streamBrewerByRef(String brewerRef) {
     return db.fetchBrewerByRef(brewerRef).map((beer) => Brewer.fromMap(beer));
   }

@@ -84,11 +84,14 @@ class _EventCardWidgetState extends State<EventCardWidget> {
   @override
   void initState() {
     startTimer();
+    debugPrint('INIT STATE EVENTCARD');
     super.initState();
   }
 
+
   @override
   void dispose() {
+    debugPrint('DISPOSE STATE EVENTCARD');
     _timer?.cancel();
     super.dispose();
   }

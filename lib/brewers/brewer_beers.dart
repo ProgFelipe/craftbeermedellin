@@ -9,17 +9,17 @@ class BrewerBeersWidget extends StatefulWidget {
   BrewerBeersWidget({this.beersIds});
   @override
   _BrewerBeersWidgetState createState() =>
-      _BrewerBeersWidgetState(beers: beersIds);
+      _BrewerBeersWidgetState(beersRef: beersIds);
 }
 
 class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
-  final List<String> beers;
+  final List<String> beersRef;
   final db = DataBaseService();
   bool _showBeerDescription = false;
   String _beerName;
   String _beerHistory;
 
-  _BrewerBeersWidgetState({this.beers});
+  _BrewerBeersWidgetState({this.beersRef});
 
   _showBeerHistory(String beerName, String beerHistory) {
     setState(() {
@@ -65,14 +65,14 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           children: List.generate(
-            beers.length,
+            beersRef.length,
             (index) => StreamProvider<Beer>.value(
-              value: db.streamBeerByReference(beers[index]),
+              value: db.streamBeerByReference(beersRef[index]),
               child: Consumer<Beer>(
                 builder: (context, beer, child) {
                   if (beer == null) return SizedBox();
                   return GestureDetector(
-                    onTap: () => showBeerDialog(context, beer, beers[index]),
+                    onTap: () => showBeerDialog(context, beer, beersRef[index]),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,

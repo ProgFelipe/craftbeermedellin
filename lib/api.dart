@@ -22,51 +22,55 @@ class Api {
   static const String ibu = 'ibu';
   static const String abv = 'abv';
   static const String votes = 'votes';
+  static const String release = 'release';
 
   ///Beer Categories
 
   ///Brewers
   Stream<QuerySnapshot> fetchBrewers() {
-    debugPrint('--BREWERS SERVICE SNAPSHOT--');
+    debugPrint('***BREWERS SERVICE SNAPSHOT**');
     return _fireStore.collection(brewers).snapshots();
   }
 
   ///Brewer Detail -> Brewer
   Stream<DocumentSnapshot> fetchBrewerByRef(String brewerRef) {
     debugPrint('Collection /brewers/$brewerRef');
+    debugPrint('**BREWERS BY REFERENCE**');
     return _fireStore.collection(brewers).document(brewerRef).snapshots();
   }
 
   ///BeerCategory
   Stream<QuerySnapshot> fetchBeerCategories() {
+    debugPrint('***BEER BY CATEGORY**');
     return _fireStore.collection('beertypes').snapshots();
   }
 
   Stream<DocumentSnapshot> fetchBeerByReference(String beerRef) {
     debugPrint('Collection /beers/$beerRef');
+    debugPrint('***BEER BY REFERENCE**');
     return _fireStore.collection(beers).document(beerRef).snapshots();
   }
 
-  Stream<QuerySnapshot> fetchBeers() {
+  /*Stream<QuerySnapshot> fetchBeers() {
     return _fireStore.collection(beers).snapshots();
-  }
+  }*/
 
-  Stream<QuerySnapshot> fetchBrewerByName(String brewerName) {
+  /*Stream<QuerySnapshot> fetchBrewerByName(String brewerName) {
     return _fireStore
         .collection(brewer)
         .where(name, isEqualTo: brewerName)
         .limit(1)
         .snapshots();
-  }
+  }*/
 
-  Stream<QuerySnapshot> fetchBrewerBeers(String brewerDocumentRef) {
+  /*Stream<QuerySnapshot> fetchBrewerBeers(String brewerDocumentRef) {
     return _fireStore
         .collection(beers)
         .where(brewer, isEqualTo: '/$brewers/$brewerDocumentRef')
         .snapshots();
-  }
+  }*/
 
-  Future<int> getBrewerVotes(String brewerName) {
+  /*Future<int> getBrewerVotes(String brewerName) {
     return _fireStore
         .collection(brewers)
         .document(brewerName)
@@ -79,16 +83,16 @@ class Api {
         return 0;
       }
     });
-  }
+  }*/
 
-  Future<void> brewerVote(String brewerName) async {
+  /*Future<void> brewerVote(String brewerName) async {
     int currentRanking;
     getBrewerVotes(brewerName).then((value) => currentRanking = value);
     _fireStore
         .collection(brewers)
         .document(brewerName)
         .updateData({ranking: currentRanking + 1});
-  }
+  }*/
 
   Future<void> beerVote(String beerRef, int vote) async {
     debugPrint('VAMOS A VOTAR $beerRef, $vote');
@@ -107,6 +111,7 @@ class Api {
 
   List<DocumentSnapshot> documents;
   Future<List<DocumentSnapshot>> searchBeers(String query) async {
+    debugPrint('***Suscrito a search beers**');
     if (documents == null || documents.isEmpty) {
       await _fireStore
           .collection(beers)
@@ -128,7 +133,7 @@ class Api {
 
   //Home
   Stream<QuerySnapshot> fetchTopBeers() {
-    debugPrint('Suscrito a top cervezas');
+    debugPrint('***Suscrito a top cervezas**');
     return _fireStore
         .collection(beers)
         .orderBy('ranking', descending: true)
@@ -137,28 +142,32 @@ class Api {
   }
 
   Stream<QuerySnapshot> fetchReleases() {
-    debugPrint('Suscrito a releases cervezas');
+    debugPrint('***Suscrito a releases cervezas**');
     var currentDate = DateTime.now();
     DateTime _starDate = DateTime(
         currentDate.year, currentDate.month - 1, currentDate.day, 0, 0);
     debugPrint("Release from ${_starDate.month}-${_starDate.day}");
     return _fireStore
         .collection(beers)
-        .where('release', isGreaterThanOrEqualTo: _starDate)
-        .orderBy('release', descending: true)
+        .where(release, isGreaterThanOrEqualTo: _starDate)
+        .orderBy(release, descending: true)
         .limit(5)
         .snapshots();
   }
 
   ///Events
   static String events = 'events';
-  Stream<QuerySnapshot> fetchEvents() =>
-      _fireStore.collection(events).snapshots();
+  Stream<QuerySnapshot> fetchEvents(){
+    debugPrint('***Suscrito a EVENTS**');
+    return _fireStore.collection(events).snapshots();
+  }
 
   ///Promotions
   static String promotions = 'promotions';
-  Stream<QuerySnapshot> fetchPromotions() =>
-      _fireStore.collection(promotions).snapshots();
+  Stream<QuerySnapshot> fetchPromotions(){
+    debugPrint('***Suscrito a PROMOTIONS**');
+    return _fireStore.collection(promotions).snapshots();
+  }
 }
 
 Api db = Api();

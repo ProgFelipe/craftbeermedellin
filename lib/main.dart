@@ -13,20 +13,21 @@ import 'package:provider/provider.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final database = DataBaseService();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        StreamProvider<List<Brewer>>.value(
-            value: DataBaseService().streamBrewers()),
         StreamProvider<List<Beer>>.value(
-            value: DataBaseService().streamBeers()),
+            value: database.fetchTopBeers()),
+        StreamProvider<List<Brewer>>.value(
+            value: database.streamBrewers()),
         StreamProvider<List<BeerType>>.value(
-            value: DataBaseService().streamBeerTypes()),
+            value: database.streamBeerTypes()),
         StreamProvider<List<Promotion>>.value(
-            value: DataBaseService().streamPromotions()),
+            value: database.streamPromotions()),
         StreamProvider<List<Event>>.value(
-            value: DataBaseService().streamEvents()),
+            value: database.streamEvents()),
       ],
       child: MaterialApp(
         title: 'Craft Beer Colombia',

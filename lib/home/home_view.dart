@@ -71,6 +71,8 @@ class BrewersGrid extends StatefulWidget {
 
 class _BrewersGridState extends State<BrewersGrid> {
   List<String> favorites = [];
+  bool favoriteOnDemand;
+
   Future<List<String>> getFutureFavorites() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getStringList('favorites') ?? List();
@@ -80,7 +82,17 @@ class _BrewersGridState extends State<BrewersGrid> {
     return favorites.contains(brewer);
   }
 
-  bool favoriteOnDemand;
+  @override
+  void initState() {
+    debugPrint('INIT STATE BREWER GRID');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    debugPrint('DISPOSE STATE BREWER GRID');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
