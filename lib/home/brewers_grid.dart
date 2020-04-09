@@ -64,36 +64,46 @@ class _BrewersGridState extends State<BrewersGrid> {
   }
 }
 
-class BrewerItem extends StatelessWidget {
+class BrewerItem extends StatefulWidget {
   final Brewer brewer;
   final bool isFavorite;
 
   BrewerItem(this.brewer, this.isFavorite);
 
   @override
+  _BrewerItemState createState() => _BrewerItemState(brewer, isFavorite);
+}
+
+class _BrewerItemState extends State<BrewerItem> {
+  final Brewer brewer;
+  bool isFavorite;
+
+  _BrewerItemState(this.brewer, this.isFavorite);
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        /*Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => BrewersDetail(
               brewer: brewer,
             ),
           ),
-        );
-        /*final result = await Navigator.push(
+        );*/
+        final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BrewersDetail(
-                brewer: brewer,
-              )),
+                    brewer: brewer,
+                  )),
         );
-        if(result != null) {
+        if (result != null) {
           setState(() {
             isFavorite = result;
           });
-        }*/
+        }
       },
       child: Container(
         decoration: _brewersDecoration(),
@@ -106,8 +116,8 @@ class BrewerItem extends StatelessWidget {
               right: 0.0,
               child: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
-                  size: 40.0,
-                  color: Colors.red,
+                size: 40.0,
+                color: Colors.red,
               ),
             ),
           ],
