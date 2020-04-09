@@ -45,6 +45,9 @@ class _CategoriesViewState extends State<CategoriesView> {
       decoration: BoxDecoration(),
       child: Column(
         children: <Widget>[
+          _selectedCategory != null
+              ? FilterBeersByTypeView(category: _selectedCategory)
+              : SizedBox(height: 0.0,),
           GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 3,
@@ -55,34 +58,44 @@ class _CategoriesViewState extends State<CategoriesView> {
                 onTap: () {
                   changeBeerTypeSelection(categories[index]);
                 },
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 10.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      begin: FractionalOffset.topLeft,
-                      end: FractionalOffset.bottomRight,
-                      colors: [Colors.black54, Colors.indigo],
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(child: ImageProviderWidget(categories[index].imageUri,height: 60.0,)),
-                      Text(
-                        categories[index].name,
-                        style: TextStyle(color: Colors.white),
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          begin: FractionalOffset.topLeft,
+                          end: FractionalOffset.bottomRight,
+                          colors: [Colors.black54, Colors.indigo],
+                        ),
                       ),
-                      SizedBox(height: 10.0,)
-                    ],
-                  ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(child: ImageProviderWidget(categories[index].imageUri,height: 60.0,)),
+                          Text(
+                            categories[index].name,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(height: 10.0,)
+                        ],
+                      ),
+                    ),
+                    Positioned(child: Container(
+                      width: 20.0,
+                      height: 20.0,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.orangeAccent
+                      ),
+                      child: Text('${categories[index].beers.length}',textAlign: TextAlign.center,),),top: 0.0, right: 10.0,),
+                  ],
                 ),
               ),
             ),
           ),
-          _selectedCategory != null
-              ? FilterBeersByTypeView(category: _selectedCategory)
-              : SizedBox(height: 0.0,),
         ],
       ),
     );

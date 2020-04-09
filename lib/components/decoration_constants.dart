@@ -15,8 +15,7 @@ Widget cardTitle(String title) {
     padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
     child: Text(
       title ?? '',
-      style: TextStyle(
-          fontFamily: 'Patua', fontSize: 16.0, fontWeight: FontWeight.normal),
+      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
       textAlign: TextAlign.left,
     ),
   );

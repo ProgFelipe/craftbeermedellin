@@ -22,7 +22,7 @@ class Api {
   static const String ibu = 'ibu';
   static const String abv = 'abv';
   static const String votes = 'votes';
-  static const String release = 'release';
+  static const String releases = 'releases';
 
   ///Beer Categories
 
@@ -142,15 +142,9 @@ class Api {
   }
 
   Stream<QuerySnapshot> fetchReleases() {
-    debugPrint('***Suscrito a releases cervezas**');
-    var currentDate = DateTime.now();
-    DateTime _starDate = DateTime(
-        currentDate.year, currentDate.month - 1, currentDate.day, 0, 0);
-    debugPrint("Release from ${_starDate.month}-${_starDate.day}");
+    debugPrint('***Suscrito a top cervezas**');
     return _fireStore
-        .collection(beers)
-        .where(release, isGreaterThanOrEqualTo: _starDate)
-        .orderBy(release, descending: true)
+        .collection(releases)
         .limit(5)
         .snapshots();
   }

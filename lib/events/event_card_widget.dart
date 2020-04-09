@@ -46,10 +46,10 @@ class _EventCardWidgetState extends State<EventCardWidget> {
   }
 
   void startTimer() {
-    if (event.dateTime != null &&
-        (!event.dateTime.isBefore(DateTime.now()) ||
-            isSameDate(event.dateTime, DateTime.now()))) {
-      eventLeftTime = event.dateTime.difference(DateTime.now());
+    if (event.timestamp != null &&
+        (!event.timestamp.toDate().isBefore(DateTime.now()) ||
+            isSameDate(event.timestamp.toDate(), DateTime.now()))) {
+      eventLeftTime = event.timestamp.toDate().difference(DateTime.now());
       if (eventLeftTime.inHours >= 0 && eventLeftTime.inHours <= 24) {
         todayEventTimer();
       } else if(eventLeftTime.inDays > 0){
@@ -132,14 +132,14 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                   left: 8.0,
                 ),
                 child: Visibility(
-                  visible: event?.dateTime != null,
+                  visible: event?.timestamp != null,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Icon(Icons.date_range, color: Colors.grey),
                       Text(
-                        event.dateTime != null
-                            ? _dateFormat.format(event.dateTime)
+                        event.timestamp != null
+                            ? _dateFormat.format(event.timestamp.toDate())
                             : '',
                         style: TextStyle(
                           fontSize: 12.0,

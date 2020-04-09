@@ -45,7 +45,7 @@ class FavoriteCard extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           brewer.name,
-                          style: TextStyle(fontFamily: 'Patua', fontSize: 30.0),
+                          style: TextStyle(fontSize: 30.0),
                         ),
                         Text(
                           brewer.description,
@@ -54,14 +54,8 @@ class FavoriteCard extends StatelessWidget {
                           softWrap: true,
                           style: TextStyle(
                               color: Colors.orangeAccent,
-                              fontFamily: 'Patua',
                               fontSize: 12.0),
                         ),
-                        /*Text(snapshot.data['location'] ?? '',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Patua',
-                                fontSize: 14.0)),*/
                       ],
                     ),
                   ),
@@ -110,8 +104,7 @@ StreamBuilder(
                               children: <Widget>[
                                 Text(
                                   snapshot.data[0]['name'],
-                                  style: TextStyle(
-                                      fontFamily: 'Patua', fontSize: 30.0),
+                                  style: TextStyle(fontSize: 30.0),
                                 ),
                                 Text(
                                   snapshot.data['description'],
@@ -120,13 +113,11 @@ StreamBuilder(
                                   softWrap: true,
                                   style: TextStyle(
                                       color: Colors.orangeAccent,
-                                      fontFamily: 'Patua',
                                       fontSize: 12.0),
                                 ),
                                 Text(snapshot.data['location'] ?? '',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Patua',
                                         fontSize: 14.0)),
                               ],
                             ),

@@ -29,6 +29,11 @@ class DataBaseService {
         (beers) => beers.documents.map((beer) => Beer.fromMap(beer)).toList());
   }
 
+  Stream<List<Release>> fetchReleases() {
+    return db.fetchReleases().map(
+        (releases) => releases.documents.map((release) => Release.fromMap(release)).toList());
+  }
+
   Future<void> futureSetVoteBeer(String brewerId, int vote) {
     return db.beerVote(brewerId, vote);
   }

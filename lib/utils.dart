@@ -9,7 +9,7 @@ Widget titleView(String title,
         padding: EdgeInsets.all(padding),
         child: Text(
           title,
-          style: TextStyle(fontFamily: 'Patua', fontSize: size, color: color),
+          style: TextStyle(fontSize: size, color: color),
           textAlign: TextAlign.left,
         )),
   );

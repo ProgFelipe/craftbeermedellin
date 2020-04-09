@@ -36,6 +36,7 @@ dev_dependencies:
   cached_network_image: ^2.0.0
   http: ^0.12.0+4
   connectivity: ^0.4.8+2
+  flare_splash_screen: ^3.0.1
   flutter_test:
     sdk: flutter
 

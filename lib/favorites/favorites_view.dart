@@ -108,7 +108,6 @@ class _FavoritesState extends State<Favorites> {
                             'Favoritos',
                             style: TextStyle(
                               fontSize: 40.0,
-                              fontFamily: 'Patua',
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),

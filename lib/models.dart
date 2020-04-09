@@ -9,7 +9,7 @@ class Beer {
   final String brewerRef;
   final String imageUri;
   final num ranking, votes;
-  final DateTime release;
+  final Timestamp release;
   final bool sell;
   final String type;
 
@@ -40,7 +40,7 @@ class Beer {
         imageUri: data['imageUri'] ?? '',
         ranking: data['ranking'] as num ?? 0,
         votes: data['votes'] ?? 0,
-        release: data['release'] ?? DateTime.now(),
+        release: data['release'] ?? null,
         sell: data['sell'] ?? false,
         type: data['type']?.documentID ?? '');
     return beer;
@@ -96,6 +96,7 @@ class BeerType {
   DocumentReference id;
   String name, description, imageUri;
   List<String> beers;
+
   BeerType({this.id, this.name, this.description, this.imageUri, this.beers});
 
   factory BeerType.fromMap(DocumentSnapshot data) {
@@ -116,11 +117,12 @@ class BeerType {
 
 class Event {
   String city, date, description, imageUri, name;
-  final DateTime dateTime;
+  final Timestamp timestamp;
+
   Event(
       {this.city,
       this.date,
-      this.dateTime,
+      this.timestamp,
       this.description,
       this.imageUri,
       this.name});
@@ -129,7 +131,7 @@ class Event {
     return Event(
         city: data['city'] ?? '',
         date: data['date'] ?? '',
-        dateTime: data['dateTime'] ?? null,
+        timestamp: data['dateTime'] ?? null,
         description: data['description'] ?? '',
         imageUri: data['imageUri'] ?? '',
         name: data['name'] ?? '');
@@ -138,6 +140,7 @@ class Event {
 
 class Promotion {
   String imageUri;
+
   Promotion({this.imageUri});
 
   factory Promotion.fromMap(DocumentSnapshot data) {
@@ -148,19 +151,23 @@ class Promotion {
   }
 }
 
-class Releases {
-  List<String> beersRef;
-  Releases({this.beersRef});
+class Release {
+  String name;
+  String imageUri;
 
-  factory Releases.fromMap(DocumentSnapshot data) {
-    return Releases(
-      beersRef: data['beers'] ?? List<String>(),
+  Release({this.name, this.imageUri});
+
+  factory Release.fromMap(DocumentSnapshot data) {
+    return Release(
+      name: data['name'] ?? '',
+      imageUri: data['imageUri'] ?? '',
     );
   }
 }
 
 class TopBeers {
   List<String> beersRef;
+
   TopBeers({this.beersRef});
 
   factory TopBeers.fromMap(DocumentSnapshot data) {

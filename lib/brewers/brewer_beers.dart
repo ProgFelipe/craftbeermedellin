@@ -111,7 +111,7 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         _beerName == null ? '' : _beerName,
-                        style: TextStyle(fontSize: 25.0, fontFamily: 'Patua'),
+                        style: TextStyle(fontSize: 25.0,),
                       ),
                     ),
                     Icon(
