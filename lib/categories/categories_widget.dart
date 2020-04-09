@@ -72,7 +72,8 @@ class _CategoriesViewState extends State<CategoriesView> {
                       Text(
                         categories[index].name,
                         style: TextStyle(color: Colors.white),
-                      )
+                      ),
+                      SizedBox(height: 10.0,)
                     ],
                   ),
                 ),
@@ -95,8 +96,13 @@ class FilterBeersByTypeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('${category.beers?.length}');
-    debugPrint('${category.name}');
+    if(category.beers?.length == 0 ?? true){
+      return Container(
+          decoration: BoxDecoration(),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: Center(child: Text('No hay cervezas\nEn esta categoria')),
+      );
+    }
     return Container(
       decoration: BoxDecoration(),
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -107,7 +113,7 @@ class FilterBeersByTypeView extends StatelessWidget {
             value: db.streamBeerByReference(category.beers[index]),
             child: Consumer<Beer>(
               builder: (context, beer, child) {
-                if (beer == null) return SizedBox();
+                if (beer == null) return Text('');
                 return BeerItem(beer);
               },
             ),

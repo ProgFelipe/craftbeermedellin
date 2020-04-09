@@ -53,7 +53,7 @@ class PromotionsWidget extends StatelessWidget {
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(vertical: 10.0),
+        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         itemCount: promotions.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
@@ -62,7 +62,7 @@ class PromotionsWidget extends StatelessWidget {
               color: Colors.white,
               semanticContainer: true,
               child: Image.network(promotions[index].imageUri,
-                  width: 100.0, fit: BoxFit.cover));
+                  width: 160.0, height: 100.0, fit: BoxFit.cover));
         },
       ),
     );
