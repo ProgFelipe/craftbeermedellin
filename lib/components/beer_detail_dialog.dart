@@ -1,10 +1,10 @@
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 typedef IntCallback = Function(int num);
 
 class BeerDetailDialog extends StatefulWidget {
   final String title, description, buttonText, actionText;
-  final String contentImage;
   final Color avatarColor;
   final String avatarImage;
   final VoidCallback action;
@@ -15,7 +15,6 @@ class BeerDetailDialog extends StatefulWidget {
     @required this.title,
     @required this.description,
     @required this.buttonText,
-    this.contentImage,
     this.avatarColor,
     this.avatarImage,
     this.actionText,
@@ -30,7 +29,6 @@ class BeerDetailDialog extends StatefulWidget {
         title: title,
         description: description,
         buttonText: buttonText,
-        contentImage: contentImage,
         avatarColor: avatarColor,
         avatarImage: avatarImage,
         actionText: actionText,
@@ -43,7 +41,6 @@ class BeerDetailDialog extends StatefulWidget {
 
 class _BeerDetailDialogState extends State<BeerDetailDialog> {
   final String title, description, buttonText, actionText;
-  final String contentImage;
   final Color avatarColor;
   final String avatarImage;
   final VoidCallback action;
@@ -54,7 +51,6 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
     @required this.title,
     @required this.description,
     @required this.buttonText,
-    this.contentImage,
     this.avatarColor,
     this.avatarImage,
     this.actionText,
@@ -147,7 +143,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Que tanto te gustó?',
+                        S.of(context).do_you_like_it,
                         style: TextStyle(
                           fontSize: 17.0,
                           fontWeight: FontWeight.w700,

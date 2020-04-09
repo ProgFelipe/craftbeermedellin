@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:core';
-import 'package:craftbeer/components/image_provider.dart';
-import 'package:intl/intl.dart';
+
 import 'package:craftbeer/components/decoration_constants.dart';
+import 'package:craftbeer/components/image_provider.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EventCardWidget extends StatefulWidget {
   final Event event;
+
   EventCardWidget({this.event});
+
   @override
   _EventCardWidgetState createState() => _EventCardWidgetState(event: event);
 }
@@ -18,6 +22,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
   final DateFormat _dateFormat = new DateFormat(" dd \'de\' MMMM");
 
   _EventCardWidgetState({this.event});
+
   Timer _timer;
   Duration eventLeftTime;
 
@@ -37,7 +42,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
   }
 
   String getFormattedDayHoursDurationString(Duration duration) =>
-      "días: ${twoDigits(duration.inDays)}\n horas:${twoDigits(duration.inHours)}";
+      "${S.of(context).days}: ${twoDigits(duration.inDays)}\n ${S.of(context).hours}:${twoDigits(duration.inHours)}";
 
   bool isSameDate(DateTime one, DateTime other) {
     return one.year == other.year &&
@@ -52,7 +57,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
       eventLeftTime = event.timestamp.toDate().difference(DateTime.now());
       if (eventLeftTime.inHours >= 0 && eventLeftTime.inHours <= 24) {
         todayEventTimer();
-      } else if(eventLeftTime.inDays > 0){
+      } else if (eventLeftTime.inDays > 0) {
         setState(() {
           showRemainEventDaysLabel = true;
         });
@@ -88,7 +93,6 @@ class _EventCardWidgetState extends State<EventCardWidget> {
     super.initState();
   }
 
-
   @override
   void dispose() {
     debugPrint('DISPOSE STATE EVENTCARD');
@@ -112,20 +116,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(DecorationConsts.cardRadius),
                         topRight: Radius.circular(DecorationConsts.cardRadius)),
-                    child: ImageProviderWidget(event.imageUri)
-                    /*CachedNetworkImage(
-                    fadeInDuration: Duration(milliseconds: 1500),
-                    imageUrl: event.imageUri,
-                    fit: BoxFit.scaleDown,
-                    placeholder: (context, url) => Image.network(url),
-                    errorWidget: (context, url, error) => Card(
-                      elevation: 4.0,
-                      child: Container(
-                        child: Icon(Icons.error),
-                      ),
-                    ),
-                  ),*/
-                    ),
+                    child: ImageProviderWidget(event.imageUri)),
               ),
               Padding(
                 padding: EdgeInsets.only(
@@ -158,7 +149,6 @@ class _EventCardWidgetState extends State<EventCardWidget> {
               SizedBox(
                 height: 10.0,
               )
-              //cardTitle(event['description']),
             ],
           ),
           Visibility(
@@ -197,7 +187,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
             ),
             Text(
               //'8 hours 20 min',
-              "${eventLeftTime?.inDays ?? ''} días ${eventLeftTime?.inHours ?? ''} hrs",
+              "${eventLeftTime?.inDays ?? ''} ${S.of(context).days} ${eventLeftTime?.inHours ?? ''} ${S.of(context).hours}",
               style: TextStyle(
                 fontSize: 12.0,
                 color: Colors.blue,

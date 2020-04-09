@@ -3,6 +3,7 @@ import 'package:craftbeer/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/api.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
@@ -30,7 +31,7 @@ class SearchWidget extends StatelessWidget {
                 Icons.search,
                 color: DecorationConsts.hintGreyColor,
               ),
-              hintText: 'Busca tú Cerveza ó Cervecero',
+              hintText: S.of(context).find_beer_or_brewer_hint,
               hintStyle: TextStyle(color: DecorationConsts.hintGreyColor),
               border: InputBorder.none),
         ),

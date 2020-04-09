@@ -1,6 +1,6 @@
-import 'package:craftbeer/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:craftbeer/generated/l10n.dart';
+import 'package:flutter/material.dart';
 
 class ConnectivityWidget extends StatelessWidget {
   Widget internetErrorWidget(context) {
@@ -10,7 +10,7 @@ class ConnectivityWidget extends StatelessWidget {
       color: Colors.redAccent,
       child: Center(
         child: Text(
-          localizedText(context, NO_DATA_ERROR),
+          S.of(context).no_data,
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.bold),

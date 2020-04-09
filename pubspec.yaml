@@ -20,7 +20,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   story_view: ^0.11.4
-  #flutter_open_whatsapp: ^0.1.2
+  flutter_open_whatsapp: ^0.1.2
   shared_preferences: ^0.5.6+3
   flutter_typeahead: ^1.8.0
   url_launcher: ^5.4.2
@@ -41,7 +41,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter_icons:
-  android: true 
+  android: true
   ios: true
   image_path: "assets/icon.png"
 # For information on the generic Dart part of this file, see the
@@ -76,10 +76,10 @@ flutter:
   fonts:
     - family:  BeerIcon
       fonts:
-       - asset: fonts/BeerIcon.ttf
+        - asset: fonts/BeerIcon.ttf
     - family: Patua
       fonts:
-       - asset: fonts/PatuaOne.ttf
+        - asset: fonts/PatuaOne.ttf
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
@@ -91,3 +91,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true

@@ -1,7 +1,9 @@
 import 'dart:ui';
+
 import 'package:craftbeer/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/database_service.dart';
+import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -39,7 +41,9 @@ class _CategoriesViewState extends State<CategoriesView> {
   Widget build(BuildContext context) {
     List<BeerType> categories = Provider.of<List<BeerType>>(context);
 
-    if(categories == null || categories.isEmpty){return Text('Loading...');}
+    if (categories == null || categories.isEmpty) {
+      return LoadingWidget();
+    }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(),
@@ -47,7 +51,9 @@ class _CategoriesViewState extends State<CategoriesView> {
         children: <Widget>[
           _selectedCategory != null
               ? FilterBeersByTypeView(category: _selectedCategory)
-              : SizedBox(height: 0.0,),
+              : SizedBox(
+                  height: 0.0,
+                ),
           GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 3,
@@ -73,24 +79,36 @@ class _CategoriesViewState extends State<CategoriesView> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Expanded(child: ImageProviderWidget(categories[index].imageUri,height: 60.0,)),
+                          Expanded(
+                              child: ImageProviderWidget(
+                            categories[index].imageUri,
+                            height: 60.0,
+                          )),
                           Text(
                             categories[index].name,
                             style: TextStyle(color: Colors.white),
                           ),
-                          SizedBox(height: 10.0,)
+                          SizedBox(
+                            height: 10.0,
+                          )
                         ],
                       ),
                     ),
-                    Positioned(child: Container(
-                      width: 20.0,
-                      height: 20.0,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.orangeAccent
+                    Positioned(
+                      child: Container(
+                        width: 20.0,
+                        height: 20.0,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.orangeAccent),
+                        child: Text(
+                          '${categories[index].beers.length}',
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      child: Text('${categories[index].beers.length}',textAlign: TextAlign.center,),),top: 0.0, right: 10.0,),
+                      top: 0.0,
+                      right: 10.0,
+                    ),
                   ],
                 ),
               ),
@@ -105,15 +123,20 @@ class _CategoriesViewState extends State<CategoriesView> {
 class FilterBeersByTypeView extends StatelessWidget {
   final BeerType category;
   final db = DataBaseService();
+
   FilterBeersByTypeView({this.category});
 
   @override
   Widget build(BuildContext context) {
-    if(category.beers?.length == 0 ?? true){
+    if (category.beers?.length == 0 ?? true) {
       return Container(
-          decoration: BoxDecoration(),
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        child: Center(child: Text('No hay cervezas\nEn esta categoria')),
+        decoration: BoxDecoration(),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: Center(
+            child: Icon(
+          Icons.all_inclusive,
+          size: 40.0,
+        )),
       );
     }
     return Container(
@@ -139,11 +162,11 @@ class FilterBeersByTypeView extends StatelessWidget {
 
 class BeerItem extends StatelessWidget {
   final Beer beer;
+
   BeerItem(this.beer);
 
   @override
   Widget build(BuildContext context) {
-    if(beer == null){return Container(child: Text('NO BEER'));}
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -154,8 +177,10 @@ class BeerItem extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(vertical: 20.0),
             child: Card(
-              child: ImageProviderWidget(beer.imageUri, height: 90.0,)
-            ),
+                child: ImageProviderWidget(
+              beer.imageUri,
+              height: 90.0,
+            )),
           ),
           Positioned(
             top: 0.0,

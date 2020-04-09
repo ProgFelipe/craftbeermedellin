@@ -1,7 +1,7 @@
 import 'package:craftbeer/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/components/image_provider.dart';
-import 'package:craftbeer/database_service.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,15 +13,15 @@ class TopBeersView extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Beer> beers = Provider.of<List<Beer>>(context);
 
-    if(beers == null){
+    if (beers == null) {
       return LoadingWidget();
-    }else{
+    } else {
       return Consumer<List<Beer>>(builder: (context, beers, child) {
         return Container(
           child: Row(
             children: List.generate(
               beers.length ?? 0,
-                  (index) => Flexible(
+              (index) => Flexible(
                 child: topBeerItem(beers[index], context),
               ),
             ),
@@ -48,9 +48,9 @@ Widget topBeerItem(Beer beer, context) {
               title: beer.name,
               description: beer.description,
               avatarImage: beer.imageUri,
-              buttonText: "Volver",
+              buttonText: S.of(context).back,
               starts: true,
-              actionText: "Contactanos",
+              actionText: S.of(context).contact_us,
               action: () => goToBrewerDetail(beer)));
     },
     child: Stack(
@@ -60,20 +60,6 @@ Widget topBeerItem(Beer beer, context) {
           margin: EdgeInsets.symmetric(vertical: 20.0),
           child: Card(
             child: ImageProviderWidget(beer.imageUri),
-            /*CachedNetworkImage(
-              height: 90.0,
-              fadeInDuration: Duration(milliseconds: 1500),
-              imageUrl: beer.imageUri,
-              fit: BoxFit.scaleDown,
-              placeholder: (context, url) => Image.network(
-                url,
-                height: 90.0,
-              ),
-              errorWidget: (context, url, error) => Image.asset(
-                'assets/beer.png',
-                height: 90.0,
-              ),
-            ),*/
           ),
         ),
         Text(

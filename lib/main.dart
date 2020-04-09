@@ -1,16 +1,14 @@
-import 'package:craftbeer/app_localization.dart';
 import 'package:craftbeer/categories/beer_category_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/events_view.dart';
 import 'package:craftbeer/models.dart';
-import 'package:craftbeer/utils.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-
 import './Home/home_view.dart';
+import 'generated/l10n.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,12 +29,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Craft Beer Colombia',
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('es', ''),
-        ],
+        supportedLocales: S.delegate.supportedLocales,
         localizationsDelegates: [
-          AppLocalizations.delegate,
+          S.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
@@ -114,7 +109,7 @@ class _NavigatorState extends State<Navigator> {
               Icons.home,
               color: Colors.green,
             ),
-            title: Text(localizedText(context, HOME_NAV_TITLE)),
+            title: Text(S.of(context).home_nav_title),
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
@@ -125,7 +120,7 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.red,
             ),
             backgroundColor: Colors.black,
-            title: Text(localizedText(context, EVENTS_NAV_TITLE)),
+            title: Text(S.of(context).events_nav_title),
           ),
           BottomNavigationBarItem(
             icon: Icon(BeerIcon.beerglass),
@@ -134,9 +129,7 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.orangeAccent,
             ),
             backgroundColor: Colors.black,
-            title: Text(
-              localizedText(context, BEER_NAV_TITLE),
-            ),
+            title: Text(S.of(context).beer_nav_title),
           ),
         ],
       ),

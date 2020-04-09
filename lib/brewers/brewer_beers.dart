@@ -1,13 +1,16 @@
 import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/database_service.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BrewerBeersWidget extends StatefulWidget {
   final List<dynamic> beersIds;
+
   BrewerBeersWidget({this.beersIds});
+
   @override
   _BrewerBeersWidgetState createState() =>
       _BrewerBeersWidgetState(beersRef: beersIds);
@@ -46,14 +49,13 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                 db.futureSetVoteBeer(beerRef, vote);
               },
               description: beer.description,
-              buttonText: "Volver",
-              actionText: 'Conocé más',
+              buttonText: S.of(context).back,
+              actionText: S.of(context).more_info,
               action: () {
                 _showBeerHistory(beer.name, beer.history);
               },
               avatarColor: Colors.orangeAccent[200],
-              avatarImage:
-                  'https://images.rappi.com.mx/products/976764882-1574446494426.png?d=200x200',
+              avatarImage: beer.imageUri,
             ));
   }
 
@@ -82,8 +84,8 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                           child: ImageProviderWidget(beer.imageUri),
                         ),
                         SizedBox(height: 10.0),
-                        beerPropertiesText('IBU: ', beer.ibu),
-                        beerPropertiesText('ABV: ', beer.abv),
+                        beerPropertiesText(S.of(context).ibu, beer.ibu),
+                        beerPropertiesText(S.of(context).abv, beer.abv),
                         Text('${beer.name}'),
                       ],
                     ),
@@ -111,7 +113,9 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         _beerName == null ? '' : _beerName,
-                        style: TextStyle(fontSize: 25.0,),
+                        style: TextStyle(
+                          fontSize: 25.0,
+                        ),
                       ),
                     ),
                     Icon(
@@ -142,12 +146,20 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
 
 Widget beerPropertiesText(String propertyName, num value) {
   return RichText(
-    text: TextSpan(
-      style: TextStyle(
-        fontSize: 9.0,
-        color: Colors.black,
+      text: TextSpan(
+    style: TextStyle(
+      fontSize: 9.0,
+      color: Colors.black,
+    ),
+    children: [
+      TextSpan(
+        text: propertyName,
+        style: TextStyle(fontWeight: FontWeight.bold),
       ),
-        children: [TextSpan(text: propertyName , style: TextStyle(fontWeight: FontWeight.bold),
-    ),TextSpan(text:  value.toString(), style: TextStyle(fontSize: 9.0),)],)
-  );
+      TextSpan(
+        text: value.toString(),
+        style: TextStyle(fontSize: 9.0),
+      )
+    ],
+  ));
 }

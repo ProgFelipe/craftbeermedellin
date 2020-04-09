@@ -1,5 +1,6 @@
-import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/categories/categories_widget.dart';
+import 'package:craftbeer/connectivity_widget.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class BeerCategoryView extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 ConnectivityWidget(),
-                titleView('Categories', color: Colors.black),
+                titleView(S.of(context).categories, color: Colors.black),
                 CategoriesView(),
                 Image.asset('assets/tiposcerveza.png'),
                 Image.asset('assets/colorescerveza.jpg'),

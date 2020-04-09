@@ -1,7 +1,8 @@
-import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
+import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/event_card_widget.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
 import 'package:craftbeer/utils.dart';
@@ -26,9 +27,9 @@ class EventsView extends StatelessWidget {
           child: Column(
             children: <Widget>[
               ConnectivityWidget(),
-              titleView(localizedText(context, PROMOTIONS_TITLE)),
+              titleView(S.of(context).promotions_title),
               PromotionsWidget(),
-              titleView(localizedText(context, EVENTS_TITLE)),
+              titleView(S.of(context).events_title),
               EventsWidget(),
             ],
           ),
@@ -44,7 +45,7 @@ class PromotionsWidget extends StatelessWidget {
     List<Promotion> promotions = Provider.of<List<Promotion>>(context);
 
     if (promotions == null || promotions.isEmpty) {
-      return Text('No promotions');
+      return LoadingWidget();
     }
 
     return Container(
@@ -71,6 +72,7 @@ class PromotionsWidget extends StatelessWidget {
 
 class EventsWidget extends StatelessWidget {
   final db = DataBaseService();
+
   @override
   Widget build(BuildContext context) {
     List<Event> events = Provider.of<List<Event>>(context);

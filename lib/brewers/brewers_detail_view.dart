@@ -1,14 +1,16 @@
+import 'package:craftbeer/brewers/brewer_beers.dart';
 import 'package:craftbeer/brewers/offers.dart';
+import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/connectivity_widget.dart';
-import 'package:craftbeer/brewers/brewer_beers.dart';
-import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/database_service.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,6 +47,7 @@ class BrewersDetail extends StatelessWidget {
 
 class BrewerViewBody extends StatefulWidget {
   final Brewer brewer;
+
   BrewerViewBody(this.brewer);
 
   @override
@@ -53,6 +56,7 @@ class BrewerViewBody extends StatefulWidget {
 
 class _BrewerViewBodyState extends State<BrewerViewBody> {
   final Brewer brewer;
+
   _BrewerViewBodyState(this.brewer);
 
   bool isFavorite;
@@ -71,15 +75,16 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
         (prefs.getStringList('favorites') ?? List()).contains(brewerName);
   }
 
-  void openWhatsApp() async {
+  void openWhatsApp() {
     String message =
-        "${brewer.name}\nMe gustaría comprar una cerveza\n[CraftBeer Colombia]";
-    String url = 'whatsapp://send?phone=${brewer.phone}&text=$message';
-    if (await canLaunch(url)) {
+        "${brewer.name}\n${S.of(context).i_would_like_to_to_buy_msg}";
+    FlutterOpenWhatsapp.sendSingleMessage(brewer.phone, message);
+    //String url = 'whatsapp://send?phone=${brewer.phone}&text=$message';
+    /*if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
-    }
+    }*/
   }
 
   void changeFavorite() async {
@@ -87,7 +92,6 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> favorites = (prefs.getStringList('favorites') ?? List());
     bool exist = favorites?.contains(brewerName);
-    debugPrint('Exist $brewerName: $exist ?. New Value $isFavorite');
 
     if (exist && isFavorite) {
       favorites.remove(brewerName);
@@ -96,7 +100,6 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
       favorites.add(brewerName);
     }
 
-    debugPrint('Favorites: $favorites ?.');
     await prefs.setStringList('favorites', favorites);
 
     setState(() {
@@ -108,13 +111,10 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
     showDialog(
       context: context,
       builder: (BuildContext context) => BeerDetailDialog(
-        title: 'Oscar',
-        description:
-            'Soy un emprendedor con basta certificación internacional. Ganador de varios premios locales y nacionales.',
-        buttonText: "Volver",
-        avatarImage: brewer.imageUri,
-        contentImage:
-            'https://d1ynl4hb5mx7r8.cloudfront.net/wp-content/uploads/2018/10/26174056/bonfire-head-brewer.jpg',
+        title: brewer.brewers,
+        description: brewer.aboutUs,
+        buttonText: S.of(context).back,
+        avatarImage: brewer.brewersImageUri,
         avatarColor: Colors.orangeAccent[200],
       ),
     );
@@ -153,7 +153,9 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          SizedBox(height: 30.0,),
+                          SizedBox(
+                            height: 30.0,
+                          ),
                           ImageProviderWidget(brewer.imageUri, width: 120.0),
                           FutureBuilder(
                             future: _isFavorite(brewer.name),
@@ -216,7 +218,7 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                                 ),
                                 label: RichText(
                                   text: TextSpan(
-                                    text: 'Conocenos',
+                                    text: S.of(context).know_us,
                                     style: new TextStyle(
                                         color: Colors.white, fontSize: 20.0),
                                   ),
@@ -226,14 +228,16 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                                 visible: brewer.phone.isNotEmpty,
                                 child: FlatButton.icon(
                                   color: Colors.green,
-                                  onPressed: () => openWhatsApp,
+                                  onPressed: openWhatsApp,
                                   icon: Icon(
                                     Icons.phone,
                                     color: Colors.white,
                                   ),
                                   label: RichText(
                                     text: TextSpan(
-                                      text: 'Pedir Whatsapp',
+                                      text: S
+                                          .of(context)
+                                          .request_beer_by_whatsapp,
                                       style: new TextStyle(
                                           color: Colors.white, fontSize: 20.0),
                                     ),
@@ -254,10 +258,10 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                     margin: EdgeInsets.symmetric(horizontal: 15.0),
                     child: Column(
                       children: <Widget>[
-                        titleView('Ofertas',
+                        titleView(S.of(context).offers,
                             color: Colors.black, size: 30.0, padding: 0.0),
                         Offers(),
-                        titleView('Nuestras Cervezas',
+                        titleView(S.of(context).our_beers,
                             color: Colors.black, size: 30.0, padding: 0.0),
                         BrewerBeersWidget(beersIds: brewer.beersRef),
                         SizedBox(
@@ -267,37 +271,43 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            FlatButton(
-                              onPressed: () {
-                                _launchInBrowser(
-                                    'https://www.instagram.com/paolagarciaolaya/');
-                              },
-                              child: Image.asset(
-                                'assets/instagram.png',
-                                width: 40.0,
-                                height: 40.0,
+                            Visibility(
+                              visible: brewer.instagram.isNotEmpty,
+                              child: FlatButton(
+                                onPressed: () {
+                                  _launchInBrowser(brewer.instagram);
+                                },
+                                child: Image.asset(
+                                  'assets/instagram.png',
+                                  width: 40.0,
+                                  height: 40.0,
+                                ),
                               ),
                             ),
-                            FlatButton(
-                              onPressed: () {
-                                _launchInBrowser(
-                                    'https://www.facebook.com/laplantamedellin/');
-                              },
-                              child: Image.asset(
-                                'assets/facebook.png',
-                                width: 40.0,
-                                height: 40.0,
+                            Visibility(
+                              visible: brewer.facebook.isNotEmpty,
+                              child: FlatButton(
+                                onPressed: () {
+                                  _launchInBrowser(brewer.facebook);
+                                },
+                                child: Image.asset(
+                                  'assets/facebook.png',
+                                  width: 40.0,
+                                  height: 40.0,
+                                ),
                               ),
                             ),
-                            FlatButton(
-                              onPressed: () {
-                                _launchInBrowser(
-                                    'https://www.youtube.com/watch?v=0dEvh3afEqE');
-                              },
-                              child: Image.asset(
-                                'assets/youtube.png',
-                                width: 40.0,
-                                height: 40.0,
+                            Visibility(
+                              visible: brewer.youtube.isNotEmpty,
+                              child: FlatButton(
+                                onPressed: () {
+                                  _launchInBrowser(brewer.youtube);
+                                },
+                                child: Image.asset(
+                                  'assets/youtube.png',
+                                  width: 40.0,
+                                  height: 40.0,
+                                ),
                               ),
                             ),
                           ],

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:craftbeer/connectivity_widget.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/home/brewers_grid.dart';
 import 'package:craftbeer/home/new_releases.dart';
 import 'package:craftbeer/home/search_view.dart';
@@ -24,7 +25,7 @@ class Home extends StatelessWidget {
               ConnectivityWidget(),
               BeerReleases(),
               Padding(
-                padding: EdgeInsets.only(top: 4.0),
+                padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
                 child: Image.asset(
                   'assets/icon.png',
                   alignment: Alignment.center,
@@ -36,9 +37,9 @@ class Home extends StatelessWidget {
                   padding:
                       EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
                   child: SearchWidget()),
-              titleView('Top Week Selections'),
+              titleView(S.of(context).top_week_title),
               TopBeersView(),
-              titleView(localizedText(context, LOCAL_BREWERS_TITLE)),
+              titleView(S.of(context).local_brewers),
               BrewersGrid(),
             ],
           ),
