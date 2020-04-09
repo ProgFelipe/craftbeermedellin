@@ -52,6 +52,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
 
   void startTimer() {
     if (event.timestamp != null &&
+        //Not pass events or same day
         (!event.timestamp.toDate().isBefore(DateTime.now()) ||
             isSameDate(event.timestamp.toDate(), DateTime.now()))) {
       eventLeftTime = event.timestamp.toDate().difference(DateTime.now());
@@ -187,7 +188,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
             ),
             Text(
               //'8 hours 20 min',
-              "${eventLeftTime?.inDays ?? ''} ${S.of(context).days} ${eventLeftTime?.inHours ?? ''} ${S.of(context).hours}",
+              "${eventLeftTime?.inDays ?? ''} ${S.of(context).days}",
               style: TextStyle(
                 fontSize: 12.0,
                 color: Colors.blue,
