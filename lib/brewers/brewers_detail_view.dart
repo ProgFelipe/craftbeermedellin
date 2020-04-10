@@ -133,7 +133,6 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              ConnectivityWidget(),
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -145,108 +144,120 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                       bottomRight: Radius.circular(15.0)),
                 ),
                 child: SafeArea(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      ConnectivityWidget(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          ImageProviderWidget(brewer.imageUri, width: 120.0),
-                          FutureBuilder(
-                            future: _isFavorite(brewer.name),
-                            builder: (context, snapshot) {
-                              return FlatButton.icon(
-                                onPressed: changeFavorite,
-                                icon: Icon(
-                                  isFavorite
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  size: 40.0,
-                                  color: Colors.red,
-                                ),
-                                label: Text(''),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               SizedBox(
-                                height: 20.0,
+                                height: 30.0,
                               ),
-                              Text(
-                                brewer.name,
-                                style: TextStyle(
-                                    fontSize: 30.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                child: ImageProviderWidget(brewer.imageUri,
+                                    width: 120.0),
                               ),
-                              SizedBox(
-                                height: 20.0,
-                              ),
-                              Text(
-                                brewer.description,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal),
-                                maxLines: 10,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(
-                                height: 20.0,
-                              ),
-                              FlatButton.icon(
-                                color: Colors.black54,
-                                onPressed: showBrewerMoreInfo,
-                                icon: Icon(
-                                  Icons.info_outline,
-                                  color: Colors.grey,
-                                ),
-                                label: RichText(
-                                  text: TextSpan(
-                                    text: S.of(context).know_us,
-                                    style: new TextStyle(
-                                        color: Colors.white, fontSize: 20.0),
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: brewer.phone.isNotEmpty,
-                                child: FlatButton.icon(
-                                  color: Colors.green,
-                                  onPressed: openWhatsApp,
-                                  icon: Icon(
-                                    Icons.phone,
-                                    color: Colors.white,
-                                  ),
-                                  label: RichText(
-                                    text: TextSpan(
-                                      text: S
-                                          .of(context)
-                                          .request_beer_by_whatsapp,
-                                      style: new TextStyle(
-                                          color: Colors.white, fontSize: 20.0),
+                              FutureBuilder(
+                                future: _isFavorite(brewer.name),
+                                builder: (context, snapshot) {
+                                  return FlatButton.icon(
+                                    onPressed: changeFavorite,
+                                    icon: Icon(
+                                      isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      size: 40.0,
+                                      color: Colors.red,
                                     ),
-                                  ),
-                                ),
+                                    label: Text(''),
+                                  );
+                                },
                               ),
                             ],
                           ),
-                        ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Text(
+                                    brewer.name,
+                                    style: TextStyle(
+                                        fontSize: 30.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87),
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Text(
+                                    brewer.description,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.normal),
+                                    maxLines: 10,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  FlatButton.icon(
+                                    color: Colors.black54,
+                                    onPressed: showBrewerMoreInfo,
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      color: Colors.grey,
+                                    ),
+                                    label: RichText(
+                                      text: TextSpan(
+                                        text: S.of(context).know_us,
+                                        style: new TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: brewer.phone.isNotEmpty,
+                                    child: FlatButton.icon(
+                                      color: Colors.green,
+                                      onPressed: openWhatsApp,
+                                      icon: Icon(
+                                        Icons.phone,
+                                        color: Colors.white,
+                                      ),
+                                      label: RichText(
+                                        text: TextSpan(
+                                          text: S
+                                              .of(context)
+                                              .request_beer_by_whatsapp,
+                                          style: new TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

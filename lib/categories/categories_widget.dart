@@ -123,7 +123,7 @@ class _CategoriesViewState extends State<CategoriesView> {
 
 class FilterBeersByTypeView extends StatelessWidget {
   final BeerType category;
-  List<Beer> beers;
+  final List<Beer> beers;
   final db = DataBaseService();
 
   FilterBeersByTypeView({this.category, this.beers});

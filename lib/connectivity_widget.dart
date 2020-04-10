@@ -1,6 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ConnectivityWidget extends StatelessWidget {
   Widget internetErrorWidget(context) {
@@ -22,20 +23,17 @@ class ConnectivityWidget extends StatelessWidget {
   /// Fires whenever the connectivity state changes.
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: Connectivity().onConnectivityChanged,
-        builder: (context, AsyncSnapshot<ConnectivityResult> snapshot) {
-          if (!snapshot.hasData) return SizedBox();
-          var result = snapshot.data;
-          switch (result) {
-            case ConnectivityResult.none:
-              return internetErrorWidget(context);
-            case ConnectivityResult.mobile:
-            case ConnectivityResult.wifi:
-              return SizedBox();
-            default:
-              return internetErrorWidget(context);
-          }
-        });
+    ConnectivityResult connectivityResult = Provider.of<ConnectivityResult>(context);
+
+    if (connectivityResult == null) return SizedBox();
+    switch(connectivityResult){
+      case ConnectivityResult.none:
+        return internetErrorWidget(context);
+      case ConnectivityResult.mobile:
+      case ConnectivityResult.wifi:
+        return SizedBox();
+      default:
+        return internetErrorWidget(context);
+    }
   }
 }

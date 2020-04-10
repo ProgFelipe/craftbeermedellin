@@ -7,6 +7,7 @@ import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:connectivity/connectivity.dart';
 
 import './Home/home_view.dart';
 import 'generated/l10n.dart';
@@ -15,11 +16,12 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   final database = DataBaseService();
-
+  final connectivity = Connectivity();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
+        providers: [
+        StreamProvider<ConnectivityResult>.value(value: connectivity.onConnectivityChanged),
         StreamProvider<List<Beer>>.value(value: database.streamBeers()),
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
         StreamProvider<List<Brewer>>.value(value: database.streamBrewers()),
