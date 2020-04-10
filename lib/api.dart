@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-//https://medium.com/@aaron_lu1/firebase-cloud-firestore-add-set-update-delete-get-data-6da566513b1b
 class Api {
   final _fireStore = Firestore.instance;
   static final Api _singleton = Api._internal();
@@ -22,21 +21,10 @@ class Api {
   static const String ranking = 'ranking';
   static const String brewName = 'name';
   static const String brewsReleases = 'brewingOn';
-  static const String ibu = 'ibu';
-  static const String abv = 'abv';
   static const String votes = 'votes';
   static const String releases = 'releases';
-
-  ///Beer Categories
-
-  ///Brewers
-
-  ///Brewer Detail -> Brewer
-  Stream<DocumentSnapshot> fetchBrewerByRef(String brewerRef) {
-    debugPrint('Collection /brewers/$brewerRef');
-    debugPrint('**BREWERS BY REFERENCE**');
-    return _fireStore.collection(brewers).document(brewerRef).snapshots();
-  }
+  static String events = 'events';
+  static String promotions = 'promotions';
 
   ///BeerCategory
   Stream<QuerySnapshot> fetchBeerCategories() {
@@ -44,55 +32,7 @@ class Api {
     return _fireStore.collection('beertypes').snapshots();
   }
 
-  Stream<DocumentSnapshot> fetchBeerByReference(String beerRef) {
-    debugPrint('Collection /beers/$beerRef');
-    debugPrint('***BEER BY REFERENCE**');
-    return _fireStore.collection(beers).document(beerRef).snapshots();
-  }
-
-  /*Stream<QuerySnapshot> fetchBeers() {
-    return _fireStore.collection(beers).snapshots();
-  }*/
-
-  /*Stream<QuerySnapshot> fetchBrewerByName(String brewerName) {
-    return _fireStore
-        .collection(brewer)
-        .where(name, isEqualTo: brewerName)
-        .limit(1)
-        .snapshots();
-  }*/
-
-  /*Stream<QuerySnapshot> fetchBrewerBeers(String brewerDocumentRef) {
-    return _fireStore
-        .collection(beers)
-        .where(brewer, isEqualTo: '/$brewers/$brewerDocumentRef')
-        .snapshots();
-  }*/
-
-  /*Future<int> getBrewerVotes(String brewerName) {
-    return _fireStore
-        .collection(brewers)
-        .document(brewerName)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        return doc.data[ranking];
-      } else {
-        debugPrint("No such document!");
-        return 0;
-      }
-    });
-  }*/
-
-  /*Future<void> brewerVote(String brewerName) async {
-    int currentRanking;
-    getBrewerVotes(brewerName).then((value) => currentRanking = value);
-    _fireStore
-        .collection(brewers)
-        .document(brewerName)
-        .updateData({ranking: currentRanking + 1});
-  }*/
-
+  ///Vote
   Future<void> beerVote(String beerRef, int vote) async {
     debugPrint('VAMOS A VOTAR $beerRef, $vote');
     var document = _fireStore.collection(beers).document(beerRef);
@@ -108,30 +48,6 @@ class Api {
     });
   }
 
-  List<DocumentSnapshot> documents;
-
-  Future<List<DocumentSnapshot>> searchBeers(String query) async {
-    debugPrint('***Suscrito a search beers**');
-    if (documents == null || documents.isEmpty) {
-      await _fireStore
-          .collection(beers)
-          .getDocuments()
-          .then((value) => documents = value.documents);
-      await _fireStore
-          .collection(brewers)
-          .getDocuments()
-          .then((value) => documents..addAll(value.documents));
-    }
-    List<DocumentSnapshot> documentList = List();
-    documentList = documents.where((doc) {
-      debugPrint('Searching ${doc.data['name']}');
-      return doc['name'].toLowerCase().contains(query.toLowerCase());
-    }).toList();
-
-    return documentList;
-  }
-
-  //Home
   ///Releases
   Stream<QuerySnapshot> fetchReleases() {
     debugPrint('***Suscrito a top cervezas**');
@@ -151,16 +67,12 @@ class Api {
   }
 
   ///Events
-  static String events = 'events';
-
   Stream<QuerySnapshot> fetchEvents() {
     debugPrint('***Suscrito a EVENTS**');
     return _fireStore.collection(events).snapshots();
   }
 
   ///Promotions
-  static String promotions = 'promotions';
-
   Stream<QuerySnapshot> fetchPromotions() {
     debugPrint('***Suscrito a PROMOTIONS**');
     return _fireStore.collection(promotions).snapshots();

@@ -7,6 +7,7 @@ import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+
 import './Home/home_view.dart';
 import 'generated/l10n.dart';
 
