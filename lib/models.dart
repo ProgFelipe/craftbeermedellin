@@ -1,17 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Beer {
-  final String id;
-  final String name;
-  final String description;
-  final String history;
+  final String id, name, description, history, brewerRef, imageUri, type;
   final num abv, ibu;
-  final String brewerRef;
-  final String imageUri;
   final num ranking, votes;
   final Timestamp release;
   final bool sell;
-  final String type;
 
   Beer(
       {this.id,
@@ -49,18 +43,8 @@ class Beer {
 
 class Brewer {
   List<String> beersRef;
-  String id,
-      description,
-      imageUri,
-      name,
-      brewers,
-      aboutUs,
-      brewersImageUri,
-      phone,
-      instagram,
-      facebook,
-      youtube,
-      website;
+  String id, description, imageUri, name, brewers, aboutUs, brewersImageUri;
+  String phone, instagram, facebook, youtube, website;
 
   Brewer(
       {this.id,
@@ -163,8 +147,7 @@ class Promotion {
 }
 
 class Release {
-  String name;
-  String imageUri;
+  String name, imageUri;
 
   Release({this.name, this.imageUri});
 

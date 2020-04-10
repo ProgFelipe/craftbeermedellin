@@ -260,6 +260,15 @@ class S {
       args: [],
     );
   }
+
+  String get whatsapp_error {
+    return Intl.message(
+      'Couldn\'t reach WhatsApp',
+      name: 'whatsapp_error',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

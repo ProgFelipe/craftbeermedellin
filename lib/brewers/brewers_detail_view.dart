@@ -10,7 +10,6 @@ import 'package:craftbeer/models.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -75,16 +74,24 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
         (prefs.getStringList('favorites') ?? List()).contains(brewerName);
   }
 
-  void openWhatsApp() {
+  void openWhatsApp() async {
     String message =
         "${brewer.name}\n${S.of(context).i_would_like_to_to_buy_msg}";
-    FlutterOpenWhatsapp.sendSingleMessage(brewer.phone, message);
-    //String url = 'whatsapp://send?phone=${brewer.phone}&text=$message';
-    /*if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }*/
+
+    String url = 'whatsapp://send?phone=${brewer.phone}&text=$message';
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text(S.of(context).whatsapp_error),
+        ));
+      }
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(S.of(context).whatsapp_error),
+      ));
+    }
   }
 
   void changeFavorite() async {
