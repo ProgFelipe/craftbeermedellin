@@ -2,6 +2,7 @@ import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
+import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,6 +62,10 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
 
   @override
   Widget build(BuildContext context) {
+    List<Beer> beers = Provider.of<List<Beer>>(context);
+    if (beers == null) {
+      return LoadingWidget();
+    }
     return Column(
       children: <Widget>[
         GridView.count(
@@ -69,30 +74,30 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
           shrinkWrap: true,
           children: List.generate(
             beersRef.length,
-            (index) => StreamProvider<Beer>.value(
-              value: db.streamBeerByReference(beersRef[index]),
-              child: Consumer<Beer>(
-                builder: (context, beer, child) {
-                  if (beer == null) return SizedBox();
+            (index) => FutureBuilder(
+                future: db.futureBeerByReference(beers, beersRef[index]),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return SizedBox();
                   return GestureDetector(
-                    onTap: () => showBeerDialog(context, beer, beersRef[index]),
+                    onTap: () =>
+                        showBeerDialog(context, snapshot.data, beersRef[index]),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Expanded(
-                          child: ImageProviderWidget(beer.imageUri),
+                          child: ImageProviderWidget(snapshot.data.imageUri),
                         ),
                         SizedBox(height: 10.0),
-                        beerPropertiesText(S.of(context).ibu, beer.ibu),
-                        beerPropertiesText(S.of(context).abv, beer.abv),
-                        Text('${beer.name}'),
+                        beerPropertiesText(
+                            S.of(context).ibu, snapshot.data.ibu),
+                        beerPropertiesText(
+                            S.of(context).abv, snapshot.data.abv),
+                        Text('${snapshot.data.name}'),
                       ],
                     ),
                   );
-                },
-              ),
-            ),
+                }),
           ),
         ),
         Visibility(

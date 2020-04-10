@@ -40,8 +40,9 @@ class _CategoriesViewState extends State<CategoriesView> {
   @override
   Widget build(BuildContext context) {
     List<BeerType> categories = Provider.of<List<BeerType>>(context);
+    List<Beer> beers = Provider.of<List<Beer>>(context);
 
-    if (categories == null || categories.isEmpty) {
+    if (categories?.isEmpty == true && beers?.isEmpty == true) {
       return LoadingWidget();
     }
     return Container(
@@ -50,7 +51,7 @@ class _CategoriesViewState extends State<CategoriesView> {
       child: Column(
         children: <Widget>[
           _selectedCategory != null
-              ? FilterBeersByTypeView(category: _selectedCategory)
+              ? FilterBeersByTypeView(category: _selectedCategory, beers: beers)
               : SizedBox(
                   height: 0.0,
                 ),
@@ -59,7 +60,7 @@ class _CategoriesViewState extends State<CategoriesView> {
             crossAxisCount: 3,
             shrinkWrap: true,
             children: List.generate(
-              categories.length ?? 0,
+              categories?.length ?? 0,
               (index) => GestureDetector(
                 onTap: () {
                   changeBeerTypeSelection(categories[index]);
@@ -122,13 +123,14 @@ class _CategoriesViewState extends State<CategoriesView> {
 
 class FilterBeersByTypeView extends StatelessWidget {
   final BeerType category;
+  List<Beer> beers;
   final db = DataBaseService();
 
-  FilterBeersByTypeView({this.category});
+  FilterBeersByTypeView({this.category, this.beers});
 
   @override
   Widget build(BuildContext context) {
-    if (category.beers?.length == 0 ?? true) {
+    if (category.beers?.length == 0 ?? true && beers?.length == 0 ?? true) {
       return Container(
         decoration: BoxDecoration(),
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -145,15 +147,14 @@ class FilterBeersByTypeView extends StatelessWidget {
       child: Row(
         children: List.generate(
           category.beers?.length ?? 0,
-          (index) => StreamProvider<Beer>.value(
-            value: db.streamBeerByReference(category.beers[index]),
-            child: Consumer<Beer>(
-              builder: (context, beer, child) {
-                if (beer == null) return Text('');
-                return BeerItem(beer);
-              },
-            ),
-          ),
+          (index) => FutureBuilder(
+              future: db.futureBeerByReference(beers, category.beers[index]),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return BeerItem(snapshot.data);
+                }
+                return Text('');
+              }),
         ),
       ),
     );

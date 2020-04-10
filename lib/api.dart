@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -6,9 +7,11 @@ import 'package:flutter/cupertino.dart';
 class Api {
   final _fireStore = Firestore.instance;
   static final Api _singleton = Api._internal();
+
   factory Api() {
     return _singleton;
   }
+
   Api._internal();
 
   static const String brewers = 'brewers';
@@ -27,10 +30,6 @@ class Api {
   ///Beer Categories
 
   ///Brewers
-  Stream<QuerySnapshot> fetchBrewers() {
-    debugPrint('***BREWERS SERVICE SNAPSHOT**');
-    return _fireStore.collection(brewers).snapshots();
-  }
 
   ///Brewer Detail -> Brewer
   Stream<DocumentSnapshot> fetchBrewerByRef(String brewerRef) {
@@ -110,6 +109,7 @@ class Api {
   }
 
   List<DocumentSnapshot> documents;
+
   Future<List<DocumentSnapshot>> searchBeers(String query) async {
     debugPrint('***Suscrito a search beers**');
     if (documents == null || documents.isEmpty) {
@@ -132,33 +132,36 @@ class Api {
   }
 
   //Home
-  Stream<QuerySnapshot> fetchTopBeers() {
-    debugPrint('***Suscrito a top cervezas**');
-    return _fireStore
-        .collection(beers)
-        .orderBy('ranking', descending: true)
-        .limit(5)
-        .snapshots();
-  }
-
+  ///Releases
   Stream<QuerySnapshot> fetchReleases() {
     debugPrint('***Suscrito a top cervezas**');
-    return _fireStore
-        .collection(releases)
-        .limit(5)
-        .snapshots();
+    return _fireStore.collection(releases).limit(5).snapshots();
+  }
+
+  ///Beers
+  Stream<QuerySnapshot> fetchBeers() {
+    debugPrint('***Suscrito a cervezas**');
+    return _fireStore.collection(beers).snapshots();
+  }
+
+  ///Brewers
+  Stream<QuerySnapshot> fetchBrewers() {
+    debugPrint('***BREWERS SERVICE SNAPSHOT**');
+    return _fireStore.collection(brewers).snapshots();
   }
 
   ///Events
   static String events = 'events';
-  Stream<QuerySnapshot> fetchEvents(){
+
+  Stream<QuerySnapshot> fetchEvents() {
     debugPrint('***Suscrito a EVENTS**');
     return _fireStore.collection(events).snapshots();
   }
 
   ///Promotions
   static String promotions = 'promotions';
-  Stream<QuerySnapshot> fetchPromotions(){
+
+  Stream<QuerySnapshot> fetchPromotions() {
     debugPrint('***Suscrito a PROMOTIONS**');
     return _fireStore.collection(promotions).snapshots();
   }

@@ -25,18 +25,18 @@ class BrewersDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var brewers = Provider.of<List<Brewer>>(context);
+
     if (brewer == null && brewerRef != null) {
-      return StreamProvider.value(
-          value: db.streamBrewerByRef(brewerRef),
-          child: Consumer<Brewer>(
-            builder: (context, brewerModel, child) {
-              if (brewerModel == null) {
-                return LoadingWidget();
-              } else {
-                return BrewerViewBody(brewerModel);
-              }
-            },
-          ));
+      return FutureBuilder(
+          future: db.futureBrewerByRef(brewers, brewerRef),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return BrewerViewBody(snapshot.data);
+            } else {
+              return LoadingWidget();
+            }
+          });
     } else if (brewer != null) {
       return BrewerViewBody(brewer);
     } else {

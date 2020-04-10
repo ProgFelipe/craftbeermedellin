@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        StreamProvider<List<Beer>>.value(value: database.fetchTopBeers()),
+        StreamProvider<List<Beer>>.value(value: database.streamBeers()),
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
         StreamProvider<List<Brewer>>.value(value: database.streamBrewers()),
         StreamProvider<List<BeerType>>.value(value: database.streamBeerTypes()),
