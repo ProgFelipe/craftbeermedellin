@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "our_beers" : MessageLookupByLibrary.simpleMessage("Our Beers"),
     "promotions_title" : MessageLookupByLibrary.simpleMessage("Promotions"),
     "request_beer_by_whatsapp" : MessageLookupByLibrary.simpleMessage("Buy on Whatsapp"),
+    "thanks_for_the_vote" : MessageLookupByLibrary.simpleMessage("Thanks for voting!"),
     "top_week_title" : MessageLookupByLibrary.simpleMessage("Top Week Selections"),
     "welcome_story_telling" : MessageLookupByLibrary.simpleMessage("Welcome\nLocal Colombian Brewers.!\n\nThe Craft Beer is our pasion \n\nDiscover local Craft Beers!")
   };

@@ -23,5 +23,6 @@
   "our_beers": "Our Beers",
   "do_you_like_it": "Do you like it?",
   "find_beer_or_brewer_hint": "Search beer or brewer",
-  "i_would_like_to_to_buy_msg": "I would like to buy beers"
+  "i_would_like_to_to_buy_msg": "I would like to buy beers",
+  "thanks_for_the_vote": "Thanks for voting!"
 }

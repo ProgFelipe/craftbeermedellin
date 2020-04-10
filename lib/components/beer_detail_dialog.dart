@@ -168,7 +168,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                 Visibility(
                   visible: showVotesBox && !_canVote,
                   child: Text(
-                    'Gracias por votar!',
+                    S.of(context).thanks_for_the_vote,
                     style: TextStyle(color: Colors.amberAccent),
                   ),
                 ),

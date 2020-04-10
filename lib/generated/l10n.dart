@@ -251,6 +251,15 @@ class S {
       args: [],
     );
   }
+
+  String get thanks_for_the_vote {
+    return Intl.message(
+      'Thanks for voting!',
+      name: 'thanks_for_the_vote',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
