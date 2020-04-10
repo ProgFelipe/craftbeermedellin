@@ -51,7 +51,7 @@ class DataBaseService {
   ///PROMOTIONS
   Stream<List<Promotion>> streamPromotions() {
     return db.fetchPromotions().map((promotions) => promotions.documents
-        .map((promotion) => Promotion.fromMap(promotion))
+        .map((promotion) => Promotion.fromSnapshotMap(promotion))
         .toList());
   }
 

@@ -276,9 +276,19 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                     margin: EdgeInsets.symmetric(horizontal: 15.0),
                     child: Column(
                       children: <Widget>[
-                        titleView(S.of(context).offers,
-                            color: Colors.black, size: 30.0, padding: 0.0),
-                        Offers(),
+                        Visibility(
+                          visible: brewer.promotions != null &&
+                              brewer.promotions.length > 0,
+                          child: Column(
+                            children: [
+                              titleView(S.of(context).offers,
+                                  color: Colors.black,
+                                  size: 30.0,
+                                  padding: 0.0),
+                              Offers(brewer.promotions),
+                            ],
+                          ),
+                        ),
                         titleView(S.of(context).our_beers,
                             color: Colors.black, size: 30.0, padding: 0.0),
                         BrewerBeersWidget(beersIds: brewer.beersRef),

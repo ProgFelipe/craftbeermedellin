@@ -43,12 +43,14 @@ class Beer {
 
 class Brewer {
   List<String> beersRef;
+  List<Promotion> promotions;
   String id, description, imageUri, name, brewers, aboutUs, brewersImageUri;
   String phone, instagram, facebook, youtube, website;
 
   Brewer(
       {this.id,
       this.beersRef,
+      this.promotions,
       this.description,
       this.imageUri,
       this.name,
@@ -69,6 +71,10 @@ class Brewer {
                   (reference) => (reference as DocumentReference).documentID)
               ?.toList() ??
           [''],
+      promotions: data['promos']
+              ?.map<Promotion>((promotion) => Promotion.fromMap(promotion))
+              ?.toList() ??
+          [],
       description: data['description'] ?? '',
       imageUri: data['imageUri'] ?? '',
       name: data['name'] ?? '',
@@ -135,11 +141,23 @@ class Event {
 
 class Promotion {
   String imageUri;
+  String description;
+  String brewerRef;
 
-  Promotion({this.imageUri});
+  Promotion({this.imageUri, this.description, this.brewerRef});
 
-  factory Promotion.fromMap(DocumentSnapshot data) {
+  factory Promotion.fromSnapshotMap(DocumentSnapshot data) {
     return Promotion(
+      description: data['description'] ?? '',
+      brewerRef: data['brewerRef'] ?? '',
+      imageUri: data['imageUri'] ??
+          'http://morganfields.com.sg/wp-content/uploads/img-home-promo3.jpg',
+    );
+  }
+  factory Promotion.fromMap(Map data) {
+    return Promotion(
+      description: data['description'] ?? '',
+      brewerRef: data['brewerRef'] ?? '',
       imageUri: data['imageUri'] ??
           'http://morganfields.com.sg/wp-content/uploads/img-home-promo3.jpg',
     );
