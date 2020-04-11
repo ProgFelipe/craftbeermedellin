@@ -42,7 +42,8 @@ class _CategoriesViewState extends State<CategoriesView> {
     List<BeerType> categories = Provider.of<List<BeerType>>(context);
     List<Beer> beers = Provider.of<List<Beer>>(context);
 
-    if (categories?.isEmpty == true && beers?.isEmpty == true) {
+    if (categories == null ||
+        categories?.isEmpty == true && beers?.isEmpty == true) {
       return LoadingWidget();
     }
     return Container(
@@ -55,13 +56,17 @@ class _CategoriesViewState extends State<CategoriesView> {
               : SizedBox(
                   height: 0.0,
                 ),
-          GridView.count(
+          GridView.builder(
+            itemCount: categories.length ?? 0,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 1.0,
+              mainAxisSpacing: 1.0,
+            ),
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
             shrinkWrap: true,
-            children: List.generate(
-              categories?.length ?? 0,
-              (index) => GestureDetector(
+            itemBuilder: (context, index) {
+              return GestureDetector(
                 onTap: () {
                   changeBeerTypeSelection(categories[index]);
                 },
@@ -112,8 +117,8 @@ class _CategoriesViewState extends State<CategoriesView> {
                     ),
                   ],
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),

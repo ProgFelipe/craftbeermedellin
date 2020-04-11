@@ -4,8 +4,15 @@ import 'package:craftbeer/models.dart';
 class DataBaseService {
   ///Brewer
   Stream<List<Brewer>> streamBrewers() {
-    return db.fetchBrewers().map((brewersList) =>
-        brewersList.documents.map((brewer) => Brewer.fromMap(brewer)).toList());
+    return db
+        .fetchBrewers()
+        .map((brewersList) => brewersList.documents.map((brewer) {
+              var brewerObj = Brewer.fromMap(brewer);
+              brewerObj.isFavorite().then((value) {
+                brewerObj.stateIsFavorite = value;
+              });
+              return brewerObj;
+            }).toList());
   }
 
   ///Brewer item

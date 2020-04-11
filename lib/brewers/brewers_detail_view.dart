@@ -11,7 +11,6 @@ import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BrewersDetail extends StatelessWidget {
@@ -55,23 +54,21 @@ class BrewerViewBody extends StatefulWidget {
 
 class _BrewerViewBodyState extends State<BrewerViewBody> {
   final Brewer brewer;
+  bool favorite;
 
   _BrewerViewBodyState(this.brewer);
-
-  bool isFavorite;
 
   final DataBaseService db = DataBaseService();
 
   @override
   void initState() {
+    favorite = brewer.stateIsFavorite;
     super.initState();
-    isFavorite = false;
   }
 
-  Future<void> _isFavorite(String brewerName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isFavorite =
-        (prefs.getStringList('favorites') ?? List()).contains(brewerName);
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void openWhatsApp() async {
@@ -94,26 +91,6 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
     }
   }
 
-  void changeFavorite() async {
-    String brewerName = brewer.name;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favorites = (prefs.getStringList('favorites') ?? List());
-    bool exist = favorites?.contains(brewerName);
-
-    if (exist && isFavorite) {
-      favorites.remove(brewerName);
-    }
-    if (!exist && !isFavorite) {
-      favorites.add(brewerName);
-    }
-
-    await prefs.setStringList('favorites', favorites);
-
-    setState(() {
-      isFavorite = !isFavorite;
-    });
-  }
-
   showBrewerMoreInfo() {
     showDialog(
       context: context,
@@ -127,14 +104,16 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
     );
   }
 
+  updateFavoriteIfChanged() {
+    brewer.stateIsFavorite = favorite;
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: WillPopScope(
-        onWillPop: () {
-          Navigator.pop(context, isFavorite);
-          return Future(() => true);
-        },
+        onWillPop: () => updateFavoriteIfChanged(),
         child: Container(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -170,22 +149,21 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                                 child: ImageProviderWidget(brewer.imageUri,
                                     width: 120.0),
                               ),
-                              FutureBuilder(
-                                future: _isFavorite(brewer.name),
-                                builder: (context, snapshot) {
-                                  return FlatButton.icon(
-                                    onPressed: changeFavorite,
-                                    icon: Icon(
-                                      isFavorite
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      size: 40.0,
-                                      color: Colors.red,
-                                    ),
-                                    label: Text(''),
-                                  );
+                              FlatButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    favorite = !favorite;
+                                  });
                                 },
-                              ),
+                                icon: Icon(
+                                  favorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  size: 40.0,
+                                  color: Colors.red,
+                                ),
+                                label: Text(''),
+                              )
                             ],
                           ),
                           Expanded(

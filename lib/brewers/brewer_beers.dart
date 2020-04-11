@@ -68,13 +68,14 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
     }
     return Column(
       children: <Widget>[
-        GridView.count(
-          crossAxisCount: 3,
+        GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, crossAxisSpacing: 1.0, mainAxisSpacing: 1.0),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          children: List.generate(
-            beersRef.length,
-            (index) => FutureBuilder(
+          itemCount: beersRef.length,
+          itemBuilder: (context, index) {
+            return FutureBuilder(
                 future: db.futureBeerByReference(beers, beersRef[index]),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return SizedBox();
@@ -97,8 +98,8 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       ],
                     ),
                   );
-                }),
-          ),
+                });
+          },
         ),
         Visibility(
           visible: _showBeerDescription,

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Beer {
   final String id, name, description, history, brewerRef, imageUri, type;
@@ -41,11 +43,22 @@ class Beer {
   }
 }
 
-class Brewer {
+class Brewer with ChangeNotifier {
   List<String> beersRef;
   List<Promotion> promotions;
   String id, description, imageUri, name, brewers, aboutUs, brewersImageUri;
   String phone, instagram, facebook, youtube, website;
+  bool _stateIsFavorite;
+
+  bool get stateIsFavorite => _stateIsFavorite;
+
+  set stateIsFavorite(bool newValue) {
+    if (stateIsFavorite != newValue) {
+      _stateIsFavorite = newValue;
+      changeFavoriteState(newValue);
+      notifyListeners();
+    }
+  }
 
   Brewer(
       {this.id,
@@ -90,6 +103,37 @@ class Brewer {
       website: data['website'] ?? '',
     );
     return brewer;
+  }
+
+  SharedPreferences prefs;
+
+  Future<SharedPreferences> getSharedPreference() async {
+    if (prefs == null) {
+      prefs = await SharedPreferences.getInstance();
+    }
+    return prefs;
+  }
+
+  Future<bool> isFavorite() async {
+    return getSharedPreference().then(
+        (value) => (value.getStringList('favorites') ?? List()).contains(name));
+  }
+
+  void changeFavoriteState(bool newValue) async {
+    SharedPreferences prefs = await getSharedPreference();
+    List<String> favorites = (prefs.getStringList('favorites') ?? List());
+    bool exist = favorites?.contains(name);
+
+    if (exist && !newValue) {
+      favorites.remove(name);
+    }
+    if (!exist && newValue) {
+      favorites.add(name);
+    }
+    favorites.forEach((element) {
+      debugPrint('Favorite: $element');
+    });
+    await prefs.setStringList('favorites', favorites);
   }
 }
 
@@ -154,6 +198,7 @@ class Promotion {
           'http://morganfields.com.sg/wp-content/uploads/img-home-promo3.jpg',
     );
   }
+
   factory Promotion.fromMap(Map data) {
     return Promotion(
       description: data['description'] ?? '',
