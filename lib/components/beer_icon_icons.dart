@@ -19,6 +19,10 @@ class BeerIcon {
   BeerIcon._();
 
   static const _kFontFam = 'BeerIcon';
+  static const _kFontPkg = null;
 
-  static const IconData beerglass = IconData(0xe801, fontFamily: _kFontFam);
+  static const IconData instagram = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData beerglass = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData youtube = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData facebook = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

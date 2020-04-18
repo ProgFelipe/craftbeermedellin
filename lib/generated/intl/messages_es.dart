@@ -43,7 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "offers" : MessageLookupByLibrary.simpleMessage("Ofertas"),
     "our_beers" : MessageLookupByLibrary.simpleMessage("Nuestras Cervezas"),
     "promotions_title" : MessageLookupByLibrary.simpleMessage("Promociones"),
-    "request_beer_by_whatsapp" : MessageLookupByLibrary.simpleMessage("Pedir Whatsapp"),
+    "srm" : MessageLookupByLibrary.simpleMessage("SRM:"),
     "thanks_for_the_vote" : MessageLookupByLibrary.simpleMessage("Gracias por votar!"),
     "top_week_title" : MessageLookupByLibrary.simpleMessage("Top semanales"),
     "welcome_story_telling" : MessageLookupByLibrary.simpleMessage("Bienvenido\nBrewers Colombia.!\n\nLa cerveza artesanal es nuestra pasión \n\nConoce sobre cervezas artesanales locales!"),

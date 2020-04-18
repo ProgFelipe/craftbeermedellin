@@ -189,19 +189,19 @@ class S {
     );
   }
 
-  String get know_us {
+  String get srm {
     return Intl.message(
-      'Know about us',
-      name: 'know_us',
+      'SRM:',
+      name: 'srm',
       desc: '',
       args: [],
     );
   }
 
-  String get request_beer_by_whatsapp {
+  String get know_us {
     return Intl.message(
-      'Buy on Whatsapp',
-      name: 'request_beer_by_whatsapp',
+      'Know about us',
+      name: 'know_us',
       desc: '',
       args: [],
     );

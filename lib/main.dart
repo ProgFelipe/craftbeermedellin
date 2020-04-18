@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:craftbeer/categories/beer_category_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/database_service.dart';
@@ -7,7 +8,6 @@ import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:connectivity/connectivity.dart';
 
 import './Home/home_view.dart';
 import 'generated/l10n.dart';
@@ -17,15 +17,20 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   final database = DataBaseService();
   final connectivity = Connectivity();
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-        StreamProvider<ConnectivityResult>.value(value: connectivity.onConnectivityChanged),
-        StreamProvider<List<Beer>>.value(value: database.streamBeers()),
+      providers: [
+        StreamProvider<ConnectivityResult>.value(
+            value: connectivity.onConnectivityChanged),
+        FutureProvider<List<Beer>>.value(value: database.fetchBeers()),
+        FutureProvider<List<BeerType>>.value(value: database.fetchBeerTypes()),
+        FutureProvider<List<Brewer>>.value(value: database.fetchBrewers()),
+        //StreamProvider<List<Beer>>.value(value: database.streamBeers()),
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
-        StreamProvider<List<Brewer>>.value(value: database.streamBrewers()),
-        StreamProvider<List<BeerType>>.value(value: database.streamBeerTypes()),
+        //StreamProvider<List<Brewer>>.value(value: database.streamBrewers()),
+        //StreamProvider<List<BeerType>>.value(value: database.streamBeerTypes()),
         StreamProvider<List<Promotion>>.value(
             value: database.streamPromotions()),
         StreamProvider<List<Event>>.value(value: database.streamEvents()),
@@ -39,10 +44,13 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         theme: ThemeData(
-          primarySwatch: Colors.orange,
-          cursorColor: Colors.orange,
-          fontFamily: 'Patua',
-        ),
+            primarySwatch: Colors.orange,
+            cursorColor: Colors.orange,
+            fontFamily: 'Patua',
+            pageTransitionsTheme: PageTransitionsTheme(builders: {
+              TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            })),
         home: SplashScreen.navigate(
           name: 'assets/splash.flr',
           next: (context) => Navigator(),
