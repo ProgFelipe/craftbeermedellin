@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:craftbeer/brewers/brewer_beers.dart';
 import 'package:craftbeer/brewers/offers.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
@@ -109,6 +111,24 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
     Navigator.pop(context);
   }
 
+  Widget backIfIos() {
+    if (Platform.isIOS) {
+      return FlatButton.icon(
+        onPressed: () {
+          updateFavoriteIfChanged();
+        },
+        icon: Icon(
+          Icons.arrow_back_ios,
+          size: 40.0,
+          color: Colors.deepOrange,
+        ),
+        label: Text(''),
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,8 +151,10 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                 ),
                 child: SafeArea(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       ConnectivityWidget(),
+                      backIfIos(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
