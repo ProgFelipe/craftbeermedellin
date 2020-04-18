@@ -3,7 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Beer {
-  final String id, name, description, history, brewerRef, imageUri, type;
+  final String id,
+      name,
+      description,
+      history,
+      brewerRef,
+      imageUri,
+      type,
+      flavors,
+      scents,
+      ingredients;
   final num abv, ibu;
   final num ranking, votes;
   final Timestamp release;
@@ -17,6 +26,9 @@ class Beer {
       this.history,
       this.abv,
       this.ibu,
+      this.flavors,
+      this.scents,
+      this.ingredients,
       this.imageUri,
       this.ranking,
       this.votes,
@@ -41,14 +53,36 @@ class Beer {
         type: data['type']?.documentID ?? '');
     return beer;
   }
+
+  factory Beer.fromJson(Map<String, dynamic> data) {
+    var beer = Beer(
+        id: data['name'] ?? '',
+        name: data['name'] ?? '',
+        brewerRef: data['brewer']?.toString() ?? '',
+        description: data['description'] ?? '',
+        history: data['history'] ?? '',
+        abv: double.parse(data['abv']) ?? 0.0,
+        ibu: double.parse(data['ibu']) ?? 0.0,
+        imageUri: data['beer_pic'] ?? '',
+        ranking: data['ranking'] as num ?? 0,
+        votes: data['votes'] ?? 0,
+        release:
+            Timestamp.fromDate(DateTime.parse(data['release_date'])) ?? null,
+        sell: data['sell'] ?? false,
+        flavors: data['flavors'] ?? '',
+        scents: data['scents'] ?? '',
+        ingredients: data['ingredients'] ?? '',
+        type: data['category']?.toString() ?? '');
+    return beer;
+  }
 }
 
 class Brewer with ChangeNotifier {
-  List<String> beersRef;
+  List<Beer> beers;
   List<Promotion> promotions;
   String id, description, imageUri, name, brewers, aboutUs, brewersImageUri;
   String phone, instagram, facebook, youtube, website;
-  bool _stateIsFavorite;
+  bool _stateIsFavorite = false;
 
   bool get stateIsFavorite => _stateIsFavorite;
 
@@ -62,7 +96,7 @@ class Brewer with ChangeNotifier {
 
   Brewer(
       {this.id,
-      this.beersRef,
+      this.beers,
       this.promotions,
       this.description,
       this.imageUri,
@@ -78,12 +112,9 @@ class Brewer with ChangeNotifier {
 
   factory Brewer.fromMap(DocumentSnapshot data) {
     var brewer = Brewer(
-      id: data.documentID,
-      beersRef: data['beers']
-              ?.map<String>(
-                  (reference) => (reference as DocumentReference).documentID)
-              ?.toList() ??
-          [''],
+      id: data['id'],
+      beers:
+          data['beers'].map<Beer>((beer) => Beer.fromJson(beer)).toList() ?? [],
       promotions: data['promos']
               ?.map<Promotion>((promotion) => Promotion.fromMap(promotion))
               ?.toList() ??
@@ -97,6 +128,32 @@ class Brewer with ChangeNotifier {
           ? data['brewers_imageUri']
           : data['imageUri'] ?? '',
       phone: data['phone'] ?? '',
+      instagram: data['instagram'] ?? '',
+      facebook: data['facebook'] ?? '',
+      youtube: data['youtube'] ?? '',
+      website: data['website'] ?? '',
+    );
+    return brewer;
+  }
+
+  factory Brewer.fromJson(Map<String, dynamic> data) {
+    var brewer = Brewer(
+      id: data['id'].toString(),
+      beers:
+          data['beers'].map<Beer>((beer) => Beer.fromJson(beer)).toList() ?? [],
+/*      promotions: data['promos']
+          ?.map<Promotion>((promotion) => Promotion.fromMap(promotion))
+          ?.toList() ??
+          [],*/
+      description: data['description'] ?? '',
+      imageUri: data['profile_pic'] ?? '',
+      name: data['name'] ?? '',
+      //brewers: data['brewers'] ?? '',
+      aboutUs: data['about_us'] ?? '',
+/*      brewersImageUri: data['brewers_imageUri'] != null
+          ? data['brewers_imageUri']
+          : data['imageUri'] ?? '',
+      phone: data['phone'] ?? '',*/
       instagram: data['instagram'] ?? '',
       facebook: data['facebook'] ?? '',
       youtube: data['youtube'] ?? '',
@@ -137,10 +194,24 @@ class Brewer with ChangeNotifier {
   }
 }
 
+class CategoryBeer {
+  String name, imageUri;
+  int brewerId;
+
+  CategoryBeer({this.name, this.imageUri, this.brewerId});
+
+  factory CategoryBeer.fromJson(Map<String, dynamic> data) {
+    return CategoryBeer(
+        name: data['name'] ?? '',
+        brewerId: data['brewer'] ?? -1,
+        imageUri: data['beer_pic'] ?? '');
+  }
+}
+
 class BeerType {
   DocumentReference id;
   String name, description, imageUri;
-  List<String> beers;
+  List<CategoryBeer> beers;
 
   BeerType({this.id, this.name, this.description, this.imageUri, this.beers});
 
@@ -157,6 +228,17 @@ class BeerType {
       description: data['description'] ?? '',
       imageUri: data['imageUri'] ?? '',
     );
+  }
+
+  factory BeerType.fromJson(Map<String, dynamic> data) {
+    return BeerType(
+        name: data['name'] ?? '',
+        description: data['description'] ?? '',
+        beers: data['category_beers']
+                .map<CategoryBeer>((beer) => CategoryBeer.fromJson(beer))
+                .toList() ??
+            '',
+        imageUri: data['category_pic'] ?? '');
   }
 }
 

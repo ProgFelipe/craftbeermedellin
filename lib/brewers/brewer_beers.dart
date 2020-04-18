@@ -2,29 +2,27 @@ import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class BrewerBeersWidget extends StatefulWidget {
-  final List<dynamic> beersIds;
+  final List<Beer> beers;
 
-  BrewerBeersWidget({this.beersIds});
+  BrewerBeersWidget({this.beers});
 
   @override
   _BrewerBeersWidgetState createState() =>
-      _BrewerBeersWidgetState(beersRef: beersIds);
+      _BrewerBeersWidgetState(beers: beers);
 }
 
 class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
-  final List<String> beersRef;
+  final List<Beer> beers;
   final db = DataBaseService();
   bool _showBeerDescription = false;
   String _beerName;
   String _beerHistory;
 
-  _BrewerBeersWidgetState({this.beersRef});
+  _BrewerBeersWidgetState({this.beers});
 
   _showBeerHistory(String beerName, String beerHistory) {
     setState(() {
@@ -62,10 +60,6 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<Beer> beers = Provider.of<List<Beer>>(context);
-    if (beers == null) {
-      return LoadingWidget();
-    }
     return Column(
       children: <Widget>[
         GridView.builder(
@@ -73,32 +67,25 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
               crossAxisCount: 3, crossAxisSpacing: 1.0, mainAxisSpacing: 1.0),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: beersRef.length,
+          itemCount: beers.length,
           itemBuilder: (context, index) {
-            return FutureBuilder(
-                future: db.futureBeerByReference(beers, beersRef[index]),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return SizedBox();
-                  return GestureDetector(
-                    onTap: () =>
-                        showBeerDialog(context, snapshot.data, beersRef[index]),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          child: ImageProviderWidget(snapshot.data.imageUri),
-                        ),
-                        SizedBox(height: 10.0),
-                        beerPropertiesText(
-                            S.of(context).ibu, snapshot.data.ibu),
-                        beerPropertiesText(
-                            S.of(context).abv, snapshot.data.abv),
-                        Text('${snapshot.data.name}'),
-                      ],
-                    ),
-                  );
-                });
+            return GestureDetector(
+              onTap: () =>
+                  showBeerDialog(context, beers[index], beers[index].brewerRef),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: ImageProviderWidget(beers[index].imageUri),
+                  ),
+                  SizedBox(height: 10.0),
+                  beerPropertiesText(S.of(context).ibu, beers[index].ibu),
+                  beerPropertiesText(S.of(context).abv, beers[index].abv),
+                  Text('${beers[index].name}'),
+                ],
+              ),
+            );
           },
         ),
         Visibility(

@@ -15,6 +15,7 @@ class TopBeersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Beer> beers = Provider.of<List<Beer>>(context);
+    //FutureProvider.of<List<Beer>>(context);
 
     if (beers == null) {
       return LoadingWidget();

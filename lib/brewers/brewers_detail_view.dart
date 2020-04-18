@@ -95,7 +95,7 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
     showDialog(
       context: context,
       builder: (BuildContext context) => BeerDetailDialog(
-        title: brewer.brewers,
+        title: brewer.name,
         description: brewer.aboutUs,
         buttonText: S.of(context).back,
         avatarImage: brewer.brewersImageUri,
@@ -218,7 +218,7 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                                     ),
                                   ),
                                   Visibility(
-                                    visible: brewer.phone.isNotEmpty,
+                                    visible: brewer.phone?.isNotEmpty ?? false,
                                     child: FlatButton.icon(
                                       color: Colors.green,
                                       onPressed: openWhatsApp,
@@ -269,7 +269,7 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
                         ),
                         titleView(S.of(context).our_beers,
                             color: Colors.black, size: 30.0, padding: 0.0),
-                        BrewerBeersWidget(beersIds: brewer.beersRef),
+                        BrewerBeersWidget(beers: brewer.beers),
                         SizedBox(
                           height: 20.0,
                         ),

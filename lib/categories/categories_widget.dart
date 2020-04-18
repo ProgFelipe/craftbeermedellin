@@ -54,8 +54,8 @@ class _CategoriesViewState extends State<CategoriesView> {
           _selectedCategory != null
               ? FilterBeersByTypeView(category: _selectedCategory, beers: beers)
               : SizedBox(
-                  height: 0.0,
-                ),
+            height: 0.0,
+          ),
           GridView.builder(
             itemCount: categories.length ?? 0,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -87,9 +87,9 @@ class _CategoriesViewState extends State<CategoriesView> {
                         children: <Widget>[
                           Expanded(
                               child: ImageProviderWidget(
-                            categories[index].imageUri,
-                            height: 60.0,
-                          )),
+                                categories[index].imageUri,
+                                height: 60.0,
+                              )),
                           Text(
                             categories[index].name,
                             style: TextStyle(color: Colors.white),
@@ -141,9 +141,9 @@ class FilterBeersByTypeView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Center(
             child: Icon(
-          Icons.all_inclusive,
-          size: 40.0,
-        )),
+              Icons.all_inclusive,
+              size: 40.0,
+            )),
       );
     }
     return Container(
@@ -152,22 +152,14 @@ class FilterBeersByTypeView extends StatelessWidget {
       child: Row(
         children: List.generate(
           category.beers?.length ?? 0,
-          (index) => FutureBuilder(
-              future: db.futureBeerByReference(beers, category.beers[index]),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return BeerItem(snapshot.data);
-                }
-                return Text('');
-              }),
+              (index) => BeerItem(category.beers[index]),
         ),
-      ),
-    );
+      ),);
   }
 }
 
 class BeerItem extends StatelessWidget {
-  final Beer beer;
+  final CategoryBeer beer;
 
   BeerItem(this.beer);
 
@@ -176,7 +168,7 @@ class BeerItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BrewersDetail(brewerRef: beer.brewerRef)));
+            builder: (context) => BrewersDetail(brewerRef: beer.brewerId.toString())));
       },
       child: Stack(
         children: <Widget>[
@@ -184,9 +176,9 @@ class BeerItem extends StatelessWidget {
             margin: EdgeInsets.symmetric(vertical: 20.0),
             child: Card(
                 child: ImageProviderWidget(
-              beer.imageUri,
-              height: 90.0,
-            )),
+                  beer.imageUri,
+                  height: 90.0,
+                )),
           ),
           Positioned(
             top: 0.0,
