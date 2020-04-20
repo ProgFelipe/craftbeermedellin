@@ -28,6 +28,7 @@
 .pub/
 .flutter-plugins-dependencies
 build/
+lib/generated/intl/messages_all.dart
 
 # Android related
 **/android/**/gradle-wrapper.jar
