@@ -85,6 +85,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white70),
                 ),
+                Icon(Icons.notifications, color: Colors.white,),
               ],
             ),
             SizedBox(

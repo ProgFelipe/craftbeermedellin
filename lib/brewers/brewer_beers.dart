@@ -67,41 +67,33 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
           visible: _showBeerDescription,
           child: Card(
             color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                FlatButton(
-                  onPressed: () => _hideHistory(),
-                  color: Colors.black54,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        _beerName == null ? '' : _beerName,
-                        style: TextStyle(
-                          fontSize: 20.0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_up,
-                        color: Colors.white,
-                        size: 40.0,
-                      )
-                    ],
+            child: Container(
+              margin: EdgeInsets.all(5.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  FlatButton.icon(onPressed:  () => _hideHistory(), icon: Icon(Icons.close), label: Text('')),
+                  SizedBox(
+                    height: 20.0,
                   ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Text(
-                  _beerHistory ?? '',
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      letterSpacing: 2.0,
-                      color: Colors.grey[600]),
-                ),
-              ],
+                  Text(
+                    _beerName == null ? '' : _beerName,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    _beerHistory ?? '',
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        letterSpacing: 2.0,
+                        color: Colors.grey[600]),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:craftbeer/categories/beer_category_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/events_view.dart';
+import 'package:craftbeer/map/map_view.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +78,7 @@ class _NavigatorState extends State<Navigator> {
     Home(),
     EventsView(),
     BeerCategoryView(),
+    CraftMap()
     //Favorites()
   ];
 
@@ -141,6 +143,15 @@ class _NavigatorState extends State<Navigator> {
             ),
             backgroundColor: Colors.black,
             title: Text(S.of(context).beer_nav_title),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            activeIcon: Icon(
+              Icons.map,
+              color: Colors.green,
+            ),
+            backgroundColor: Colors.black,
+            title: Text('Mapa'),
           ),
         ],
       ),
