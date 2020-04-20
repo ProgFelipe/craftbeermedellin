@@ -10,7 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
-class EventsView extends StatelessWidget {
+class EventsView extends StatefulWidget {
+  @override
+  _EventsViewState createState() => _EventsViewState();
+}
+
+class _EventsViewState extends State<EventsView> with AutomaticKeepAliveClientMixin<EventsView> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,6 +42,9 @@ class EventsView extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class PromotionsWidget extends StatelessWidget {

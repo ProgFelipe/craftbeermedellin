@@ -14,7 +14,7 @@ class CategoriesView extends StatefulWidget {
   _CategoriesViewState createState() => _CategoriesViewState();
 }
 
-class _CategoriesViewState extends State<CategoriesView> {
+class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAliveClientMixin<CategoriesView> {
   BeerType _selectedCategory;
 
   @override
@@ -124,6 +124,9 @@ class _CategoriesViewState extends State<CategoriesView> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class FilterBeersByTypeView extends StatelessWidget {

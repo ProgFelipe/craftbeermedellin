@@ -10,7 +10,12 @@ import 'package:flutter/material.dart';
 
 import '../utils.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,4 +52,7 @@ class Home extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
