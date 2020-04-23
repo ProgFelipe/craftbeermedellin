@@ -152,6 +152,7 @@ class Brewer with ChangeNotifier {
       name: data['name'] ?? '',
       //brewers: data['brewers'] ?? '',
       aboutUs: data['about_us'] ?? '',
+      phone: data['phone'] ?? '',
 /*      brewersImageUri: data['brewers_imageUri'] != null
           ? data['brewers_imageUri']
           : data['imageUri'] ?? '',
@@ -206,7 +207,7 @@ class CategoryBeer {
     return CategoryBeer(
         name: data['name'] ?? '',
         brewerId: data['brewer'] ?? -1,
-        imageUri: data['beer_pic'] ?? '');
+        imageUri: data['beer_pic'] ?? 'assets/beer.png');
   }
 }
 

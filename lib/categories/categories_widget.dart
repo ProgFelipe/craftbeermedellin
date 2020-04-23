@@ -82,22 +82,25 @@ class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAlive
                           colors: [Colors.black54, Colors.indigo],
                         ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                              child: ImageProviderWidget(
-                                categories[index].imageUri,
-                                height: 60.0,
-                              )),
-                          Text(
-                            categories[index].name,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          )
-                        ],
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(height: 15.0,),
+                            Expanded(
+                                child: ImageProviderWidget(
+                                  categories[index].imageUri,
+                                  height: 60.0,
+                                )),
+                            Text(
+                              categories[index].name,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     Positioned(
@@ -140,6 +143,7 @@ class FilterBeersByTypeView extends StatelessWidget {
   Widget build(BuildContext context) {
     if (category.beers?.length == 0 ?? true && beers?.length == 0 ?? true) {
       return Container(
+        height: 140.0,
         decoration: BoxDecoration(),
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Center(
@@ -176,6 +180,8 @@ class BeerItem extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Container(
+            height: 140.0,
+            width: 100.0,
             margin: EdgeInsets.symmetric(vertical: 20.0),
             child: Card(
                 child: ImageProviderWidget(

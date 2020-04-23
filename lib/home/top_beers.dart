@@ -62,12 +62,14 @@ Widget topBeerItem(Beer beer, context) {
       children: <Widget>[
         Text(
           beer.name,
-          maxLines: 2,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white30),
+          style: TextStyle(color: Colors.white70),
         ),
         Container(
           margin: EdgeInsets.symmetric(vertical: 20.0),
+          height: 140.0,
           child: Card(
             child: ImageProviderWidget(beer.imageUri),
           ),

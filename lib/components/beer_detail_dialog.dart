@@ -1,3 +1,4 @@
+import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -201,8 +202,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
             left: Consts.padding,
             right: Consts.padding,
             child: CircleAvatar(
-              child: Image.network(avatarImage != null
-                  ? avatarImage : ''),
+              child: ImageProviderWidget(avatarImage),
               backgroundColor: avatarColor,
               radius: Consts.avatarRadius,
             ),

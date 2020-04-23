@@ -27,7 +27,7 @@ class DataBaseService {
     final response =
     await http.get('$BASE_URL/brewer/?format=json');
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
+      final jsonData = json.decode(utf8.decode(response.bodyBytes));
       List<Brewer> brewers = List();
       for (Map brewer in jsonData) {
         brewers.add(Brewer.fromJson(brewer));
@@ -58,7 +58,7 @@ class DataBaseService {
     await http.get('$BASE_URL/beers/?format=json');
     //[beer1, beer2, beer3, ...]
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
+      final jsonData = json.decode(utf8.decode(response.bodyBytes));
       //var beers = jsonData.map((beer){Beer.fromJson(beer);}).toList();
       List<Beer> beers = List();
       for (Map beer in jsonData) {
@@ -123,7 +123,7 @@ class DataBaseService {
     await http.get('$BASE_URL/categories/?format=json');
     //[beer1, beer2, beer3, ...]
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
+      final jsonData = json.decode(utf8.decode(response.bodyBytes));
       //var beers = jsonData.map((beer){Beer.fromJson(beer);}).toList();
       List<BeerType> beerTypes = List();
       for (Map beerType in jsonData) {

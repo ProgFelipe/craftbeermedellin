@@ -92,7 +92,7 @@ class BrewerItem extends StatelessWidget {
                     ? Icons.favorite
                     : Icons.favorite_border,
                 size: 40.0,
-                color: Colors.red,
+                color: Colors.orange,
               ),
             ),
           ],

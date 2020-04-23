@@ -12,10 +12,10 @@ class DecorationConsts {
 
 Widget cardTitle(String title) {
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
+    padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
     child: Text(
       title ?? '',
-      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+      style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),
       textAlign: TextAlign.left,
     ),
   );

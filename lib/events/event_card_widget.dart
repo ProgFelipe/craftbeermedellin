@@ -122,28 +122,30 @@ class _EventCardWidgetState extends State<EventCardWidget> {
               Padding(
                 padding: EdgeInsets.only(
                   left: 8.0,
+                  top:10.0,
                 ),
                 child: Visibility(
                   visible: event?.timestamp != null,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Icon(Icons.date_range, color: Colors.grey),
+                      Icon(Icons.date_range, color: Colors.black38),
                       Text(
                         event.timestamp != null
                             ? _dateFormat.format(event.timestamp.toDate())
                             : '',
                         style: TextStyle(
                           fontSize: 12.0,
-                          color: Colors.grey,
+                          color: Colors.blue,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              cardTitle(event.name),
+              cardTitle(event.description),
               cardTitle(event.city),
+              SizedBox( height: 10.0,),
               Visibility(
                   visible: showRemainEventDaysLabel,
                   child: Center(child: _buildTimerButton())),

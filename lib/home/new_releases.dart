@@ -18,7 +18,7 @@ class BeerReleases extends StatelessWidget {
       stories.add(StoryItem.inlineGif(
         release.imageUri,
         roundedTop: false,
-        imageFit: BoxFit.scaleDown,
+        imageFit: BoxFit.fitHeight,
         caption: Text(
           release.name,
           style: TextStyle(

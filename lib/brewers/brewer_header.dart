@@ -49,6 +49,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
   }
 
   showBrewerMoreInfo() {
+    debugPrint(brewer.description);
     showDialog(
       context: context,
       builder: (BuildContext context) => BeerDetailDialog(
@@ -76,6 +77,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               ConnectivityWidget(),
+              SizedBox(height: 20.0,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -85,7 +87,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
                     style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white70),
+                        color: Colors.white),
                   ),
                 ],
               ),
@@ -143,7 +145,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
                           ? Icons.favorite
                           : Icons.favorite_border,
                       size: 40.0,
-                      color: Colors.red,
+                      color: Colors.orange,
                     ),
                     label: Text(''),
                   ),
