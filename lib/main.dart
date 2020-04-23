@@ -79,7 +79,6 @@ class _NavigatorState extends State<Navigator> {
     EventsView(),
     BeerCategoryView(),
     CraftMap()
-    //Favorites()
   ];
 
   @override
@@ -100,6 +99,8 @@ class _NavigatorState extends State<Navigator> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
+        physics: _currentIndex == 3 ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
         controller: _pageController,
         onPageChanged: (newPage) {
           setState(() {

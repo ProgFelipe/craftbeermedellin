@@ -52,8 +52,10 @@ class PromotionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Promotion> promotions = Provider.of<List<Promotion>>(context);
 
-    if (promotions == null || promotions.isEmpty) {
+    if (promotions == null) {
       return LoadingWidget();
+    }else if(promotions.isEmpty){
+      return Image.asset('assets/emptyoffers.png',scale: 1.5);
     }
 
     return Container(
@@ -84,8 +86,10 @@ class EventsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Event> events = Provider.of<List<Event>>(context);
-    if (events == null || events.isEmpty) {
+    if (events == null) {
       return LoadingWidget();
+    }else if(events.isEmpty){
+      return Image.asset('assets/emptyevent.png', scale: 1.5,);
     }
     return Container(
       child: StaggeredGridView.countBuilder(

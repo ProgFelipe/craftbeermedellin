@@ -58,20 +58,20 @@ Widget topBeerItem(Beer beer, context) {
               actionText: S.of(context).contact_us,
               action: () => goToBrewerDetail(beer)));
     },
-    child: Stack(
-      alignment: Alignment.topCenter,
+    child: Column(
       children: <Widget>[
+        Text(
+          beer.name,
+          maxLines: 2,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white30),
+        ),
         Container(
           margin: EdgeInsets.symmetric(vertical: 20.0),
           child: Card(
             child: ImageProviderWidget(beer.imageUri),
           ),
         ),
-        Text(
-          beer.name,
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white30),
-        )
       ],
     ),
   );

@@ -83,7 +83,7 @@ class BrewerItem extends StatelessWidget {
         margin: EdgeInsets.all(10.0),
         child: Stack(
           children: <Widget>[
-            Hero(tag: 'logo',child: ImageProviderWidget(brewer.imageUri)),
+            ImageProviderWidget(brewer.imageUri),
             Positioned(
               top: 0.0,
               right: 0.0,

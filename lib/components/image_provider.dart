@@ -24,10 +24,12 @@ class ImageProviderWidget extends StatelessWidget {
           imageUrl: imageUri,
           height: height,
           width: width,
-          fit: BoxFit.scaleDown,
+          fit: BoxFit.cover,
           placeholder: (context, url) => Image.network(url),
-          errorWidget: (context, url, error) => SizedBox(
-            height: 60.0,
+          errorWidget: (context, url, error) => Container(
+            height: 120.0,
+            width: 60.0,
+            child: Icon(Icons.error),
           ),
         ),
       );

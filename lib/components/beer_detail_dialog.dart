@@ -202,8 +202,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
             right: Consts.padding,
             child: CircleAvatar(
               child: Image.network(avatarImage != null
-                  ? avatarImage
-                  : 'https://images.rappi.com/products/2091421499-1579543158965.png?d=200x200'),
+                  ? avatarImage : ''),
               backgroundColor: avatarColor,
               radius: Consts.avatarRadius,
             ),

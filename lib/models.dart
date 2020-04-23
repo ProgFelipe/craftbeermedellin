@@ -278,8 +278,7 @@ class Promotion {
     return Promotion(
       description: data['description'] ?? '',
       brewerRef: data['brewerRef'] ?? '',
-      imageUri: data['imageUri'] ??
-          'http://morganfields.com.sg/wp-content/uploads/img-home-promo3.jpg',
+      imageUri: data['imageUri'] ?? '',
     );
   }
 
@@ -287,8 +286,7 @@ class Promotion {
     return Promotion(
       description: data['description'] ?? '',
       brewerRef: data['brewerRef'] ?? '',
-      imageUri: data['imageUri'] ??
-          'http://morganfields.com.sg/wp-content/uploads/img-home-promo3.jpg',
+      imageUri: data['imageUri'] ?? '',
     );
   }
 }

@@ -5,7 +5,8 @@ import 'package:craftbeer/models.dart';
 import 'package:http/http.dart' as http;
 
 class DataBaseService {
-  final String BASE_URL = "http://127.0.0.1:8000/api";
+  //final String BASE_URL = "http://127.0.0.1:8000/api";
+  final String BASE_URL = "https://craftbeerco.herokuapp.com/api";
 
   ///Brewer
   ///TODO REMOVE

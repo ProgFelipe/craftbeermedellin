@@ -97,7 +97,7 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.white,
         backgroundColor: Colors.green[600],
-        child: Icon(BeerIcon.beerglass),
+        child: Icon(BeerIcon.car),
         onPressed: () => openWhatsApp(),
       ),
     );
