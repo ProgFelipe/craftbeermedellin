@@ -1,10 +1,11 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:craftbeer/categories/beer_category_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/events_view.dart';
 import 'package:craftbeer/map/map_view.dart';
 import 'package:craftbeer/models.dart';
+import 'package:craftbeer/search/search_view.dart';
+import 'package:craftbeer/user/user_admin_view.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -77,8 +78,9 @@ class _NavigatorState extends State<Navigator> {
   final List<Widget> screens = [
     Home(),
     EventsView(),
-    BeerCategoryView(),
-    CraftMap()
+    SearchView(),
+    CraftMap(),
+    UserView(),
   ];
 
   @override
@@ -110,7 +112,12 @@ class _NavigatorState extends State<Navigator> {
         children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        //fixedColor: Colors.brown,
+        fixedColor: Colors.grey,
+        backgroundColor: Colors.black87,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        iconSize: 30.0,
         onTap: (index) {
           this._pageController.animateToPage(index,
               duration: Duration(microseconds: 500), curve: Curves.easeInOut);
@@ -118,41 +125,46 @@ class _NavigatorState extends State<Navigator> {
         currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(BeerIcon.home_empty, color: Colors.grey,),
             activeIcon: Icon(
-              Icons.home,
-              color: Colors.green,
+              BeerIcon.home_filled,
+              color: Colors.white,
             ),
             title: Text(S.of(context).home_nav_title),
-            backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt),
+            icon: Icon(BeerIcon.ticket_empty, color: Colors.white,),
             activeIcon: Icon(
-              Icons.receipt,
-              //color: Colors.red[500],
-              color: Colors.red,
+              BeerIcon.ticket_filled,
+              color: Colors.white,
             ),
             backgroundColor: Colors.black,
             title: Text(S.of(context).events_nav_title),
           ),
           BottomNavigationBarItem(
-            icon: Icon(BeerIcon.beerglass),
+            icon: Icon(BeerIcon.beer_empty, color: Colors.grey,),
             activeIcon: Icon(
-              BeerIcon.beerglass,
-              color: Colors.orangeAccent,
+              BeerIcon.beer_filled,
+              color: Colors.white,
             ),
             backgroundColor: Colors.black,
             title: Text(S.of(context).beer_nav_title),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
+            icon: Icon(BeerIcon.map_empty, color: Colors.grey,),
             activeIcon: Icon(
-              Icons.map,
-              color: Colors.green,
+              BeerIcon.map_empty,
+              color: Colors.white,
             ),
-            backgroundColor: Colors.black,
             title: Text('Mapa'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(BeerIcon.user_empty, color: Colors.grey,),
+            activeIcon: Icon(
+              BeerIcon.user_filled,
+              color: Colors.white,
+            ),
+            title: Text('Yo'),
           ),
         ],
       ),

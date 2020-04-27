@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/home/brewers_grid.dart';
+import 'package:craftbeer/home/promotions.dart';
 import 'package:craftbeer/home/new_releases.dart';
 import 'package:craftbeer/home/search_view.dart';
 import 'package:craftbeer/home/top_beers.dart';
@@ -37,15 +37,16 @@ class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
                   height: 100.0,
                 ),
               ),
-              //storyTellingWidget(context),
               Padding(
                   padding:
-                      EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
+                  EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
                   child: SearchWidget()),
               titleView(S.of(context).top_week_title),
               TopBeersView(),
-              titleView(S.of(context).local_brewers),
-              BrewersGrid(),
+              titleView(S.of(context).promotions_title),
+              PromotionsWidget(),
+              Image.asset('assets/tiposcerveza.png'),
+              Image.asset('assets/colorescerveza.jpg'),
             ],
           ),
         ),
