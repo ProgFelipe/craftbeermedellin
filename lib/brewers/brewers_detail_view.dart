@@ -5,6 +5,7 @@ import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
+import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class BrewersDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var brewers = Provider.of<List<Brewer>>(context);
+    var brewers = Provider.of<BrewersData>(context).brewers;
 
     if (brewer == null && brewerRef != null) {
       return FutureBuilder(
@@ -31,13 +32,13 @@ class BrewersDetail extends StatelessWidget {
             if (snapshot.hasData) {
               return BrewerViewBody(snapshot.data);
             } else {
-              return LoadingWidget();
+              return Scaffold(
+                body: LoadingWidget(),
+              );
             }
           });
     } else if (brewer != null) {
       return BrewerViewBody(brewer);
-    } else {
-      return LoadingWidget();
     }
   }
 }

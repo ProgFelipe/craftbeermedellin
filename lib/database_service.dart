@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:craftbeer/api.dart';
 import 'package:craftbeer/models.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class DataBaseService {
   //final String BASE_URL = "http://127.0.0.1:8000/api";
@@ -10,7 +12,7 @@ class DataBaseService {
 
   ///Brewer
   ///TODO REMOVE
-  Stream<List<Brewer>> streamBrewers() {
+  /*Stream<List<Brewer>> streamBrewers() {
     return db
         .fetchBrewers()
         .map((brewersList) =>
@@ -21,22 +23,14 @@ class DataBaseService {
           });
           return brewerObj;
         }).toList());
-  }
+  }*/
 
-  Future<List<Brewer>> fetchBrewers() async {
-    final response =
-    await http.get('$BASE_URL/brewer/?format=json');
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(utf8.decode(response.bodyBytes));
-      List<Brewer> brewers = List();
-      for (Map brewer in jsonData) {
-        brewers.add(Brewer.fromJson(brewer));
-      }
-      return brewers;
-    }
-    return null;
+  Future<http.Response> fetchBeers() async => await http.get('$BASE_URL/beers/?format=json');
 
-  }
+  Future<http.Response> fetchBrewers() async =>  await http.get('$BASE_URL/brewer/?format=json');
+
+  Future<http.Response> fetchBeerTypes() async => await http.get('$BASE_URL/categories/?format=json');
+
   ///Brewer item
   Future<Brewer> futureBrewerByRef(List<Brewer> brewers,
       String brewerRef) async {
@@ -47,35 +41,20 @@ class DataBaseService {
 
   ///Beers
   ///TODO REMOVE
-  Stream<List<Beer>> streamBeers() {
+  /*Stream<List<Beer>> streamBeers() {
     return db.fetchBeers().map(
             (beers) =>
             beers.documents.map((beer) => Beer.fromMap(beer)).toList());
-  }
+  }*/
 
-  Future<List<Beer>> fetchBeers() async {
-    final response =
-    await http.get('$BASE_URL/beers/?format=json');
-    //[beer1, beer2, beer3, ...]
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(utf8.decode(response.bodyBytes));
-      //var beers = jsonData.map((beer){Beer.fromJson(beer);}).toList();
-      List<Beer> beers = List();
-      for (Map beer in jsonData) {
-        beers.add(Beer.fromJson(beer));
-      }
-      return beers;
-    }
-    return null;
-  }
 
   ///Beer item
   //TODO REMOVE
-  Future<Beer> futureBeerByReference(List<Beer> beers, String beerRef) async {
+  /*Future<Beer> futureBeerByReference(List<Beer> beers, String beerRef) async {
     return beers
         .where((element) => element.id == beerRef)
         .first;
-  }
+  }*/
 
   ///Top Beers
   Future<List<Beer>> fetchTopBeers(List<Beer> beers) async {
@@ -118,19 +97,4 @@ class DataBaseService {
             .toList());
   }
 
-  Future<List<BeerType>> fetchBeerTypes() async {
-    final response =
-    await http.get('$BASE_URL/categories/?format=json');
-    //[beer1, beer2, beer3, ...]
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(utf8.decode(response.bodyBytes));
-      //var beers = jsonData.map((beer){Beer.fromJson(beer);}).toList();
-      List<BeerType> beerTypes = List();
-      for (Map beerType in jsonData) {
-        beerTypes.add(BeerType.fromJson(beerType));
-      }
-      return beerTypes;
-    }
-    return null;
-  }
 }

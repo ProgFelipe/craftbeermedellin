@@ -1,12 +1,11 @@
 import 'package:craftbeer/brewers/start_rating.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
+import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
-final _random = new Random();
 
 class BrewerBeersWidget extends StatefulWidget {
   final List<Beer> beers;
@@ -15,17 +14,14 @@ class BrewerBeersWidget extends StatefulWidget {
 
   @override
   _BrewerBeersWidgetState createState() =>
-      _BrewerBeersWidgetState(beers: beers);
+      _BrewerBeersWidgetState();
 }
 
 class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
-  final List<Beer> beers;
   final db = DataBaseService();
   bool _showBeerDescription = false;
   String _beerName;
   String _beerHistory;
-
-  _BrewerBeersWidgetState({this.beers});
 
   _showBeerHistory(String beerName, String beerHistory) {
     setState(() {
@@ -63,7 +59,7 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if(beers.isEmpty){
+    if(widget.beers.isEmpty){
       return Container(margin: EdgeInsets.symmetric(vertical: 20.0),child: Column(
         children: <Widget>[
           Image.asset('assets/emptybeers.gif', scale: 1.7,),
@@ -117,22 +113,27 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                 (MediaQuery.of(context).size.height / 1.2),),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: beers.length,
+          itemCount: widget.beers.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () =>
-                  showBeerDialog(context, beers[index], beers[index].brewerRef),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: ImageProviderWidget(beers[index].imageUri, height: 100.0,),
+                  showBeerDialog(context, widget.beers[index], widget.beers[index].brewerRef),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: ImageProviderWidget(widget.beers[index].imageUri, height: 100.0,),
+                      ),
+                      Text('${widget.beers[index].name}' ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),),
+                      beerPropertiesText(S.of(context).ibu, widget.beers[index].ibu),
+                      beerPropertiesText(S.of(context).abv, widget.beers[index].abv),
+                      beerPropertiesText(S.of(context).srm, widget.beers[index].srm),
+                      StarRating(rating: 5.0,)
+                    ],
                   ),
-                  Text('${beers[index].name}' ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),),
-                  beerPropertiesText(S.of(context).ibu, beers[index].ibu),
-                  beerPropertiesText(S.of(context).abv, beers[index].abv),
-                  beerPropertiesText(S.of(context).srm, beers[index].srm),
-                  StarRating(rating: 5.0,)
+                  Positioned(top: 0.0, right: 0.0, child: Icon(BeerIcon.beerglass)),
                 ],
               ),
             );

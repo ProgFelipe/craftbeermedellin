@@ -17,6 +17,7 @@ class Beer {
   final num ranking, votes;
   final Timestamp release;
   final bool sell;
+  bool tasted;
 
   Beer(
       {this.id,
@@ -34,7 +35,7 @@ class Beer {
       this.ranking,
       this.votes,
       this.release,
-      this.sell,
+      this.sell, this.tasted,
       this.type});
 
   factory Beer.fromMap(DocumentSnapshot data) {
@@ -197,6 +198,9 @@ class Brewer with ChangeNotifier {
   }
 }
 
+/**
+ * Items of beer that appers when category touched
+ */
 class CategoryBeer {
   String name, imageUri;
   int brewerId;

@@ -97,7 +97,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.0),
                 child: ImageProviderWidget(brewer.imageUri,
-                    height: 100.0),
+                    height: 100.0, animationDuration: 0,),
               ),
               SizedBox(
                 height: 10.0,

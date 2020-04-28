@@ -4,6 +4,9 @@ import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/events_view.dart';
 import 'package:craftbeer/map/map_view.dart';
 import 'package:craftbeer/models.dart';
+import 'package:craftbeer/models/beers_data_notifier.dart';
+import 'package:craftbeer/models/brewer_data_notifier.dart';
+import 'package:craftbeer/models/categories_data_notifier.dart';
 import 'package:craftbeer/search/search_view.dart';
 import 'package:craftbeer/user/user_admin_view.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
@@ -24,11 +27,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<BrewersData>.value(value: BrewersData()),
+        ChangeNotifierProvider<BeersData>.value(value: BeersData()),
+        ChangeNotifierProvider<CategoriesData>.value(value: CategoriesData()),
         StreamProvider<ConnectivityResult>.value(
             value: connectivity.onConnectivityChanged),
-        FutureProvider<List<Beer>>.value(value: database.fetchBeers()),
-        FutureProvider<List<BeerType>>.value(value: database.fetchBeerTypes()),
-        FutureProvider<List<Brewer>>.value(value: database.fetchBrewers()),
+        //FutureProvider<List<Beer>>.value(value: database.fetchBeers()),
+        //FutureProvider<List<BeerType>>.value(value: database.fetchBeerTypes()),
+        //FutureProvider<List<Brewer>>.value(value: database.fetchBrewers()),
         //StreamProvider<List<Beer>>.value(value: database.streamBeers()),
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
         //StreamProvider<List<Brewer>>.value(value: database.streamBrewers()),

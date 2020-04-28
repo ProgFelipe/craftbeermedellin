@@ -5,6 +5,8 @@ import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
+import 'package:craftbeer/models/beers_data_notifier.dart';
+import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
@@ -38,8 +40,8 @@ class SearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Brewer> brewers = Provider.of<List<Brewer>>(context);
-    List<Beer> beers = Provider.of<List<Beer>>(context);
+    List<Brewer> brewers = Provider.of<BrewersData>(context).brewers;
+    List<Beer> beers = Provider.of<BeersData>(context).beers;
 
     if (brewers == null || beers == null) {
       return LoadingWidget();

@@ -5,6 +5,8 @@ import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
+import 'package:craftbeer/models/beers_data_notifier.dart';
+import 'package:craftbeer/models/categories_data_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +41,9 @@ class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAlive
 
   @override
   Widget build(BuildContext context) {
-    List<BeerType> categories = Provider.of<List<BeerType>>(context);
-    List<Beer> beers = Provider.of<List<Beer>>(context);
+    var categoriesData = Provider.of<CategoriesData>(context);
+    List<BeerType> categories = categoriesData.categories;
+    List<Beer> beers = Provider.of<BeersData>(context).beers;
 
     if (categories == null ||
         categories?.isEmpty == true && beers?.isEmpty == true) {

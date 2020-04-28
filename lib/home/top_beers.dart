@@ -5,6 +5,7 @@ import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models.dart';
+import 'package:craftbeer/models/beers_data_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +15,9 @@ class TopBeersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Beer> beers = Provider.of<List<Beer>>(context);
-    //FutureProvider.of<List<Beer>>(context);
+    List<Beer> beers = Provider.of<BeersData>(context).beers;
 
-    if (beers == null) {
+    if (beers == null || beers.isEmpty) {
       return LoadingWidget();
     } else {
       return FutureBuilder(
