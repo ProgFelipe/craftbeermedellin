@@ -1,9 +1,11 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:craftbeer/abstractions/event_model.dart';
+import 'package:craftbeer/abstractions/promotion_model.dart';
+import 'package:craftbeer/abstractions/release_model.dart';
+import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
-import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/events_view.dart';
 import 'package:craftbeer/map/map_view.dart';
-import 'package:craftbeer/models.dart';
 import 'package:craftbeer/models/beers_data_notifier.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/models/categories_data_notifier.dart';
@@ -27,24 +29,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        StreamProvider<ConnectivityResult>.value(
+            value: connectivity.onConnectivityChanged),
+        ///Django
         ChangeNotifierProvider<BrewersData>.value(value: BrewersData()),
         ChangeNotifierProvider<BeersData>.value(value: BeersData()),
         ChangeNotifierProvider<CategoriesData>.value(value: CategoriesData()),
-        StreamProvider<ConnectivityResult>.value(
-            value: connectivity.onConnectivityChanged),
-        //FutureProvider<List<Beer>>.value(value: database.fetchBeers()),
-        //FutureProvider<List<BeerType>>.value(value: database.fetchBeerTypes()),
-        //FutureProvider<List<Brewer>>.value(value: database.fetchBrewers()),
-        //StreamProvider<List<Beer>>.value(value: database.streamBeers()),
+        ///FireStore
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
-        //StreamProvider<List<Brewer>>.value(value: database.streamBrewers()),
-        //StreamProvider<List<BeerType>>.value(value: database.streamBeerTypes()),
         StreamProvider<List<Promotion>>.value(
             value: database.streamPromotions()),
         StreamProvider<List<Event>>.value(value: database.streamEvents()),
       ],
       child: MaterialApp(
-        title: 'Craft Beer Colombia',
+        title: 'Craft Beer Co',
         supportedLocales: S.delegate.supportedLocales,
         localizationsDelegates: [
           S.delegate,
@@ -97,12 +95,6 @@ class _NavigatorState extends State<Navigator> {
     super.initState();
   }
 
-  /*
-  IndexedStack(
-          index: _currentIndex,
-          children: widget.screens,
-        )
-  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(

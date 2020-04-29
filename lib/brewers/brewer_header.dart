@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 
 class BrewerHeader extends StatefulWidget {

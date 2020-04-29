@@ -1,5 +1,5 @@
-import 'package:craftbeer/database_service.dart';
-import 'package:craftbeer/models.dart';
+import 'package:craftbeer/abstractions/beer_model.dart';
+import 'package:craftbeer/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 
@@ -41,12 +41,13 @@ class BeersData extends ChangeNotifier{
   }
 
   setBeerAsTasted(int index){
-    beers[index].tasted = true;
+
+    //beers[index] = true;
     notifyListeners();
   }
 
   setBeerAsNotTasted(int index){
-    beers[index].tasted = false;
+    //beers[index].tasted = false;
     notifyListeners();
   }
 }

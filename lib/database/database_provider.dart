@@ -14,9 +14,23 @@ class DataBaseProvider {
 
   static Database _database;
   final initialScript = [
-    'CREATE TABLE brewer(id TEXT PRIMARY KEY,)',
-    'CREATE TABLE beer(id TEXT PRIMARY KEY, )',
-    'CREATE TABLE category(id INTEGER PRIMARY KEY AUTOINCREMENT,)',
+    //FOR CACHING
+    'CREATE TABLE brewer(id INTEGER PRIMARY KEY, name TEXT, '
+        'description TEXT, imageUri TEXT, aboutUs TEXT, phone TEXT,'
+        ' instagram TEXT, facebook TEXT, youtube TEXT, website TEXT,'
+        ' canSale INTEGER)',
+    'CREATE TABLE beer(id NUMERIC PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, history TEXT, '
+        'imageUri Text, type TEXT, flavors TEXT, scents TEXT, ingredients TEXT'
+        ', adv NUMERIC, ibu NUMERIC, srm NUMERIC, '
+        ' ranking NUMERIC, vores NUMERIC, release TEXT, sell INTEGER, brewer_id INTEGER,'
+        ' FOREIGN KEY(brewer_id) REFERENCES brewer(id) ON DELETE CASCADE)',
+    'CREATE TABLE promotion(id INTEGER PRIMARY KEY AUTOINCREMENT, imageUri TEXT,'
+        ' description TEXT,brewer_id INTEGER, '
+        'FOREIGN KEY(brewer_id) REFERENCES brewer(id) ON DELETE CASCADE )',
+    'CREATE TABLE category(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, imageUri TEXT)',
+    //FAVORITES
+    'CREATE TABLE tastedbeers(brewerID INTEGER PRIMARY KEY, beername TEXT, vote INTEGER, comment TEXT)',
+    'CREATE TABLE favoritbrewers(id INTEGER PRIMARY KEY)'
   ];
 
   Future<Database> getDataBase() async {
@@ -24,9 +38,7 @@ class DataBaseProvider {
       return _database;
     } else {
       _database = await getDatabasesPath().then((String path) async {
-        print('path $path');
         String dbPath = join(path, 'craftbeerco.db');
-        print('joined path $dbPath');
         return await openDatabase(
           dbPath,
           onCreate: (db, version) async {
@@ -39,7 +51,6 @@ class DataBaseProvider {
       }, onError: (error) {
         print("Ocurrió un error { database.dart } $error");
       });
-      print('db ${_database != null}');
       return _database;
     }
   }

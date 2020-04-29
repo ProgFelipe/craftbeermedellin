@@ -1,5 +1,5 @@
+import 'package:craftbeer/abstractions/promotion_model.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
-import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 
 class Offers extends StatelessWidget {

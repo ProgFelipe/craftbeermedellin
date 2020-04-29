@@ -1,5 +1,6 @@
-import 'package:craftbeer/database_service.dart';
-import 'package:craftbeer/models.dart';
+import 'package:craftbeer/abstractions/beer_model.dart';
+import 'package:craftbeer/abstractions/category_model.dart';
+import 'package:craftbeer/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 

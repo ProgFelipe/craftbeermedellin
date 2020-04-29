@@ -1,10 +1,8 @@
-import 'package:craftbeer/components/decoration_constants.dart';
+import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/connectivity_widget.dart';
-import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/events/event_card_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
-import 'package:craftbeer/models.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -46,8 +44,6 @@ class _EventsViewState extends State<EventsView> with AutomaticKeepAliveClientMi
 }
 
 class EventsWidget extends StatelessWidget {
-  final db = DataBaseService();
-
   @override
   Widget build(BuildContext context) {
     List<Event> events = Provider.of<List<Event>>(context);

@@ -1,10 +1,11 @@
+import 'package:craftbeer/abstractions/beer_model.dart';
+import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/api.dart';
 import 'package:craftbeer/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
-import 'package:craftbeer/models.dart';
 import 'package:craftbeer/models/beers_data_notifier.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:flutter/material.dart';

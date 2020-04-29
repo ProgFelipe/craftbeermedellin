@@ -1,10 +1,10 @@
+import 'package:craftbeer/abstractions/beer_model.dart';
+import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/brewers/start_rating.dart';
 import 'package:craftbeer/components/beer_detail_dialog.dart';
 import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/components/image_provider.dart';
-import 'package:craftbeer/database_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 
 class BrewerBeersWidget extends StatefulWidget {

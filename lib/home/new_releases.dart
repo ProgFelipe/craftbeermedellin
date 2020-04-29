@@ -1,5 +1,5 @@
+import 'package:craftbeer/abstractions/release_model.dart';
 import 'package:craftbeer/loading_widget.dart';
-import 'package:craftbeer/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

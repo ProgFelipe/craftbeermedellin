@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/models.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

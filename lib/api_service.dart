@@ -1,10 +1,11 @@
-import 'dart:convert';
-
+import 'package:craftbeer/abstractions/beer_model.dart';
+import 'package:craftbeer/abstractions/brewer_model.dart';
+import 'package:craftbeer/abstractions/category_model.dart';
+import 'package:craftbeer/abstractions/event_model.dart';
+import 'package:craftbeer/abstractions/promotion_model.dart';
+import 'package:craftbeer/abstractions/release_model.dart';
 import 'package:craftbeer/api.dart';
-import 'package:craftbeer/models.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 class DataBaseService {
   //final String BASE_URL = "http://127.0.0.1:8000/api";
