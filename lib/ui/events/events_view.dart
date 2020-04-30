@@ -1,8 +1,8 @@
 import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/connectivity_widget.dart';
-import 'package:craftbeer/events/event_card_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
+import 'package:craftbeer/ui/events/event_card_widget.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';

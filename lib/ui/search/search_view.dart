@@ -1,7 +1,7 @@
-import 'package:craftbeer/search/categories_widget.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/search/brewers_grid.dart';
+import 'package:craftbeer/ui/search/brewers_grid.dart';
+import 'package:craftbeer/ui/search/categories_widget.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 

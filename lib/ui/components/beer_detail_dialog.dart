@@ -1,5 +1,5 @@
-import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/generated/l10n.dart';
+import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:flutter/material.dart';
 
 typedef IntCallback = Function(int num);

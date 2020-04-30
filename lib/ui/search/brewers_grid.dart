@@ -1,8 +1,8 @@
 import 'package:craftbeer/abstractions/brewer_model.dart';
-import 'package:craftbeer/brewers/brewers_detail_view.dart';
-import 'package:craftbeer/components/image_provider.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
+import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
+import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

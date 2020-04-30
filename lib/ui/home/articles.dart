@@ -1,4 +1,4 @@
-import 'package:craftbeer/components/decoration_constants.dart';
+import 'package:craftbeer/ui/components/decoration_constants.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';

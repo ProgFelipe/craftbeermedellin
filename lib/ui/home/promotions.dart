@@ -1,6 +1,6 @@
 import 'package:craftbeer/abstractions/promotion_model.dart';
-import 'package:craftbeer/components/decoration_constants.dart';
 import 'package:craftbeer/loading_widget.dart';
+import 'package:craftbeer/ui/components/decoration_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

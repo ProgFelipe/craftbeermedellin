@@ -2,13 +2,12 @@ import 'dart:ui';
 
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/home/articles.dart';
-import 'package:craftbeer/home/new_releases.dart';
-import 'package:craftbeer/home/search_view.dart';
-import 'package:craftbeer/home/top_beers.dart';
+import 'package:craftbeer/ui/home/articles.dart';
+import 'package:craftbeer/ui/home/new_releases.dart';
+import 'package:craftbeer/ui/home/search_view.dart';
+import 'package:craftbeer/ui/home/top_beers.dart';
+import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
-
-import '../utils.dart';
 
 class Home extends StatefulWidget {
   @override

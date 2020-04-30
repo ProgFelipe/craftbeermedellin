@@ -3,20 +3,20 @@ import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/abstractions/promotion_model.dart';
 import 'package:craftbeer/abstractions/release_model.dart';
 import 'package:craftbeer/api_service.dart';
-import 'package:craftbeer/components/beer_icon_icons.dart';
-import 'package:craftbeer/events/events_view.dart';
-import 'package:craftbeer/map/map_view.dart';
 import 'package:craftbeer/models/beers_data_notifier.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/models/categories_data_notifier.dart';
-import 'package:craftbeer/search/search_view.dart';
-import 'package:craftbeer/user/user_admin_view.dart';
+import 'package:craftbeer/ui/components/beer_icon_icons.dart';
+import 'package:craftbeer/ui/events/events_view.dart';
+import 'package:craftbeer/ui/home/home_view.dart';
+import 'package:craftbeer/ui/map/map_view.dart';
+import 'package:craftbeer/ui/search/search_view.dart';
+import 'package:craftbeer/ui/user/user_admin_view.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-import './Home/home_view.dart';
 import 'generated/l10n.dart';
 
 void main() => runApp(MyApp());

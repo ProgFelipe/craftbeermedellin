@@ -2,10 +2,10 @@ import 'dart:ui';
 import 'dart:math' as math;
 
 import 'package:craftbeer/abstractions/brewer_model.dart';
-import 'package:craftbeer/brewers/brewer_beers.dart';
-import 'package:craftbeer/brewers/offers.dart';
-import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/generated/l10n.dart';
+import 'package:craftbeer/ui/brewers/brewer_beers.dart';
+import 'package:craftbeer/ui/brewers/offers.dart';
+import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

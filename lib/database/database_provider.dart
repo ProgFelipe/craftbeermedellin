@@ -19,13 +19,12 @@ class DataBaseProvider {
         'description TEXT, imageUri TEXT, aboutUs TEXT, phone TEXT,'
         ' instagram TEXT, facebook TEXT, youtube TEXT, website TEXT,'
         ' canSale INTEGER)',
-    'CREATE TABLE beer(id NUMERIC PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, history TEXT, '
+    'CREATE TABLE beer(id NUMERIC PRIMARY KEY, name TEXT, description TEXT, history TEXT, '
         'imageUri Text, type TEXT, flavors TEXT, scents TEXT, ingredients TEXT'
         ', adv NUMERIC, ibu NUMERIC, srm NUMERIC, '
-        ' ranking NUMERIC, vores NUMERIC, release TEXT, sell INTEGER, brewer_id INTEGER,'
-        ' FOREIGN KEY(brewer_id) REFERENCES brewer(id) ON DELETE CASCADE)',
+        ' ranking NUMERIC, vores NUMERIC, release TEXT, sell INTEGER, brewer_id INTEGER, category_id INTEGER)',
     'CREATE TABLE promotion(id INTEGER PRIMARY KEY AUTOINCREMENT, imageUri TEXT,'
-        ' description TEXT,brewer_id INTEGER, '
+        ' description TEXT, brewer_id INTEGER, '
         'FOREIGN KEY(brewer_id) REFERENCES brewer(id) ON DELETE CASCADE )',
     'CREATE TABLE category(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, imageUri TEXT)',
     //FAVORITES

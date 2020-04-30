@@ -1,5 +1,5 @@
-import 'package:craftbeer/components/beer_icon_icons.dart';
 import 'package:craftbeer/connectivity_widget.dart';
+import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:flutter/material.dart';
 
 class UserView extends StatelessWidget {
