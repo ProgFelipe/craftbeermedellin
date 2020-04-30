@@ -1,11 +1,13 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
+import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/start_rating.dart';
 import 'package:craftbeer/ui/components/beer_detail_dialog.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BrewerBeersWidget extends StatefulWidget {
   final List<Beer> beers;
@@ -19,6 +21,7 @@ class BrewerBeersWidget extends StatefulWidget {
 
 class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
   final db = DataBaseService();
+  BrewersData model;
   bool _showBeerDescription = false;
   String _beerName;
   String _beerHistory;
@@ -44,6 +47,10 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
               title: beer.name,
               showVotesBox: true,
               voteAction: (int vote) {
+                setState(() {
+                  beer.doITasted = !beer.doITasted;
+                  model.setBeerTastedValue(beer, beer.doITasted);
+                });
                 db.futureSetVoteBeer(brewerID, vote);
               },
               description: beer.description,
@@ -59,6 +66,8 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
 
   @override
   Widget build(BuildContext context) {
+    model = Provider.of<BrewersData>(context);
+
     if(widget.beers.isEmpty){
       return Container(margin: EdgeInsets.symmetric(vertical: 20.0),child: Column(
         children: <Widget>[
@@ -133,7 +142,9 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       StarRating(rating: 5.0,)
                     ],
                   ),
-                  Positioned(top: 0.0, right: 0.0, child: Icon(BeerIcon.beerglass)),
+                  widget.beers[index].doITasted ?
+                  Positioned(top: 0.0, right: 0.0, child: Icon(BeerIcon.beer_filled))
+                      : Positioned(top: 0.0, right: 0.0, child: Icon(BeerIcon.beerglass)),
                 ],
               ),
             );

@@ -26,7 +26,12 @@ class ImageProviderWidget extends StatelessWidget {
           height: height,
           width: width,
           fit: BoxFit.cover,
-          placeholder: (context, url) => Image.network(url),
+          placeholder: (context, url) => Image.asset(
+            'assets/beer.png',
+            height: height,
+            width: width,
+            fit: BoxFit.scaleDown,
+          ),
           errorWidget: (context, url, error){if(url.contains('assets')){
             return Container(
               height: 120.0,

@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/abstractions/promotion_model.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Brewer with ChangeNotifier {
   List<Promotion> promotions;
@@ -11,22 +9,13 @@ class Brewer with ChangeNotifier {
   List<Beer> beers;
   String description, imageUri, aboutUs, brewersImageUri;
   String phone, instagram, facebook, youtube, website;
-  bool _stateIsFavorite = false;
   bool canSale = false;
-
-  bool get stateIsFavorite => _stateIsFavorite;
-
-  set stateIsFavorite(bool newValue) {
-    if (stateIsFavorite != newValue) {
-      _stateIsFavorite = newValue;
-      changeFavoriteState(newValue);
-      notifyListeners();
-    }
-  }
+  bool favorite;
 
   Brewer(
       {this.id,
         this.beers,
+        this.favorite,
         this.promotions,
         this.description,
         this.imageUri,
@@ -48,9 +37,28 @@ class Brewer with ChangeNotifier {
           ?.map<Promotion>((promotion) => Promotion.fromMap(promotion))
           ?.toList() ??
           [],*/
+      favorite: false,
       description: data['description'] ?? '',
       imageUri: data['profile_pic'] ?? '',
       name: data['name'] ?? '',
+      aboutUs: data['about_us'] ?? '',
+      phone: data['phone'] ?? '',
+      instagram: data['instagram'] ?? '',
+      facebook: data['facebook'] ?? '',
+      youtube: data['youtube'] ?? '',
+      website: data['website'] ?? '',
+      canSale: data['on_sale'] ?? false,
+    );
+    return brewer;
+  }
+
+  factory Brewer.fromDB(Map<String, dynamic> data) {
+    var brewer = Brewer(
+      id: data['id'],
+      description: data['description'] ?? '',
+      imageUri: data['profile_pic'] ?? '',
+      name: data['name'] ?? '',
+      favorite: data['favorite']==1 ? true : false,
       aboutUs: data['about_us'] ?? '',
       phone: data['phone'] ?? '',
       instagram: data['instagram'] ?? '',
@@ -75,38 +83,15 @@ class Brewer with ChangeNotifier {
       'facebook' : facebook,
       'youtube' : youtube,
       'website' : website,
+      'favorite' : favorite ? 1 : 0,
       'canSale' : canSale ? 1 : 0
     };
   }
 
-  SharedPreferences prefs;
 
-  Future<SharedPreferences> getSharedPreference() async {
-    if (prefs == null) {
-      prefs = await SharedPreferences.getInstance();
-    }
-    return prefs;
+  set updateFavorite(bool newValue) {
+    favorite = newValue;
+    notifyListeners();
   }
 
-  Future<bool> isFavorite() async {
-    return getSharedPreference().then(
-            (value) => (value.getStringList('favorites') ?? List()).contains(name));
-  }
-
-  void changeFavoriteState(bool newValue) async {
-    SharedPreferences prefs = await getSharedPreference();
-    List<String> favorites = (prefs.getStringList('favorites') ?? List());
-    bool exist = favorites?.contains(name);
-
-    if (exist && !newValue) {
-      favorites.remove(name);
-    }
-    if (!exist && newValue) {
-      favorites.add(name);
-    }
-    favorites.forEach((element) {
-      debugPrint('Favorite: $element');
-    });
-    await prefs.setStringList('favorites', favorites);
-  }
 }

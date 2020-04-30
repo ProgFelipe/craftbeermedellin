@@ -8,11 +8,21 @@ class BeersDao{
   Future<void> insertBeers(List<Beer> beers) async {
     final Database db = await DataBaseProvider().getDataBase();
     beers.forEach((beer) async {
-      await db.insert(
-        BEER_TABLE,
-        beer.toDaoMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,);
-    });
+      final List<Map<String, dynamic>> beerMap = await db.query(BEER_TABLE, where: "id = ?", whereArgs: [beer.id]);
+      if(beerMap?.isEmpty ?? true){
+        await db.insert(
+          BEER_TABLE,
+          beer.toDaoMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,);
+      }else{
+        Map<String, dynamic> beerFromServer = beer.toDaoMap();
+        beerFromServer['tasted'] = beerMap[0]['tasted'];
+        await db.update(
+          BEER_TABLE,
+          beerFromServer,
+          conflictAlgorithm: ConflictAlgorithm.replace,);
+      }
+      });
   }
 
   Future<List<Beer>> getBeers() async {
@@ -40,24 +50,9 @@ class BeersDao{
     db.delete(BEER_TABLE);
   }
 
-  ///Favorites
-  Future<void> addBrewerToFavorite(int brewerId) async {
+  Future<void> setTasted(Beer beer, bool tasted) async {
+    beer.doITasted = tasted;
     final Database db = await DataBaseProvider().getDataBase();
-    if(! await isFavorite(brewerId)){
-      await db.insert('favoritbrewers', {'id' : brewerId} , conflictAlgorithm: ConflictAlgorithm.replace);
-    }
-  }
-
-  Future<void> removeFromFavorite(int brewerId) async{
-    final Database db = await DataBaseProvider().getDataBase();
-    if(await isFavorite(brewerId)) {
-      db.delete('favoritbrewers', where: "id = ?", whereArgs: [brewerId]);
-    }
-  }
-
-  Future<bool> isFavorite(int brewerId) async {
-    final Database db = await DataBaseProvider().getDataBase();
-    List<Map<String, dynamic>> result = await db.query('favoritbrewers', where: "id = ?", whereArgs: [brewerId]);
-    return result?.isEmpty ?? false;
+    await db.update(BEER_TABLE, beer.toDaoMap(), where: "id = ?", whereArgs: [beer.id]);
   }
 }

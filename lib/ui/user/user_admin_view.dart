@@ -1,36 +1,69 @@
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
+import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 
 class UserView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: FractionalOffset.topCenter,
+          end: FractionalOffset.bottomCenter,
+          colors: [Colors.black87, Colors.orangeAccent],
+        ),
+      ),
       child: SafeArea(
-        child: Center(
-          child: Container(
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+          child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 ConnectivityWidget(),
                 SizedBox(height: 20.0,),
-                CircleAvatar(
-                  child: Icon(Icons.person, color: Colors.white, size: 80.0,),
-                  backgroundColor: Colors.grey,
-                  radius: 60.0,
-                ),
+                Image.asset('assets/icon.png', height: 120.0,),
                 SizedBox(height: 20.0,),
                 Container(
+                  height: 50.0,
                   width: double.infinity,
-                    child: FlatButton.icon(onPressed: (){}, icon: Icon(BeerIcon.google), label: Text('Ingresa'), color: Colors.orange,)),
+                    child: FlatButton.icon(onPressed: (){}, icon: Icon(BeerIcon.google), label: Text('INGRESA', style: TextStyle(fontSize: 20.0),), color: Colors.green,)),
                 SizedBox(height: 20.0,),
-                Text('Registrate para poder calificar y comentar sobre las cervezas que probaste, ver tús cervezas favoritas y recomendarlas, adquirir beneficios, descuentos en boletas, promociones en cervezas y mucho más, o si deseas saber cuando tú cervecero'
-                    'saca una nueva variedad de cerveza,, ', textAlign: TextAlign.justify,),
+                titleView('Ingresa y obten estos beneficios:'),
+                ListTile(
+                  leading: MyBullet(),
+                  title: Text('Ingresa para poder calificar y comentar sobre las cervezas que probaste'),
+                ),
+                ListTile(
+                  leading: MyBullet(),
+                  title: Text('Ver tús cervezas favoritas y recomendarlas'),
+                ),
+                ListTile(
+                  leading: MyBullet(),
+                  title: Text('Adquirir beneficios, descuentos en boletas, promociones en cervezas'),
+                ),
+                ListTile(
+                  leading: MyBullet(),
+                  title: Text('Recibir notificaciones (cuando tú cervecero saca una nueva variedad de cerveza, eventos, beneficios solo para tí)'),
+                ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyBullet extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 25.0,
+      decoration: BoxDecoration(
+        color: Colors.black,
+        shape: BoxShape.circle,
       ),
     );
   }

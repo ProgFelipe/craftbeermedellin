@@ -17,6 +17,9 @@ class Beer {
   final num abv, ibu, srm;
   final num ranking, votes;
   final Timestamp release;
+  bool doITasted;
+  final int myVote;
+  final String myComment;
   final bool sell; /// IF HAS INVIMA AND IS AVAILABLE FOR SALE
 
   Beer(
@@ -29,6 +32,9 @@ class Beer {
         this.abv,
         this.ibu,
         this.srm,
+        this.myComment,
+        this.doITasted,
+        this.myVote,
         this.flavors,
         this.scents,
         this.ingredients,
@@ -53,6 +59,7 @@ class Beer {
         imageUri: data['beer_pic'] ?? '',
         ranking: data['ranking'] ?? 0,
         votes: data['votes'] ?? 0,
+        doITasted: false,
         release:
         Timestamp.fromDate(DateTime.parse(data['release_date'])) ?? null,
         sell: data['on_sale'] ?? false,
@@ -74,8 +81,11 @@ class Beer {
       'imageUri': imageUri,
       'ranking': ranking,
       'votes': votes,
+      'tasted': doITasted==true ? 1 : 0,
+      'my_vote': myVote ?? 0,
+      'comment': myComment ?? '',
       'release': dateFormat.format(release.toDate()),
-      'sell': sell==true ? 1 : 0,
+      'sell': sell ? 1 : 0,
       'flavors': flavors,
       'scents': scents,
       'ingredients': ingredients,
@@ -98,6 +108,9 @@ class Beer {
         imageUri: data['beer_pic'] ?? '',
         ranking: data['ranking'] as num ?? 0,
         votes: data['votes'] ?? 0,
+        doITasted: data['tasted'] == 1 ? true : false,
+        myVote: data['myVote'] ?? 0,
+        myComment: data['comment'] ?? '',
         release:
         Timestamp.fromDate(DateTime.parse(data['release'])) ?? null,
         sell: data['sell'] == 1  ? true : false,

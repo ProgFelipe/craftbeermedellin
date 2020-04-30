@@ -100,7 +100,7 @@ class BrewerItem extends StatelessWidget {
               top: 0.0,
               right: 0.0,
               child: Icon(
-                (brewer?.stateIsFavorite ?? false)
+                (brewer?.favorite ?? false)
                     ? Icons.favorite
                     : Icons.favorite_border,
                 size: 40.0,

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class BrewersData extends ChangeNotifier {
   List<Brewer> brewers;
@@ -17,6 +18,10 @@ class BrewersData extends ChangeNotifier {
   final api = DataBaseService();
   final brewerDAO = BrewerDao();
   final beersDAO = BeersDao();
+
+  static const CACHE_TIME_IN_DAYS = 3;
+
+  final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
 
   SharedPreferences prefs;
 
@@ -33,12 +38,16 @@ class BrewersData extends ChangeNotifier {
 
   void getBrewers() async {
     try {
+      print('TOMANDO DATOS DE DATABASE');
       brewers = await brewerDAO.getBrewers();
       beers = await beersDAO.getBeers();
+      //await shouldUpdateData()
       if(brewers == null || brewers.isEmpty || beers?.isEmpty == true) {
+        print('TOMANDO DATOS DE INTERNET');
         var response = await api.fetchBrewers();
         switch(response.statusCode){
           case 200: {
+            setFetchCurrentDate();
             final jsonData = json.decode(utf8.decode(response.bodyBytes));
             print(jsonData);
             List<Brewer> brewers = List();
@@ -74,17 +83,41 @@ class BrewersData extends ChangeNotifier {
       errorStatus = true;
       notifyListeners();
     }
-    //Return cache if exist
-    //Retry with back pressure if not service in maintaince
   }
 
   void addBrewers(List<Brewer> newBrewers, List<Beer> newBeers) {
     brewers = newBrewers;
     beers = newBeers;
-    print('NUMERO DE CERVECEROS ${brewers.length}');
-    print('NUMERO DE CERVEZAS ${beers.length}');
     notifyListeners();
   }
 
-  void setBrewerToFavorite(Brewer brewer) {}
+  void setBrewerToFavorite(Brewer brewer, bool isFavorite) {
+    brewerDAO.setFavorite(brewer, isFavorite);
+  }
+
+  void setBeerTastedValue(Beer beer, bool tasted){
+    beersDAO.setTasted(beer, tasted);
+  }
+
+  void setFetchCurrentDate() async {
+    SharedPreferences prefs = await getSharedPreference();
+    String lastUpdate = dateFormat.format(DateTime.now());
+    prefs.setString('last_update', lastUpdate);
+  }
+
+  Future<bool> shouldUpdateData() async {
+    SharedPreferences prefs = await getSharedPreference();
+    String lastUpdate = (prefs.getString('last_update'));
+    try{
+      if(lastUpdate != null && DateTime.parse(lastUpdate).difference(DateTime.now()).inDays > CACHE_TIME_IN_DAYS){
+        return true;
+      }else{
+        return false;
+      }
+    }catch(exception){
+      print(exception);
+      return true;
+    }
+  }
+
 }

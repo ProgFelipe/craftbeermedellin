@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
+import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/components/beer_detail_dialog.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BrewerHeader extends StatefulWidget {
   final Brewer brewer;
@@ -16,6 +18,8 @@ class BrewerHeader extends StatefulWidget {
 
 class _BrewerHeaderState extends State<BrewerHeader> {
   final Brewer brewer;
+  BrewersData model;
+
   _BrewerHeaderState(this.brewer);
   Widget backIfIos() {
     if (Platform.isIOS) {
@@ -39,12 +43,12 @@ class _BrewerHeaderState extends State<BrewerHeader> {
 
   @override
   void initState() {
-    favorite = brewer.stateIsFavorite;
+    favorite = brewer.favorite;
     super.initState();
   }
 
   updateFavoriteIfChanged() {
-    brewer.stateIsFavorite = favorite;
+    model.setBrewerToFavorite(brewer, favorite);
     Navigator.pop(context);
   }
 
@@ -68,6 +72,8 @@ class _BrewerHeaderState extends State<BrewerHeader> {
   //        //onWillPop: () => updateFavoriteIfChanged(),
   @override
   Widget build(BuildContext context) {
+    model = Provider.of<BrewersData>(context);
+
     return WillPopScope(
       onWillPop: () => updateFavoriteIfChanged(),
       child: Container(
