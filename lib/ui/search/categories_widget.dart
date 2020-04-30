@@ -5,6 +5,7 @@ import 'package:craftbeer/abstractions/category_model.dart';
 import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models/beers_data_notifier.dart';
+import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/models/categories_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
@@ -44,7 +45,7 @@ class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAlive
   Widget build(BuildContext context) {
     var categoriesData = Provider.of<CategoriesData>(context);
     List<BeerType> categories = categoriesData.categories;
-    List<Beer> beers = Provider.of<BeersData>(context).beers;
+    List<Beer> beers = Provider.of<BrewersData>(context).beers;
 
     if (categories == null ||
         categories?.isEmpty == true && beers?.isEmpty == true) {
@@ -179,7 +180,7 @@ class BeerItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BrewersDetail(brewerRef: beer.brewerId.toString())));
+            builder: (context) => BrewersDetail(brewerID: beer.brewerId)));
       },
       child: Stack(
         children: <Widget>[

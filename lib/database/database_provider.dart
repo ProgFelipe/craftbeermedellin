@@ -21,8 +21,8 @@ class DataBaseProvider {
         ' canSale INTEGER)',
     'CREATE TABLE beer(id NUMERIC PRIMARY KEY, name TEXT, description TEXT, history TEXT, '
         'imageUri Text, type TEXT, flavors TEXT, scents TEXT, ingredients TEXT'
-        ', adv NUMERIC, ibu NUMERIC, srm NUMERIC, '
-        ' ranking NUMERIC, vores NUMERIC, release TEXT, sell INTEGER, brewer_id INTEGER, category_id INTEGER)',
+        ', abv NUMERIC, ibu NUMERIC, srm NUMERIC, '
+        ' ranking NUMERIC, votes NUMERIC, release TEXT, sell INTEGER, brewerId INTEGER, categoryId INTEGER)',
     'CREATE TABLE promotion(id INTEGER PRIMARY KEY AUTOINCREMENT, imageUri TEXT,'
         ' description TEXT, brewer_id INTEGER, '
         'FOREIGN KEY(brewer_id) REFERENCES brewer(id) ON DELETE CASCADE )',

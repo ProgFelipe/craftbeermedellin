@@ -15,9 +15,9 @@ import 'package:url_launcher/url_launcher.dart';
 //https://github.com/MarcinusX/buy_ticket_design/blob/master/lib/exhibition_bottom_sheet.dart
 class BrewersDetail extends StatelessWidget {
   final Brewer brewer;
-  final String brewerRef;
+  final int brewerID;
 
-  BrewersDetail({this.brewer, this.brewerRef});
+  BrewersDetail({this.brewer, this.brewerID});
 
   final DataBaseService db = DataBaseService();
 
@@ -25,9 +25,9 @@ class BrewersDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     var brewers = Provider.of<BrewersData>(context).brewers;
 
-    if (brewer == null && brewerRef != null) {
+    if (brewer == null && brewerID != null) {
       return FutureBuilder(
-          future: db.futureBrewerByRef(brewers, brewerRef),
+          future: db.futureBrewerByID(brewers, brewerID),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return BrewerViewBody(snapshot.data);

@@ -1,33 +1,43 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
-import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/database/database_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BeersDao{
+  static const BEER_TABLE = 'beer';
 
   Future<void> insertBeers(List<Beer> beers) async {
     final Database db = await DataBaseProvider().getDataBase();
     beers.forEach((beer) async {
       await db.insert(
-        'beer',
-        beer.toMap(),
+        BEER_TABLE,
+        beer.toDaoMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,);
     });
   }
 
-  Future<List<Brewer>> getBrewers() async {
+  Future<List<Beer>> getBeers() async {
     final Database db = await DataBaseProvider().getDataBase();
-    final List<Map<String, dynamic>> brewersMap = await db.query('brewers');
-    List<Brewer> brewers = List();
-    brewersMap.forEach((brewer) {
-      brewers.add(Brewer.fromJson(brewer));
+    final List<Map<String, dynamic>> beersMap = await db.query(BEER_TABLE);
+    List<Beer> beers = List();
+    beersMap.forEach((beer) {
+      beers.add(Beer.fromDB(beer));
     });
-    return brewers;
+    return beers;
   }
 
-  Future<void> deleteBrewers() async {
+  Future<List<Beer>> getBeersByBrewer(int brewerID) async {
     final Database db = await DataBaseProvider().getDataBase();
-    db.delete('brewers');
+    final List<Map<String, dynamic>> beersMap = await db.query(BEER_TABLE, where: "brewerId = ?", whereArgs: [brewerID] );
+    List<Beer> beers = List();
+    beersMap.forEach((beer) {
+      beers.add(Beer.fromDB(beer));
+    });
+    return beers;
+  }
+
+  Future<void> deleteBeers() async {
+    final Database db = await DataBaseProvider().getDataBase();
+    db.delete(BEER_TABLE);
   }
 
   ///Favorites

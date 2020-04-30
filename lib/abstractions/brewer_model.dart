@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Brewer with ChangeNotifier {
-  List<Beer> beers;
   List<Promotion> promotions;
-  String id, description, imageUri, name, brewers, aboutUs, brewersImageUri;
+  int id;
+  String name;
+  List<Beer> beers;
+  String description, imageUri, aboutUs, brewersImageUri;
   String phone, instagram, facebook, youtube, website;
   bool _stateIsFavorite = false;
   bool canSale = false;
@@ -29,7 +31,6 @@ class Brewer with ChangeNotifier {
         this.description,
         this.imageUri,
         this.name,
-        this.brewers,
         this.brewersImageUri,
         this.aboutUs,
         this.phone,
@@ -39,38 +40,10 @@ class Brewer with ChangeNotifier {
         this.website,
         this.canSale});
 
-  factory Brewer.fromMap(DocumentSnapshot data) {
-    var brewer = Brewer(
-        id: data['id'],
-        beers:
-        data['beers'].map<Beer>((beer) => Beer.fromJson(beer)).toList() ?? [],
-        promotions: data['promos']
-            ?.map<Promotion>((promotion) => Promotion.fromMap(promotion))
-            ?.toList() ??
-            [],
-        description: data['description'] ?? '',
-        imageUri: data['imageUri'] ?? '',
-        name: data['name'] ?? '',
-        brewers: data['brewers'] ?? '',
-        aboutUs: data['about_us'] ?? '',
-        brewersImageUri: data['brewers_imageUri'] != null
-            ? data['brewers_imageUri']
-            : data['imageUri'] ?? '',
-        phone: data['phone'] ?? '',
-        instagram: data['instagram'] ?? '',
-        facebook: data['facebook'] ?? '',
-        youtube: data['youtube'] ?? '',
-        website: data['website'] ?? '',
-        canSale: data['canSale'] ?? false
-    );
-    return brewer;
-  }
-
   factory Brewer.fromJson(Map<String, dynamic> data) {
     var brewer = Brewer(
-      id: data['id'].toString(),
-      beers:
-      data['beers'].map<Beer>((beer) => Beer.fromJson(beer)).toList() ?? [],
+      id: data['id'],
+      beers: data['beers']?.map<Beer>((beer) => Beer.fromJson(beer))?.toList() ?? [],
 /*      promotions: data['promos']
           ?.map<Promotion>((promotion) => Promotion.fromMap(promotion))
           ?.toList() ??
@@ -84,13 +57,13 @@ class Brewer with ChangeNotifier {
       facebook: data['facebook'] ?? '',
       youtube: data['youtube'] ?? '',
       website: data['website'] ?? '',
-      canSale: data['canSale'] ?? false,
+      canSale: data['on_sale'] ?? false,
     );
     return brewer;
   }
 
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toDbMap() {
     return {
       'id' : id,
       'name' : name,
@@ -102,7 +75,7 @@ class Brewer with ChangeNotifier {
       'facebook' : facebook,
       'youtube' : youtube,
       'website' : website,
-      'canSale' : canSale
+      'canSale' : canSale ? 1 : 0
     };
   }
 

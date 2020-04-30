@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 class DataBaseService {
   //final String BASE_URL = "http://127.0.0.1:8000/api";
-  final String BASE_URL = "https://craftbeerco.herokuapp.com/api";
+  static const String BASE_URL = "https://craftbeerco.herokuapp.com/api";
 
   ///Brewer
   ///TODO REMOVE
@@ -26,17 +26,17 @@ class DataBaseService {
         }).toList());
   }*/
 
-  Future<http.Response> fetchBeers() async => await http.get('$BASE_URL/beers/?format=json');
+  //Future<http.Response> fetchBeers() async => await http.get('$BASE_URL/beers/?format=json');
 
   Future<http.Response> fetchBrewers() async =>  await http.get('$BASE_URL/brewer/?format=json');
 
   Future<http.Response> fetchBeerTypes() async => await http.get('$BASE_URL/categories/?format=json');
 
   ///Brewer item
-  Future<Brewer> futureBrewerByRef(List<Brewer> brewers,
-      String brewerRef) async {
+  Future<Brewer> futureBrewerByID(List<Brewer> brewers,
+      int brewerID) async {
     return brewers
-        .where((beer) => beer.id == brewerRef)
+        .where((brewer) => brewer.id == brewerID)
         .first;
   }
 
@@ -64,8 +64,8 @@ class DataBaseService {
   }
 
   ///Vote
-  Future<void> futureSetVoteBeer(String brewerId, int vote) {
-    return db.beerVote(brewerId, vote);
+  Future<void> futureSetVoteBeer(int brewerId, int vote) {
+    //return db.beerVote(brewerId, vote);
   }
 
   ///RELEASES

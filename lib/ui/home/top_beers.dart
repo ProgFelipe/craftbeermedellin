@@ -2,7 +2,7 @@ import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
-import 'package:craftbeer/models/beers_data_notifier.dart';
+import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/beer_detail_dialog.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
@@ -15,7 +15,7 @@ class TopBeersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Beer> beers = Provider.of<BeersData>(context).beers;
+    List<Beer> beers = Provider.of<BrewersData>(context).beers;
 
     if (beers == null || beers.isEmpty) {
       return LoadingWidget();
@@ -41,7 +41,7 @@ Widget topBeerItem(Beer beer, context) {
   void goToBrewerDetail(Beer beer) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => BrewersDetail(
-              brewerRef: beer.brewerRef,
+              brewerID: beer.brewerId,
             )));
   }
 

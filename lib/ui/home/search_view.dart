@@ -31,7 +31,7 @@ class SearchWidget extends StatelessWidget {
           .toList();
       beersQueryResultList?.forEach((element) {
         brewersAndBeers
-            .add({'name': element.name, Api.brewer: element.brewerRef});
+            .add({'name': element.name, Api.brewer: element.brewerId});
       });
       //return await db.searchBeers(query);
       return brewersAndBeers;
@@ -41,8 +41,9 @@ class SearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Brewer> brewers = Provider.of<BrewersData>(context).brewers;
-    List<Beer> beers = Provider.of<BeersData>(context).beers;
+    var brewerProvider = Provider.of<BrewersData>(context);
+    List<Brewer> brewers = brewerProvider.brewers;
+    List<Beer> beers = brewerProvider.beers;
 
     if (brewers == null || beers == null) {
       return LoadingWidget();
@@ -90,7 +91,7 @@ class SearchWidget extends StatelessWidget {
           var ref = suggestion[Api.brewer];
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => BrewersDetail(
-              brewerRef: ref,
+              brewerID: ref,
             ),
           ));
         },

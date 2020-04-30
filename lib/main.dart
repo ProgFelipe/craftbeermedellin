@@ -3,7 +3,6 @@ import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/abstractions/promotion_model.dart';
 import 'package:craftbeer/abstractions/release_model.dart';
 import 'package:craftbeer/api_service.dart';
-import 'package:craftbeer/models/beers_data_notifier.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/models/categories_data_notifier.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
             value: connectivity.onConnectivityChanged),
         ///Django
         ChangeNotifierProvider<BrewersData>.value(value: BrewersData()),
-        ChangeNotifierProvider<BeersData>.value(value: BeersData()),
         ChangeNotifierProvider<CategoriesData>.value(value: CategoriesData()),
         ///FireStore
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),

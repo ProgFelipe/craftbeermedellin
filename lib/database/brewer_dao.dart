@@ -1,32 +1,39 @@
 import 'package:craftbeer/abstractions/brewer_model.dart';
+import 'package:craftbeer/database/beers_dao.dart';
 import 'package:craftbeer/database/database_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BrewerDao{
+  static const BREWER_TABLE = 'brewer';
+  final beersDao = BeersDao();
 
   Future<void> insertBrewers(List<Brewer> brewers) async {
     final Database db = await DataBaseProvider().getDataBase();
     brewers.forEach((brewer) async {
       await db.insert(
-        'brewers',
-        brewer.toMap(),
+        BREWER_TABLE,
+        brewer.toDbMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,);
-      });
+
+      await beersDao.insertBeers(brewer.beers);
+    });
   }
 
   Future<List<Brewer>> getBrewers() async {
     final Database db = await DataBaseProvider().getDataBase();
-    final List<Map<String, dynamic>> brewersMap = await db.query('brewers');
+    final List<Map<String, dynamic>> brewersMap = await db.query(BREWER_TABLE);
     List<Brewer> brewers = List();
-    brewersMap.forEach((brewer) {
-      brewers.add(Brewer.fromJson(brewer));
+    brewersMap.forEach((brewer) async {
+      var brewerObj = Brewer.fromJson(brewer);
+      brewerObj.beers = await beersDao.getBeersByBrewer(brewerObj.id);
+      brewers.add(brewerObj);
     });
     return brewers;
   }
 
   Future<void> deleteBrewers() async {
     final Database db = await DataBaseProvider().getDataBase();
-    db.delete('brewers');
+    db.delete(BREWER_TABLE);
   }
 
   ///Favorites

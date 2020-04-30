@@ -37,14 +37,14 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
     });
   }
 
-  showBeerDialog(context, Beer beer, String beerRef) {
+  showBeerDialog(context, Beer beer, int brewerID) {
     showDialog(
         context: context,
         builder: (BuildContext context) => BeerDetailDialog(
               title: beer.name,
               showVotesBox: true,
               voteAction: (int vote) {
-                db.futureSetVoteBeer(beerRef, vote);
+                db.futureSetVoteBeer(brewerID, vote);
               },
               description: beer.description,
               buttonText: S.of(context).back,
@@ -117,7 +117,7 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () =>
-                  showBeerDialog(context, widget.beers[index], widget.beers[index].brewerRef),
+                  showBeerDialog(context, widget.beers[index], widget.beers[index].brewerId),
               child: Stack(
                 children: [
                   Column(

@@ -3,7 +3,7 @@ import 'package:craftbeer/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 
-class BeersData extends ChangeNotifier{
+/*class BeersData extends ChangeNotifier{
   List<Beer> beers = List();
   final api = DataBaseService();
 
@@ -50,4 +50,4 @@ class BeersData extends ChangeNotifier{
     //beers[index].tasted = false;
     notifyListeners();
   }
-}
+}*/
