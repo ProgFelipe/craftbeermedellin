@@ -38,8 +38,8 @@ class BrewersData extends ChangeNotifier {
     try {
       if(brewers?.isEmpty ?? true) {
         debugPrint('TOMANDO DATOS DE DATABASE');
-        brewers = await brewerDAO.getBrewers();
-        beers = await beersDAO.getBeers();
+        //brewers = await brewerDAO.getBrewers();
+        //beers = await beersDAO.getBeers();
         //await shouldUpdateData()
         if (brewers?.isEmpty ?? true) {
           debugPrint('TOMANDO DATOS DE INTERNET');

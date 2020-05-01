@@ -10,7 +10,8 @@ class Beer {
       imageUri,
       flavors,
       scents,
-      ingredients;
+      ingredients,
+      price;
   final int id;
   final int brewerId;
   final int categoryId;
@@ -35,6 +36,7 @@ class Beer {
         this.myComment,
         this.doITasted,
         this.myVote,
+        this.price,
         this.flavors,
         this.scents,
         this.ingredients,
@@ -60,6 +62,7 @@ class Beer {
         ranking: data['ranking'] ?? 0,
         votes: data['votes'] ?? 0,
         doITasted: false,
+        price: data['price']?.toString() ?? '',
         release:
         Timestamp.fromDate(DateTime.parse(data['release_date'])) ?? null,
         sell: data['on_sale'] ?? false,
@@ -80,6 +83,7 @@ class Beer {
       'srm': srm,
       'imageUri': imageUri,
       'ranking': ranking,
+      'price': price,
       'votes': votes,
       'tasted': doITasted==true ? 1 : 0,
       'my_vote': myVote ?? 0,
@@ -105,6 +109,7 @@ class Beer {
         abv: data['abv'] ?? 0.0,
         ibu: data['ibu'] ?? 0.0,
         srm: data['srm'] ?? 0.0,
+        price: data['price'] ?? '',
         imageUri: data['beer_pic'] ?? '',
         ranking: data['ranking'] as num ?? 0,
         votes: data['votes'] ?? 0,

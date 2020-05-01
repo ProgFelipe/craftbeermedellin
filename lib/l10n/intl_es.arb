@@ -25,5 +25,10 @@
   "find_beer_or_brewer_hint": "Busca tú Cerveza ó Cervecero",
   "i_would_like_to_to_buy_msg": "Me gustaría comprar cervezas",
   "thanks_for_the_vote": "Gracias por votar!",
-  "whatsapp_error": "No pudimos abrir WhatsApp"
+  "whatsapp_error": "No pudimos abrir WhatsApp",
+  "do_you_tasted": "¿Ya la probaste?",
+  "yes": "Si",
+  "no": "No",
+  "comment_beer_hint": "¿Te gustó?",
+  "informed_consent": "NOTA: Este cervecero no cuenta con registro INVIMA aún, si desea puede contactarse con el para mayor información."
 }

@@ -5,6 +5,7 @@ import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/start_rating.dart';
 import 'package:craftbeer/ui/components/beer_detail_dialog.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
+import 'package:craftbeer/ui/components/beer_tasted_dialog.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,10 +49,9 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
               showVotesBox: true,
               voteAction: (int vote) {
                 setState(() {
-                  beer.doITasted = !beer.doITasted;
                   model.setBeerTastedValue(beer, beer.doITasted);
                 });
-                db.futureSetVoteBeer(brewerID, vote);
+                //db.futureSetBeerFeedback(brewerID, vote);
               },
               description: beer.description,
               buttonText: S.of(context).back,
@@ -64,25 +64,30 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
             ));
   }
 
-  showBeerTasteDialog(context, Beer beer, int brewerID) {
+  showNotTastedBeerDialog(context, Beer beer, int brewerId) {
     showDialog(
         context: context,
-        builder: (BuildContext context) => BeerDetailDialog(
-          title: beer.name,
-          showVotesBox: true,
-          voteAction: (int vote) {
-            setState(() {
-              beer.doITasted = !beer.doITasted;
-              model.setBeerTastedValue(beer, beer.doITasted);
-            });
-            db.futureSetVoteBeer(brewerID, vote);
+        builder: (BuildContext context) => BeerTastedDialog(
+          onTastedMark: (int vote, String comment, bool tasted) {
+            if(tasted){
+              setState(() {
+                beer.doITasted = tasted;
+                model.setBeerTastedValue(beer, beer.doITasted);
+              });
+              ///SEND BEER FEEDBACK BY USER
+              if(vote != beer.myVote || comment != beer.myComment) {
+                //userId  = 0
+                db.futureSetBeerFeedback(0, brewerId, beer.id, vote, comment);
+              }
+            }
           },
-          description: beer.description,
-          buttonText: S.of(context).back,
-          actionText: beer.history.isNotEmpty ? S.of(context).more_info : '',
-          action: beer.history.isNotEmpty ? () {
+          onShowHistory: beer.history.isNotEmpty ? () {
             _showBeerHistory(beer.name, beer.history);
           } : (){},
+          title: beer.name,
+          beerDescription: beer.description,
+          saveAndBackButtonText: S.of(context).back,
+          historyButtonText: beer.history.isNotEmpty ? S.of(context).more_info : '',
           avatarColor: Colors.orangeAccent[200],
           avatarImage: beer.imageUri,
         ));
@@ -150,8 +155,8 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () =>
-              widget.beers[index].doITasted ?  showBeerDialog(context, widget.beers[index], widget.beers[index].brewerId)
-                  : showBeerDialog(context, widget.beers[index], widget.beers[index].brewerId),
+              widget.beers[index].doITasted ? showBeerDialog(context, widget.beers[index], widget.beers[index].brewerId) :
+              showNotTastedBeerDialog(context, widget.beers[index], widget.beers[index].brewerId),
               child: Stack(
                 children: [
                   Column(
@@ -164,7 +169,12 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       beerPropertiesText(S.of(context).ibu, widget.beers[index].ibu),
                       beerPropertiesText(S.of(context).abv, widget.beers[index].abv),
                       beerPropertiesText(S.of(context).srm, widget.beers[index].srm),
-                      beerPropertiesText('\$', 16000),
+                      Text('\$ ${widget.beers[index].price}', style: TextStyle(
+                        fontSize: 10.0,
+                        wordSpacing: 2.0,
+                        letterSpacing: 2.0,
+                        color: Colors.black,
+                      ),),
                       StarRating(rating: 5.0,)
                     ],
                   ),

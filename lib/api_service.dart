@@ -64,7 +64,7 @@ class DataBaseService {
   }
 
   ///Vote
-  Future<void> futureSetVoteBeer(int brewerId, int vote) {
+  Future<void> futureSetBeerFeedback(int userId, int brewerId, int beerId, int vote, String comment) {
     //return db.beerVote(brewerId, vote);
   }
 

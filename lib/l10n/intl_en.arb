@@ -25,5 +25,10 @@
   "find_beer_or_brewer_hint": "Search beer or brewer",
   "i_would_like_to_to_buy_msg": "I would like to buy beers",
   "thanks_for_the_vote": "Thanks for voting!",
-  "whatsapp_error": "Couldn't reach WhatsApp"
+  "whatsapp_error": "Couldn't reach WhatsApp",
+  "do_you_tasted": "Did you tasted?",
+  "yes": "YES",
+  "no": "NOT YET",
+  "comment_beer_hint": "Did you like it?",
+  "informed_consent": "NOTE: This brewer doesn't have INVIMA registration yet, if you wish you can contact him for more information."
 }

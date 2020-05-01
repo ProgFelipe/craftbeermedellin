@@ -47,7 +47,7 @@ class Brewer with ChangeNotifier {
       facebook: data['facebook'] ?? '',
       youtube: data['youtube'] ?? '',
       website: data['website'] ?? '',
-      canSale: data['on_sale'] ?? false,
+      canSale: data['can_sale'] ?? false,
     );
     return brewer;
   }
@@ -65,7 +65,7 @@ class Brewer with ChangeNotifier {
       facebook: data['facebook'] ?? '',
       youtube: data['youtube'] ?? '',
       website: data['website'] ?? '',
-      canSale: data['on_sale'] ?? false,
+      canSale: data['can_sale'] ?? false,
     );
     return brewer;
   }
@@ -84,7 +84,7 @@ class Brewer with ChangeNotifier {
       'youtube' : youtube,
       'website' : website,
       'favorite' : favorite ? 1 : 0,
-      'canSale' : canSale ? 1 : 0
+      'can_sale' : canSale ? 1 : 0
     };
   }
 
