@@ -15,6 +15,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
+
+  ScrollController _scrollController =  ScrollController(
+    initialScrollOffset: 0.0,
+    keepScrollOffset: true,
+  );
+
+  void putScrollAtTop(){
+    _scrollController.animateTo(
+      240.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,6 +36,7 @@ class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
       color: Colors.black87,
       child: SafeArea(
         child: SingleChildScrollView(
+          controller: _scrollController,
           scrollDirection: Axis.vertical,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,7 +54,7 @@ class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
               Padding(
                   padding:
                   EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
-                  child: SearchWidget()),
+                  child: SearchWidget(putScrollAtTop)),
               titleView(S.of(context).top_week_title),
               TopBeersView(),
               titleView('Aprende'),

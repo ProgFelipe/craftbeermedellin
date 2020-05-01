@@ -11,17 +11,9 @@ class ImageProviderWidget extends StatelessWidget {
       {this.errorWidget, this.height, this.width, this.animationDuration});
   @override
   Widget build(BuildContext context) {
-    if (imageUri == null || imageUri.isEmpty) {
-      return Image.asset(
-        'assets/beer.png',
-        height: height,
-        width: width,
-        fit: BoxFit.scaleDown,
-      );
-    } else {
       return Center(
         child: CachedNetworkImage(
-          fadeInDuration: Duration(milliseconds: 500),
+          fadeInDuration: Duration(milliseconds: 250),
           imageUrl: imageUri,
           height: height,
           width: width,
@@ -47,6 +39,5 @@ class ImageProviderWidget extends StatelessWidget {
             );}},
         ),
       );
-    }
   }
 }

@@ -10,10 +10,21 @@ class BrewerDao{
   Future<void> insertBrewers(List<Brewer> brewers) async {
     final Database db = await DataBaseProvider().getDataBase();
     brewers.forEach((brewer) async {
-      await db.insert(
-        BREWER_TABLE,
-        brewer.toDbMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,);
+      final List<Map<String, dynamic>> brewerMap = await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewer.id]);
+      if(brewerMap?.isEmpty ?? true) {
+        await db.insert(
+          BREWER_TABLE,
+          brewer.toDbMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,);
+      }else{
+        Map<String, dynamic> brewerFromServer = brewer.toDbMap();
+        brewerFromServer['favorite'] = brewerMap[0]['favorite'];
+        await db.update(
+            BREWER_TABLE,
+            brewerFromServer,
+            where: "id = ?",
+            whereArgs: [brewer.id]);
+      }
 
       await beersDao.insertBeers(brewer.beers);
     });

@@ -4,7 +4,6 @@ import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/abstractions/category_model.dart';
 import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/loading_widget.dart';
-import 'package:craftbeer/models/beers_data_notifier.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/models/categories_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
@@ -14,11 +13,17 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesView extends StatefulWidget {
+
+  final Function scrollUp;
+
+  CategoriesView(this.scrollUp);
+
   @override
   _CategoriesViewState createState() => _CategoriesViewState();
 }
 
 class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAliveClientMixin<CategoriesView> {
+
   BeerType _selectedCategory;
 
   @override
@@ -35,6 +40,7 @@ class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAlive
 
   changeBeerTypeSelection(BeerType category) {
     setState(() {
+      widget.scrollUp();
       if (category != _selectedCategory) {
         _selectedCategory = category;
       }

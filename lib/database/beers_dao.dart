@@ -20,7 +20,8 @@ class BeersDao{
         await db.update(
           BEER_TABLE,
           beerFromServer,
-          conflictAlgorithm: ConflictAlgorithm.replace,);
+          where: "id = ?",
+          whereArgs: [beer.id],);
       }
       });
   }

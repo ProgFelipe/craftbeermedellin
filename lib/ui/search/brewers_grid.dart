@@ -34,8 +34,6 @@ class _BrewersGridState extends State<BrewersGrid> {
   @override
   Widget build(BuildContext context) {
     var brewersData = Provider.of<BrewersData>(context);
-    //brewersData.getBrewers();
-    var brewers = brewersData.brewers;
 
     if(brewersData.underMaintain){
       return Text('Estamo en mantenimiento');
@@ -46,7 +44,7 @@ class _BrewersGridState extends State<BrewersGrid> {
     if(brewersData.errorStatus){
       return Text('Ah ocurrido un error', style: TextStyle(color: Colors.red));
     }
-    if (brewers == null || brewers.length == 0) {
+    if (brewersData.brewers == null || brewersData.brewers.length == 0) {
       return LoadingWidget();
     }
     return Container(
@@ -59,9 +57,9 @@ class _BrewersGridState extends State<BrewersGrid> {
           crossAxisSpacing: 1.0,
           mainAxisSpacing: 1.0,
         ),
-        itemCount: brewers.length,
+        itemCount: brewersData.brewers.length,
         itemBuilder: (context, index) {
-          var brewer = brewers[index];
+          var brewer = brewersData.brewers[index];
           return ChangeNotifierProvider<Brewer>.value(
             value: brewer,
             child: BrewerItem(),

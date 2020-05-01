@@ -26,47 +26,17 @@ class BeerDetailDialog extends StatefulWidget {
   });
 
   @override
-  _BeerDetailDialogState createState() => _BeerDetailDialogState(
-        title: title,
-        description: description,
-        buttonText: buttonText,
-        avatarColor: avatarColor,
-        avatarImage: avatarImage,
-        actionText: actionText,
-        showVotesBox: showVotesBox,
-        voteAction: voteAction,
-        action: action,
-        starts: starts,
-      );
+  _BeerDetailDialogState createState() => _BeerDetailDialogState();
 }
 
 class _BeerDetailDialogState extends State<BeerDetailDialog> {
-  final String title, description, buttonText, actionText;
-  final Color avatarColor;
-  final String avatarImage;
-  final VoidCallback action;
-  final IntCallback voteAction;
-  final bool starts, showVotesBox;
-
-  _BeerDetailDialogState({
-    @required this.title,
-    @required this.description,
-    @required this.buttonText,
-    this.avatarColor,
-    this.avatarImage,
-    this.actionText,
-    this.showVotesBox = false,
-    this.voteAction,
-    this.action,
-    this.starts = false,
-  });
 
   bool _canVote = true;
   void onVote(int vote) {
     setState(() {
       _canVote = false;
     });
-    voteAction(vote);
+    widget.voteAction(vote);
   }
 
   @override
@@ -103,7 +73,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
               mainAxisSize: MainAxisSize.min, // To make the card compact
               children: <Widget>[
                 Visibility(
-                  visible: starts,
+                  visible: widget.starts,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -122,7 +92,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                   height: 10.0,
                 ),
                 Text(
-                  title,
+                  widget.title,
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.w700,
@@ -130,7 +100,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  description,
+                  widget.description,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16.0,
@@ -140,7 +110,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                   height: 15.0,
                 ),
                 Visibility(
-                  visible: showVotesBox && _canVote,
+                  visible: widget.showVotesBox && _canVote,
                   child: Column(
                     children: <Widget>[
                       Text(
@@ -167,7 +137,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                   ),
                 ),
                 Visibility(
-                  visible: showVotesBox && !_canVote,
+                  visible: widget.showVotesBox && !_canVote,
                   child: Text(
                     S.of(context).thanks_for_the_vote,
                     style: TextStyle(color: Colors.amberAccent),
@@ -178,20 +148,20 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Visibility(
-                      visible: actionText != null,
+                      visible: widget.actionText != null,
                       child: FlatButton(
                         onPressed: () {
                           Navigator.of(context).pop();
-                          action(); // To close the dialog
+                          widget.action(); // To close the dialog
                         },
-                        child: actionText != null ? Text(actionText) : Text(''),
+                        child: widget.actionText != null ? Text(widget.actionText) : Text(''),
                       ),
                     ),
                     FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop(); // To close the dialog
                       },
-                      child: Text(buttonText),
+                      child: Text(widget.buttonText),
                     ),
                   ],
                 ),
@@ -202,8 +172,8 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
             left: Consts.padding,
             right: Consts.padding,
             child: CircleAvatar(
-              child: ImageProviderWidget(avatarImage),
-              backgroundColor: avatarColor,
+              child: ImageProviderWidget(widget.avatarImage),
+              backgroundColor: widget.avatarColor,
               radius: Consts.avatarRadius,
             ),
           ),

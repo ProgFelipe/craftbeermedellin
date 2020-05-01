@@ -64,6 +64,30 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
             ));
   }
 
+  showBeerTasteDialog(context, Beer beer, int brewerID) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => BeerDetailDialog(
+          title: beer.name,
+          showVotesBox: true,
+          voteAction: (int vote) {
+            setState(() {
+              beer.doITasted = !beer.doITasted;
+              model.setBeerTastedValue(beer, beer.doITasted);
+            });
+            db.futureSetVoteBeer(brewerID, vote);
+          },
+          description: beer.description,
+          buttonText: S.of(context).back,
+          actionText: beer.history.isNotEmpty ? S.of(context).more_info : '',
+          action: beer.history.isNotEmpty ? () {
+            _showBeerHistory(beer.name, beer.history);
+          } : (){},
+          avatarColor: Colors.orangeAccent[200],
+          avatarImage: beer.imageUri,
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     model = Provider.of<BrewersData>(context);
@@ -126,7 +150,8 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () =>
-                  showBeerDialog(context, widget.beers[index], widget.beers[index].brewerId),
+              widget.beers[index].doITasted ?  showBeerDialog(context, widget.beers[index], widget.beers[index].brewerId)
+                  : showBeerDialog(context, widget.beers[index], widget.beers[index].brewerId),
               child: Stack(
                 children: [
                   Column(
@@ -139,12 +164,13 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       beerPropertiesText(S.of(context).ibu, widget.beers[index].ibu),
                       beerPropertiesText(S.of(context).abv, widget.beers[index].abv),
                       beerPropertiesText(S.of(context).srm, widget.beers[index].srm),
+                      beerPropertiesText('\$', 16000),
                       StarRating(rating: 5.0,)
                     ],
                   ),
                   widget.beers[index].doITasted ?
-                  Positioned(top: 0.0, right: 0.0, child: Icon(BeerIcon.beer_filled))
-                      : Positioned(top: 0.0, right: 0.0, child: Icon(BeerIcon.beerglass)),
+                  Positioned(top: 0.0, right: 0.0, child: Icon(BeerIcon.tasted_full, color: Colors.green,))
+                      : Positioned(top: 0.0, right: 0.0, child: Icon(BeerIcon.tasted_empty, color: Colors.grey,)),
                 ],
               ),
             );

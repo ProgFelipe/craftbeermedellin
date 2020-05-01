@@ -36,4 +36,6 @@ class BeerIcon {
   static const IconData beer_filled = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData home_filled = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData home_empty = IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tasted_empty = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tasted_full = IconData(0xe812, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
