@@ -1,24 +1,22 @@
+import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:flutter/material.dart';
 
 class BeerTastedDialog extends StatefulWidget {
-  final String title, beerDescription, saveAndBackButtonText, historyButtonText;
+  final String saveAndBackButtonText;
   final Color avatarColor;
   final String avatarImage;
-  final Function onShowHistory; //int vote, String comment, bool tasted
   final Function onTastedMark;
+  final Beer selectedBeer;
 
   BeerTastedDialog({
-    @required this.title,
-    @required this.beerDescription,
     @required this.saveAndBackButtonText,
     this.avatarColor,
+    this.selectedBeer,
     this.avatarImage,
-    this.historyButtonText,
     this.onTastedMark,
-    this.onShowHistory,
   });
 
   @override
@@ -28,12 +26,14 @@ class BeerTastedDialog extends StatefulWidget {
 class _BeerTastedDialogState extends State<BeerTastedDialog> {
   bool _tasted = false;
   bool _canVote = true;
+  int vote;
+  String comment;
 
   void onVote(int vote) {
     setState(() {
+      this.vote = vote;
       _canVote = false;
     });
-    widget.onTastedMark(vote);
   }
 
   set tasted(bool value){
@@ -80,7 +80,7 @@ class _BeerTastedDialogState extends State<BeerTastedDialog> {
                     height: 10.0,
                   ),
                   Text(
-                    widget.title,
+                    widget.selectedBeer.name,
                     style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.w700,
@@ -88,7 +88,7 @@ class _BeerTastedDialogState extends State<BeerTastedDialog> {
                   ),
                   SizedBox(height: 16.0),
                   Text(
-                    widget.beerDescription,
+                    widget.selectedBeer.description,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16.0,
@@ -126,7 +126,7 @@ class _BeerTastedDialogState extends State<BeerTastedDialog> {
                     height: 15.0,
                   ),
                   Visibility(
-                    visible: _tasted && _canVote,
+                    visible: widget.selectedBeer.doITasted || _tasted,
                     child: Column(
                       children: <Widget>[
                         Text(
@@ -146,6 +146,7 @@ class _BeerTastedDialogState extends State<BeerTastedDialog> {
                               5,
                                   (index) => VoteItem(
                                 index: index,
+                                lastVote: widget.selectedBeer.myVote,
                                 onTastedMark: onVote,
                               )).toList(),
                         ),
@@ -160,9 +161,12 @@ class _BeerTastedDialogState extends State<BeerTastedDialog> {
                     ),
                   ),
                   Visibility(
-                    visible: _tasted,
+                    visible: widget.selectedBeer.doITasted || _tasted,
                     child: TextFormField(
+                      initialValue: widget.selectedBeer.myComment ?? '',
+                      onChanged: (value) => comment = value,
                       maxLength: 280,
+
                       decoration: InputDecoration(
                           labelText:  S.of(context).comment_beer_hint,
                       ),
@@ -172,21 +176,18 @@ class _BeerTastedDialogState extends State<BeerTastedDialog> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Visibility(
-                        visible: widget.historyButtonText != null,
-                        child: FlatButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            widget.onShowHistory(); // To close the dialog
-                          },
-                          child: widget.historyButtonText != null ? Text(widget.historyButtonText) : Text(''),
-                        ),
-                      ),
                       FlatButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // To close the dialog
                         },
-                        child: Text(widget.saveAndBackButtonText),
+                        child: Text(S.of(context).back),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          widget.onTastedMark(_tasted, vote, comment);
+                          Navigator.of(context).pop(); // To close the dialog
+                        },
+                        child: Text(S.of(context).save),
                       ),
                     ],
                   ),
@@ -211,10 +212,12 @@ class _BeerTastedDialogState extends State<BeerTastedDialog> {
 
 class VoteItem extends StatefulWidget {
   final int index;
+  final int lastVote;
   final Function onTastedMark;
   VoteItem({
     @required this.index,
     @required this.onTastedMark,
+    @required this.lastVote,
   });
   @override
   _VoteItemState createState() =>
@@ -242,7 +245,7 @@ class _VoteItemState extends State<VoteItem> {
       child: Container(
           child: Center(
             child: CircleAvatar(
-              backgroundColor: color,
+              backgroundColor: widget.lastVote == widget.index ? Colors.green : color,
               child: new Text(
                 '${widget.index + 1}',
                 style: TextStyle(color: Colors.white),
