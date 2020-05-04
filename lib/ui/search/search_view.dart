@@ -17,7 +17,6 @@ class _SearchViewState extends State<SearchView> {
   );
 
   void scrollUp(){
-    print('ANIMANDO');
     _scrollController.animateTo(
       _scrollController.position.minScrollExtent,
       duration: const Duration(milliseconds: 500),

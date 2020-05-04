@@ -12,6 +12,8 @@ import 'package:intl/intl.dart';
 class BrewersData extends ChangeNotifier {
   List<Brewer> brewers;
   List<Beer> beers;
+  Brewer currentBrewer;
+
   bool underMaintain = false;
   bool checkYourInternet = false;
   bool errorStatus = false;
@@ -30,6 +32,7 @@ class BrewersData extends ChangeNotifier {
     return prefs;
   }
 
+
   BrewersData(){
     getBrewers();
   }
@@ -38,10 +41,10 @@ class BrewersData extends ChangeNotifier {
     try {
       if(brewers?.isEmpty ?? true) {
         debugPrint('TOMANDO DATOS DE DATABASE');
-        //brewers = await brewerDAO.getBrewers();
-        //beers = await beersDAO.getBeers();
+        brewers = await brewerDAO.getBrewers();
+        beers = await beersDAO.getBeers();
         //await shouldUpdateData()
-        if (brewers?.isEmpty ?? true) {
+        if (brewers == null || brewers.isEmpty ) {
           debugPrint('TOMANDO DATOS DE INTERNET');
           var response = await api.fetchBrewers();
           switch (response.statusCode) {
@@ -100,10 +103,6 @@ class BrewersData extends ChangeNotifier {
     brewerDAO.setFavorite(brewer, isFavorite);
   }
 
-  void setBeerTastedValue(Beer beer, bool tasted){
-    beersDAO.setTasted(beer, tasted);
-  }
-
   void setFetchCurrentDate() async {
     SharedPreferences prefs = await getSharedPreference();
     String lastUpdate = DateFormat.yMMMMd().format(DateTime.now());
@@ -123,6 +122,25 @@ class BrewersData extends ChangeNotifier {
       print(exception);
       return true;
     }
+  }
+
+  ///Top Beers
+  Future<List<Beer>> fetchTopBeers() async {
+    beers.sort((a, b) => a.ranking.compareTo(b.ranking));
+    return beers.sublist(0, beers.length >= 5 ? 5 : beers.length);
+  }
+
+
+  void sendBeerFeedback(Beer beer, int index){
+    print("Guardando POLA");
+    currentBrewer.beers[index] = beer;
+    beersDAO.updateBeer(beer);
+    notifyListeners();
+  }
+
+  Future<Brewer> getBrewerById(int brewerId) async {
+    currentBrewer = brewers.where((brewer) => brewer.id == brewerId).first;
+    return currentBrewer;
   }
 
 }

@@ -57,12 +57,6 @@ class DataBaseService {
         .first;
   }*/
 
-  ///Top Beers
-  Future<List<Beer>> fetchTopBeers(List<Beer> beers) async {
-    beers.sort((a, b) => a.ranking.compareTo(b.ranking));
-    return beers.sublist(0, beers.length >= 5 ? 5 : beers.length);
-  }
-
   ///Vote
   Future<void> futureSetBeerFeedback(int userId, int brewerId, int beerId, int vote, String comment) {
     //return db.beerVote(brewerId, vote);

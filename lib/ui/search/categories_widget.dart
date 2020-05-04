@@ -186,7 +186,7 @@ class BeerItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BrewersDetail(brewerID: beer.brewerId)));
+            builder: (context) => BrewersDetail(brewerId: beer.brewerId)));
       },
       child: Stack(
         children: <Widget>[

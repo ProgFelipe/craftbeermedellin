@@ -51,8 +51,7 @@ class BeersDao{
     db.delete(BEER_TABLE);
   }
 
-  Future<void> setTasted(Beer beer, bool tasted) async {
-    beer.doITasted = tasted;
+  Future<void> updateBeer(Beer beer) async {
     final Database db = await DataBaseProvider().getDataBase();
     await db.update(BEER_TABLE, beer.toDaoMap(), where: "id = ?", whereArgs: [beer.id]);
   }

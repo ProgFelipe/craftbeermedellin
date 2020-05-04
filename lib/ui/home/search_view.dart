@@ -11,25 +11,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 
-class SearchWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
   final Function scrollViewToTop;
   SearchWidget(this.scrollViewToTop);
+
+  @override
+  _SearchWidgetState createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  bool _showClearButton = false;
 
   Future<List<Map<dynamic, dynamic>>> getSuggestions(
       List<Brewer> brewers, List<Beer> beers, String query) async {
     if (query != null && query.length > 0) {
+
+      setState(() {
+        _showClearButton = true;
+      });
+
       List<Map<dynamic, dynamic>> brewersAndBeers = List();
 
       var brewersQueryResultList = brewers
           .where((brewer) =>
-              brewer.name.toLowerCase().contains(query.toLowerCase()))
+          brewer.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
       brewersQueryResultList?.forEach((element) {
         brewersAndBeers.add({'name': element.name, Api.brewer: element.id});
       });
       var beersQueryResultList = beers
           .where((category) =>
-              category.name.toLowerCase().contains(query.toLowerCase()))
+          category.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
       beersQueryResultList?.forEach((element) {
         brewersAndBeers
@@ -37,6 +49,10 @@ class SearchWidget extends StatelessWidget {
       });
       //return await db.searchBeers(query);
       return brewersAndBeers;
+    }else{
+      setState(() {
+        _showClearButton = false;
+      });
     }
     return List();
   }
@@ -46,6 +62,7 @@ class SearchWidget extends StatelessWidget {
     var brewerProvider = Provider.of<BrewersData>(context);
     List<Brewer> brewers = brewerProvider.brewers;
     List<Beer> beers = brewerProvider.beers;
+
 
     if (brewers == null || beers == null) {
       return LoadingWidget();
@@ -64,7 +81,7 @@ class SearchWidget extends StatelessWidget {
           elevation: 10.0,
         ),
         textFieldConfiguration: TextFieldConfiguration(
-          onTap: scrollViewToTop,
+          onTap: widget.scrollViewToTop,
           autofocus: false,
           style: TextStyle(fontSize: 20.0),
           decoration: InputDecoration(
@@ -72,29 +89,27 @@ class SearchWidget extends StatelessWidget {
                 Icons.search,
                 color: DecorationConsts.hintGreyColor,
               ),
+              suffixIcon: IconButton(
+                onPressed: (){},
+                  icon: Visibility( visible: _showClearButton,child: Icon(Icons.clear, color: DecorationConsts.hintGreyColor))),
               hintText: S.of(context).find_beer_or_brewer_hint,
               hintStyle: TextStyle(color: DecorationConsts.hintGreyColor),
               border: InputBorder.none),
         ),
         suggestionsCallback: (pattern) async {
-          //return await BackendService.getSuggestions(pattern);
           return await getSuggestions(brewers, beers, pattern);
         },
         itemBuilder: (context, suggestion) {
           return ListTile(
             leading: Icon(BeerIcon.beerglass),
             title: Text(suggestion['name']),
-            //subtitle: Text('\$${suggestion.data['type']}'),
           );
         },
         onSuggestionSelected: (suggestion) {
-          /*var ref = suggestion.data[Api.brewer] != null
-              ? suggestion.data[Api.brewer].documentID
-              : suggestion.documentID;*/
           var ref = suggestion[Api.brewer];
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => BrewersDetail(
-              brewerID: ref,
+              brewerId: ref,
             ),
           ));
         },

@@ -19,8 +19,8 @@ class Beer {
   final num ranking, votes;
   final Timestamp release;
   bool doITasted;
-  final int myVote;
-  final String myComment;
+  int myVote;
+  String myComment;
   final bool sell; /// IF HAS INVIMA AND IS AVAILABLE FOR SALE
 
   Beer(

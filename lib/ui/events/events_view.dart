@@ -18,13 +18,7 @@ class _EventsViewState extends State<EventsView> with AutomaticKeepAliveClientMi
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: FractionalOffset.topCenter,
-          end: FractionalOffset.bottomCenter,
-          colors: [Colors.black, Colors.blueGrey],
-        ),
-      ),
+      color:  Colors.black87,
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(

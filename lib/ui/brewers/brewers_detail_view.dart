@@ -1,5 +1,4 @@
 import 'package:craftbeer/abstractions/brewer_model.dart';
-import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
@@ -14,56 +13,33 @@ import 'package:url_launcher/url_launcher.dart';
 //Parallax effect
 //https://github.com/MarcinusX/buy_ticket_design/blob/master/lib/exhibition_bottom_sheet.dart
 class BrewersDetail extends StatelessWidget {
-  final Brewer brewer;
-  final int brewerID;
+  final int brewerId;
 
-  BrewersDetail({this.brewer, this.brewerID});
-
-  final DataBaseService db = DataBaseService();
+  BrewersDetail({this.brewerId});
 
   @override
   Widget build(BuildContext context) {
-    var brewers = Provider.of<BrewersData>(context).brewers;
-
-    if (brewer == null && brewerID != null) {
-      return FutureBuilder(
-          future: db.futureBrewerByID(brewers, brewerID),
+    return Consumer<BrewersData>(
+      builder: (context, brewerData, child) {
+        return FutureBuilder(
+          future: brewerData.getBrewerById(brewerId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return BrewerViewBody(snapshot.data);
+              return BrewerViewBody();
             } else {
               return Scaffold(
                 body: LoadingWidget(),
               );
             }
-          });
-    } else if (brewer != null) {
-      return BrewerViewBody(brewer);
-    }
+          },
+        );
+      },
+    );
   }
 }
 
-class BrewerViewBody extends StatefulWidget {
-  final Brewer brewer;
-
-  BrewerViewBody(this.brewer);
-
-  @override
-  _BrewerViewBodyState createState() => _BrewerViewBodyState(brewer);
-}
-
-class _BrewerViewBodyState extends State<BrewerViewBody> {
-  final Brewer brewer;
-  _BrewerViewBodyState(this.brewer);
-
-  final DataBaseService db = DataBaseService();
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void openWhatsApp() async {
+class BrewerViewBody extends StatelessWidget {
+  void openWhatsApp(Brewer brewer, context) async {
     String message =
         "${brewer.name}\n${S.of(context).i_would_like_to_to_buy_msg}";
 
@@ -85,22 +61,28 @@ class _BrewerViewBodyState extends State<BrewerViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.black87,
-        child: Stack(
-          children: <Widget>[
-            BrewerHeader(brewer),
-            BrewerContent(brewer: brewer),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.green[600],
-        child: brewer.canSale ? Icon(BeerIcon.car) : Icon(BeerIcon.user_filled),
-        onPressed: () => openWhatsApp(),
-      ),
+    return Consumer<BrewersData>(
+      builder: (context, brewerData, child) {
+        return Scaffold(
+          body: Container(
+            color: Colors.black87,
+            child: Stack(
+              children: <Widget>[
+                BrewerHeader(brewerData.currentBrewer),
+                BrewerContent(brewerData.currentBrewer),
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.green[600],
+            child: brewerData.currentBrewer.canSale
+                ? Icon(BeerIcon.car)
+                : Icon(BeerIcon.user_filled),
+            onPressed: () => openWhatsApp(brewerData.currentBrewer, context),
+          ),
+        );
+      },
     );
   }
 }

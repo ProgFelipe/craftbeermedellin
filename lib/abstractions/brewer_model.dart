@@ -65,7 +65,7 @@ class Brewer with ChangeNotifier {
       facebook: data['facebook'] ?? '',
       youtube: data['youtube'] ?? '',
       website: data['website'] ?? '',
-      canSale: data['can_sale'] ?? false,
+      canSale: data['can_sale'] == 1 ? true : false,
     );
     return brewer;
   }

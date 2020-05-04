@@ -1,5 +1,4 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
-import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
@@ -11,38 +10,45 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TopBeersView extends StatelessWidget {
-  final DataBaseService db = DataBaseService();
-
   @override
   Widget build(BuildContext context) {
-    List<Beer> beers = Provider.of<BrewersData>(context).beers;
-
-    if (beers == null || beers.isEmpty) {
-      return LoadingWidget();
-    } else {
-      return FutureBuilder(
-        future: db.fetchTopBeers(beers),
-        builder: (context, snapshot) => Container(
-          child: Row(
-            children: List.generate(
-              beers.length ?? 0,
-              (index) => Flexible(
-                child: topBeerItem(beers[index], context),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
+    return Consumer<BrewersData>(
+      builder: (context, brewerData, child) {
+        if (brewerData.beers == null || brewerData.beers.isEmpty) {
+          return LoadingWidget();
+        } else {
+          return FutureBuilder(
+              future: brewerData.fetchTopBeers(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return LoadingWidget();
+                }
+                return Container(
+                  child: Row(
+                    children: List.generate(
+                      snapshot.data.length ?? 0,
+                      (index) => Flexible(
+                        child: topBeerItem(snapshot.data[index], context),
+                      ),
+                    ),
+                  ),
+                );
+              });
+        }
+      },
+    );
   }
 }
 
 Widget topBeerItem(Beer beer, context) {
   void goToBrewerDetail(Beer beer) {
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).push(
+      MaterialPageRoute(
         builder: (context) => BrewersDetail(
-              brewerID: beer.brewerId,
-            )));
+          brewerId: beer.brewerId,
+        ),
+      ),
+    );
   }
 
   return GestureDetector(

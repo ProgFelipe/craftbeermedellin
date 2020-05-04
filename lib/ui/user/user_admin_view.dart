@@ -7,13 +7,7 @@ class UserView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: FractionalOffset.topCenter,
-          end: FractionalOffset.bottomCenter,
-          colors: [Colors.black87, Colors.orangeAccent],
-        ),
-      ),
+      color:  Colors.black87,
       child: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),

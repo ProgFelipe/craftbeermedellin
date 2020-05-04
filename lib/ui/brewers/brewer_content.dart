@@ -13,21 +13,14 @@ import 'package:url_launcher/url_launcher.dart';
 class BrewerContent extends StatefulWidget {
   final Brewer brewer;
 
-  const BrewerContent({
-    Key key,
-    @required this.brewer,
-  }) : super(key: key);
+  BrewerContent(this.brewer);
+
   @override
-  _BrewerContentState createState() => _BrewerContentState(brewer);
+  _BrewerContentState createState() => _BrewerContentState();
 }
 
 class _BrewerContentState extends State<BrewerContent> with SingleTickerProviderStateMixin {
   AnimationController _controller;
-
-  final Brewer brewer;
-
-  _BrewerContentState(this.brewer);
-
 
   Future<void> _launchInBrowser(String url) async {
     if (await canLaunch(url)) {
@@ -95,14 +88,14 @@ class _BrewerContentState extends State<BrewerContent> with SingleTickerProvider
                   children: <Widget>[
                     Visibility(
                       visible:
-                      brewer.promotions != null && brewer.promotions.length > 0,
+                      widget.brewer.promotions != null && widget.brewer.promotions.length > 0,
                       child: Column(
                         children: [
                           titleView(S
                               .of(context)
                               .offers,
                               color: Colors.black, size: 30.0, padding: 0.0),
-                          Offers(brewer.promotions),
+                          Offers(widget.brewer.promotions),
                         ],
                       ),
                     ),
@@ -110,7 +103,7 @@ class _BrewerContentState extends State<BrewerContent> with SingleTickerProvider
                         .of(context)
                         .our_beers,
                         color: Colors.black, size: 30.0, padding: 0.0),
-                    BrewerBeersWidget(beers: brewer.beers),
+                    BrewerBeersWidget(),
                     SizedBox(
                       height: 20.0,
                     ),
@@ -119,28 +112,28 @@ class _BrewerContentState extends State<BrewerContent> with SingleTickerProvider
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Visibility(
-                          visible: brewer.instagram.isNotEmpty,
+                          visible: widget.brewer.instagram.isNotEmpty,
                           child: FlatButton(
                             onPressed: () {
-                              _launchInBrowser(brewer.instagram);
+                              _launchInBrowser(widget.brewer.instagram);
                             },
                             child: Icon(BeerIcon.instagram, size: 40.0,)
                           ),
                         ),
                         Visibility(
-                          visible: brewer.facebook.isNotEmpty,
+                          visible: widget.brewer.facebook.isNotEmpty,
                           child: FlatButton(
                             onPressed: () {
-                              _launchInBrowser(brewer.facebook);
+                              _launchInBrowser(widget.brewer.facebook);
                             },
                             child: Icon(BeerIcon.facebook, size: 40.0,)
                           ),
                         ),
                         Visibility(
-                          visible: brewer.youtube.isNotEmpty,
+                          visible: widget.brewer.youtube.isNotEmpty,
                           child: FlatButton(
                             onPressed: () {
-                              _launchInBrowser(brewer.youtube);
+                              _launchInBrowser(widget.brewer.youtube);
                             },
                             child: Icon(BeerIcon.youtube, size: 40.0,)
                           ),
