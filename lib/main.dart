@@ -101,6 +101,7 @@ class _NavigatorState extends State<Navigator> {
         //physics: NeverScrollableScrollPhysics(),
         controller: _pageController,
         onPageChanged: (newPage) {
+          FocusScope.of(context).requestFocus(FocusNode());
           setState(() {
             this._currentIndex = newPage;
           });

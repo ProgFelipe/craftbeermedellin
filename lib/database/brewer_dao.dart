@@ -54,8 +54,7 @@ class BrewerDao{
     return result?.isEmpty ?? false;
   }
 
-  Future<void> setFavorite(Brewer brewer, bool isFavorite) async {
-    brewer.updateFavorite = isFavorite;
+  Future<void> setFavorite(Brewer brewer) async {
     final Database db = await DataBaseProvider().getDataBase();
     await db.update(BREWER_TABLE, brewer.toDbMap(), where: "id = ?", whereArgs: [brewer.id]);
   }

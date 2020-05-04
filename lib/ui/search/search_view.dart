@@ -11,12 +11,12 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-  ScrollController _scrollController =  ScrollController(
+  ScrollController _scrollController = ScrollController(
     initialScrollOffset: 0.0,
     keepScrollOffset: true,
   );
 
-  void scrollUp(){
+  void scrollUp() {
     _scrollController.animateTo(
       _scrollController.position.minScrollExtent,
       duration: const Duration(milliseconds: 500),
@@ -30,13 +30,15 @@ class _SearchViewState extends State<SearchView> {
       body: SafeArea(
         child: SingleChildScrollView(
             controller: _scrollController,
-            child: Column(children: [
-          ConnectivityWidget(),
-          titleView(S.of(context).local_brewers, color: Colors.black),
-          BrewersGrid(),
-          titleView(S.of(context).categories, color: Colors.black),
-          CategoriesView(scrollUp),
-        ],)),
+            child: Column(
+              children: [
+                ConnectivityWidget(),
+                titleView(S.of(context).categories, color: Colors.black),
+                CategoriesView(scrollUp),
+                titleView(S.of(context).local_brewers, color: Colors.black),
+                BrewersGrid(),
+              ],
+            )),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -22,24 +23,24 @@ class UserView extends StatelessWidget {
                 Container(
                   height: 50.0,
                   width: double.infinity,
-                    child: FlatButton.icon(onPressed: (){}, icon: Icon(BeerIcon.google), label: Text('INGRESA', style: TextStyle(fontSize: 20.0),), color: Colors.green,)),
+                    child: FlatButton.icon(onPressed: (){}, icon: Icon(BeerIcon.google, color: Colors.green[200],), label: Text('INGRESA', style: TextStyle(fontSize: 20.0, color: Colors.green[200]),), color: Colors.green,)),
                 SizedBox(height: 20.0,),
-                titleView('Ingresa y obten estos beneficios:'),
+                titleView('Ingresa y obtén estos beneficios', color:  Colors.green[200]),
                 ListTile(
                   leading: MyBullet(),
-                  title: Text('Ingresa para poder calificar y comentar sobre las cervezas que probaste'),
+                  title: Text('Calificar y Comentar sobre las cervezas que probaste', style: TextStyle(color: zhenZhuBaiPearl),),
                 ),
                 ListTile(
                   leading: MyBullet(),
-                  title: Text('Ver tús cervezas favoritas y recomendarlas'),
+                  title: Text('Ver tús cervezas favoritas y recomendarlas', style: TextStyle(color: zhenZhuBaiPearl),),
                 ),
                 ListTile(
                   leading: MyBullet(),
-                  title: Text('Adquirir beneficios, descuentos en boletas, promociones en cervezas'),
+                  title: Text('Recibir notificaciones (hemos sacado una nueva cerveza de tú gusto, eventos, beneficios solo para tí!!)', style: TextStyle(color: zhenZhuBaiPearl),),
                 ),
                 ListTile(
                   leading: MyBullet(),
-                  title: Text('Recibir notificaciones (cuando tú cervecero saca una nueva variedad de cerveza, eventos, beneficios solo para tí)'),
+                  title: Text('Adquirir descuentos en boletas, promociones en cervezas', style: TextStyle(color: zhenZhuBaiPearl),),
                 ),
               ],
             ),
@@ -56,7 +57,7 @@ class MyBullet extends StatelessWidget{
     return Container(
       width: 25.0,
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: Colors.white70,
         shape: BoxShape.circle,
       ),
     );

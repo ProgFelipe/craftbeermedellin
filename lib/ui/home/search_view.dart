@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
   final Function scrollViewToTop;
+
   SearchWidget(this.scrollViewToTop);
 
   @override
@@ -25,7 +26,6 @@ class _SearchWidgetState extends State<SearchWidget> {
   Future<List<Map<dynamic, dynamic>>> getSuggestions(
       List<Brewer> brewers, List<Beer> beers, String query) async {
     if (query != null && query.length > 0) {
-
       setState(() {
         _showClearButton = true;
       });
@@ -34,14 +34,14 @@ class _SearchWidgetState extends State<SearchWidget> {
 
       var brewersQueryResultList = brewers
           .where((brewer) =>
-          brewer.name.toLowerCase().contains(query.toLowerCase()))
+              brewer.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
       brewersQueryResultList?.forEach((element) {
         brewersAndBeers.add({'name': element.name, Api.brewer: element.id});
       });
       var beersQueryResultList = beers
           .where((category) =>
-          category.name.toLowerCase().contains(query.toLowerCase()))
+              category.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
       beersQueryResultList?.forEach((element) {
         brewersAndBeers
@@ -49,7 +49,7 @@ class _SearchWidgetState extends State<SearchWidget> {
       });
       //return await db.searchBeers(query);
       return brewersAndBeers;
-    }else{
+    } else {
       setState(() {
         _showClearButton = false;
       });
@@ -57,12 +57,19 @@ class _SearchWidgetState extends State<SearchWidget> {
     return List();
   }
 
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var brewerProvider = Provider.of<BrewersData>(context);
     List<Brewer> brewers = brewerProvider.brewers;
     List<Beer> beers = brewerProvider.beers;
-
 
     if (brewers == null || beers == null) {
       return LoadingWidget();
@@ -82,16 +89,26 @@ class _SearchWidgetState extends State<SearchWidget> {
         ),
         textFieldConfiguration: TextFieldConfiguration(
           onTap: widget.scrollViewToTop,
+          controller: _controller,
           autofocus: false,
           style: TextStyle(fontSize: 20.0),
+          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
                 color: DecorationConsts.hintGreyColor,
               ),
               suffixIcon: IconButton(
-                onPressed: (){},
-                  icon: Visibility( visible: _showClearButton,child: Icon(Icons.clear, color: DecorationConsts.hintGreyColor))),
+                  onPressed: () {
+                    _controller.clear();
+                    setState(() {
+                      _showClearButton = false;
+                    });
+                  },
+                  icon: Visibility(
+                      visible: _showClearButton,
+                      child: Icon(Icons.clear,
+                          color: DecorationConsts.hintGreyColor))),
               hintText: S.of(context).find_beer_or_brewer_hint,
               hintStyle: TextStyle(color: DecorationConsts.hintGreyColor),
               border: InputBorder.none),

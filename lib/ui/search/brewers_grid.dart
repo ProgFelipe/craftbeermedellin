@@ -62,7 +62,7 @@ class _BrewersGridState extends State<BrewersGrid> {
           var brewer = brewersData.brewers[index];
           return ChangeNotifierProvider<Brewer>.value(
             value: brewer,
-            child: BrewerItem(),
+            child: BrewerItem((brewer){brewersData.currentBrewer = brewer;}),
           );
         },
       ),
@@ -71,6 +71,9 @@ class _BrewersGridState extends State<BrewersGrid> {
 }
 
 class BrewerItem extends StatelessWidget {
+  Function changeCurrentBrewerOnTap;
+  BrewerItem(this.changeCurrentBrewerOnTap);
+
   @override
   Widget build(BuildContext context) {
     var brewer = Provider.of<Brewer>(context);
@@ -80,6 +83,7 @@ class BrewerItem extends StatelessWidget {
     }
     return GestureDetector(
       onTap: () {
+        changeCurrentBrewerOnTap(brewer);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -93,7 +97,7 @@ class BrewerItem extends StatelessWidget {
         margin: EdgeInsets.all(10.0),
         child: Stack(
           children: <Widget>[
-            ImageProviderWidget(brewer.imageUri),
+            Hero(tag: brewer.name ,child: ImageProviderWidget(brewer.imageUri)),
             Positioned(
               top: 0.0,
               right: 0.0,

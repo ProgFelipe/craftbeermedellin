@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
 class BrewersData extends ChangeNotifier {
+  static const CACHE_TIME_IN_DAYS = 3;
+
   List<Brewer> brewers;
   List<Beer> beers;
   Brewer currentBrewer;
@@ -17,11 +19,10 @@ class BrewersData extends ChangeNotifier {
   bool underMaintain = false;
   bool checkYourInternet = false;
   bool errorStatus = false;
+
   final api = DataBaseService();
   final brewerDAO = BrewerDao();
   final beersDAO = BeersDao();
-
-  static const CACHE_TIME_IN_DAYS = 3;
 
   SharedPreferences prefs;
 
@@ -99,8 +100,12 @@ class BrewersData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setBrewerToFavorite(Brewer brewer, bool isFavorite) {
-    brewerDAO.setFavorite(brewer, isFavorite);
+  void changeCurrentBrewerFavoriteState(){
+    currentBrewer.favorite = !currentBrewer.favorite;
+    notifyListeners();
+  }
+  void saveCurrentBrewerFavoriteState() {
+    brewerDAO.setFavorite(currentBrewer);
   }
 
   void setFetchCurrentDate() async {
@@ -142,5 +147,4 @@ class BrewersData extends ChangeNotifier {
     currentBrewer = brewers.where((brewer) => brewer.id == brewerId).first;
     return currentBrewer;
   }
-
 }

@@ -8,3 +8,4 @@ const citrusEndCustomColor = const Color(0xfff37335);
 const zhenZhuBaiPearl = const Color(0xfff8f8f9);
 const ziSePurpleColor = const Color(0xff9f0fef);
 const zelyonyGreenColor = const Color(0xff016612);
+const ohGreenColor = const Color(0xff071e3d);
