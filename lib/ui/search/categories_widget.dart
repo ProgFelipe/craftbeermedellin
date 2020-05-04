@@ -8,6 +8,7 @@ import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/models/categories_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -156,17 +157,17 @@ class FilterBeersByTypeView extends StatelessWidget {
       return Container(
         height: 140.0,
         decoration: BoxDecoration(),
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Center(
             child: Icon(
               Icons.all_inclusive,
+              color: citrusEndCustomColor,
               size: 40.0,
             )),
       );
     }
     return Container(
-      decoration: BoxDecoration(),
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0,),
       child: Row(
         children: List.generate(
           category.beers?.length ?? 0,
@@ -193,20 +194,21 @@ class BeerItem extends StatelessWidget {
           Container(
             height: 140.0,
             width: 100.0,
-            margin: EdgeInsets.symmetric(vertical: 20.0),
+            margin: EdgeInsets.only(bottom: 20.0),
             child: Card(
+              elevation: 20.0,
                 child: ImageProviderWidget(
                   beer.imageUri,
                   height: 90.0,
                 )),
           ),
           Positioned(
-            top: 0.0,
+            top: 5.0,
             left: 10.0,
             child: Text(
               beer.name,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white30),
+              style: TextStyle(color: citrusEndCustomColor),
             ),
           )
         ],

@@ -14,6 +14,7 @@ import 'package:craftbeer/ui/user/user_admin_view.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
@@ -93,20 +94,36 @@ class _NavigatorState extends State<Navigator> {
     super.initState();
   }
 
+  DateTime currentBackPressTime;
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: S.of(context).warning_exit);
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        physics: _currentIndex == 3 ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
-        //physics: NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        onPageChanged: (newPage) {
-          FocusScope.of(context).requestFocus(FocusNode());
-          setState(() {
-            this._currentIndex = newPage;
-          });
-        },
-        children: screens,
+      body: WillPopScope(
+        onWillPop: onWillPop,
+        child: PageView(
+          physics: _currentIndex == 3 ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
+          //physics: NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          onPageChanged: (newPage) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            setState(() {
+              this._currentIndex = newPage;
+            });
+          },
+          children: screens,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.grey,

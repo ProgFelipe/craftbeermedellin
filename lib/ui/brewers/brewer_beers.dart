@@ -87,9 +87,12 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Expanded(
-                          child: ImageProviderWidget(
-                            brewerData.currentBrewer.beers[index].imageUri,
-                            height: 100.0,
+                          child: Hero(
+                            tag: brewerData.currentBrewer.beers[index].name,
+                            child: ImageProviderWidget(
+                              brewerData.currentBrewer.beers[index].imageUri,
+                              height: 100.0,
+                            ),
                           ),
                         ),
                         Text(

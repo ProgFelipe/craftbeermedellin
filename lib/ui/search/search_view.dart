@@ -33,10 +33,10 @@ class _SearchViewState extends State<SearchView> {
             child: Column(
               children: [
                 ConnectivityWidget(),
-                titleView(S.of(context).categories, color: Colors.black),
-                CategoriesView(scrollUp),
                 titleView(S.of(context).local_brewers, color: Colors.black),
                 BrewersGrid(),
+                titleView(S.of(context).categories, color: Colors.black),
+                CategoriesView(scrollUp),
               ],
             )),
       ),

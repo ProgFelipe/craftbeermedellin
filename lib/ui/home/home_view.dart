@@ -57,7 +57,7 @@ class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
                   child: SearchWidget(putScrollAtTop)),
               titleView(S.of(context).top_week_title),
               TopBeersView(),
-              titleView('Aprende'),
+              titleView(S.of(context).home_learn_title),
               ArticlesWidget(),
               //titleView(S.of(context).promotions_title),
               //PromotionsWidget(),

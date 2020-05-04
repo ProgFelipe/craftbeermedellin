@@ -30,6 +30,21 @@
   "yes": "YES",
   "no": "NOT YET",
   "save": "Save",
-  "comment_beer_hint": "Did you like it?",
-  "informed_consent": "NOTE: This brewer doesn't have INVIMA registration yet, if you wish you can contact him for more information."
+  "did_you_like_it": "Did you like it?",
+  "tell_us_more": "Tell us more",
+  "informed_consent": "NOTE: This brewer doesn't have INVIMA registration yet, if you wish you can contact brewer for more information.",
+  "warning_exit": "Tap again to exit",
+  "login": "LOGIN",
+  "login_benefits_title": "Enter and get these benefits",
+  "login_benefits_one": "Rate and Comment on the beers you tried",
+  "login_benefits_two": "See your favorite beers and recommend them",
+  "login_benefits_three": "Receive notifications (we have released a new beer of your liking, events, benefits just for you !!)",
+  "login_benefits_fourth": "Acquire discounts on tickets, promotions on beers",
+  "home_learn_title": "Learn",
+  "beer_detail_history_title": "History",
+  "beer_detail_salty": "Salty",
+  "beer_detail_bitter": "Bitter",
+  "beer_detail_candy": "Candy",
+  "beer_detail_hot_spicy": "Hot spicy",
+  "beer_detail_thanks_for_feedback": "Thank you!!\nYour opinion helps us get better"
 }

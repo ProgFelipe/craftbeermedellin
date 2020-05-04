@@ -28,21 +28,11 @@ class BeerDetailView extends StatefulWidget {
 
 class _BeerDetailViewState extends State<BeerDetailView> {
   bool _tasted = false;
-  bool _canVote = true;
-  int _vote;
-  String _comment;
 
   @override
   void initState() {
     _tasted = widget.tastedStatus;
     super.initState();
-  }
-
-  void onVote(int vote) {
-    setState(() {
-      this._vote = vote;
-      _canVote = false;
-    });
   }
 
   set tasted(bool value) {
@@ -186,7 +176,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                                   color: Colors.green,
                                 ),
                                 Text(
-                                  'Amarga',
+                                  S.of(context).beer_detail_bitter,
                                   style: TextStyle(color: Colors.white),
                                 )
                               ],
@@ -198,7 +188,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                                   height: 120.0,
                                   color: Colors.green,
                                 ),
-                                Text('Dulce',
+                                Text(S.of(context).beer_detail_candy,
                                     style: TextStyle(color: Colors.white))
                               ],
                             ),
@@ -209,7 +199,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                                   height: 10.0,
                                   color: Colors.green,
                                 ),
-                                Text('Salada',
+                                Text(S.of(context).beer_detail_salty,
                                     style: TextStyle(color: Colors.white))
                               ],
                             ),
@@ -220,7 +210,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                                   height: 120.0,
                                   color: Colors.green,
                                 ),
-                                Text('Picante',
+                                Text(S.of(context).beer_detail_hot_spicy,
                                     style: TextStyle(color: Colors.white))
                               ],
                             )
@@ -244,7 +234,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                                 height: 20.0,
                               ),
                               Text(
-                                'Historia',
+                                S.of(context).beer_detail_history_title,
                                 style: TextStyle(
                                     fontSize: 20.0, color: Colors.black54),
                               ),
@@ -307,102 +297,11 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    Card(
-                      color: moonlitAsteroidStartColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            Visibility(
-                              visible: widget.selectedBeer.doITasted || _tasted,
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    S.of(context).do_you_like_it,
-                                    style: TextStyle(
-                                      fontSize: 17.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: Iterable<Widget>.generate(
-                                        5,
-                                        (index) => VoteItem(
-                                              index: index,
-                                              lastVote:
-                                                  widget.selectedBeer.myVote,
-                                              onTastedMark: onVote,
-                                            )).toList(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Visibility(
-                              visible: _tasted && !_canVote,
-                              child: Text(
-                                S.of(context).thanks_for_the_vote,
-                                style: TextStyle(color: Colors.amberAccent),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            Visibility(
-                              visible: widget.selectedBeer.doITasted || _tasted,
-                              child: TextFormField(
-                                maxLines: null,
-                                keyboardType: TextInputType.multiline,
-                                initialValue:
-                                    widget.selectedBeer.myComment ?? '',
-                                onChanged: (value) => _comment = value,
-                                maxLength: 280,
-                                style: TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
-                                  labelText: S.of(context).comment_beer_hint,
-                                  fillColor: Colors.white,
-                                  counterStyle: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 24.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                FlatButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // To close the dialog
-                                  },
-                                  child: Text(
-                                    S.of(context).back,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                                FlatButton(
-                                  onPressed: () {
-                                    widget.onTastedMark(
-                                        _tasted, _vote, _comment);
-                                    Navigator.of(context)
-                                        .pop(); // To close the dialog
-                                  },
-                                  child: Text(
-                                    S.of(context).save,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    Visibility(
+                      visible: _tasted,
+                      child:
+                          FeedbackBox(widget.onTastedMark, widget.selectedBeer),
+                    )
                   ],
                 ),
               ),
@@ -478,4 +377,130 @@ class Consts {
 
   static const double padding = 16.0;
   static const double avatarRadius = 66.0;
+}
+
+class FeedbackBox extends StatefulWidget {
+  final Function onSave;
+  final Beer selectedBeer;
+
+  FeedbackBox(this.onSave, this.selectedBeer);
+
+  @override
+  _FeedbackBoxState createState() => _FeedbackBoxState();
+}
+
+class _FeedbackBoxState extends State<FeedbackBox> {
+  int _vote;
+  String _comment;
+  bool voted = false;
+  bool _saving = false;
+
+  void onVote(int vote) {
+    setState(() {
+      this._vote = vote;
+      voted = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: moonlitAsteroidStartColor,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Visibility(
+              visible: !_saving,
+              child: Column(
+                children: [
+                  Text(
+                    S.of(context).did_you_like_it,
+                    style: TextStyle(
+                      fontSize: 17.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Visibility(
+                    visible: !voted,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: Iterable<Widget>.generate(
+                          5,
+                          (index) => VoteItem(
+                                index: index,
+                                lastVote: widget.selectedBeer.myVote,
+                                onTastedMark: onVote,
+                              )).toList(),
+                    ),
+                  ),
+                  Visibility(
+                    visible: voted,
+                    child: Text(
+                      S.of(context).thanks_for_the_vote,
+                      style: TextStyle(color: Colors.amberAccent),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    initialValue: widget.selectedBeer.myComment ?? '',
+                    onChanged: (value) => _comment = value,
+                    maxLength: 280,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: S.of(context).tell_us_more,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      fillColor: Colors.white,
+                      labelStyle: TextStyle(color: Colors.white),
+                      counterStyle: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  SizedBox(height: 24.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // To close the dialog
+                        },
+                        child: Text(
+                          S.of(context).back,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          widget.onSave(true, _vote, _comment);
+                          setState(() {
+                            _saving = true;
+                          });
+                        },
+                        child: Text(
+                          S.of(context).save,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Visibility(visible: _saving, child: Text(S.of(context).beer_detail_thanks_for_feedback, style: TextStyle(color: Colors.white),)),
+          ],
+        ),
+      ),
+    );
+  }
 }

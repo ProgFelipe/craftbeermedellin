@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -105,7 +106,7 @@ class _CraftMapState extends State<CraftMap>
                     Text(
                       'El mejor evento cervecero',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black54),
+                          fontWeight: FontWeight.bold, fontSize: 20.0, color: mapDescriptionColor),
                     ),
                     SizedBox(
                       height: 5.0,
