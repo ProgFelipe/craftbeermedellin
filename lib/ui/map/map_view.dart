@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:craftbeer/ui/utils/custom_colors.dart';
+import 'package:craftbeer/models/map_data_notifier.dart';
+import 'package:craftbeer/ui/map/event_map_detail.dart';
+import 'package:craftbeer/ui/map/store_map_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -19,6 +21,7 @@ class _CraftMapState extends State<CraftMap>
   MarkerId selectedMarker;
   int _markerIdCounter = 1;
   bool _showDetailCard = false;
+  MapElementType _markerType;
 
   Future<void> _createMarkerImageFromAsset(BuildContext context) async {
     if (_markerIconBeer == null) {
@@ -65,7 +68,15 @@ class _CraftMapState extends State<CraftMap>
   @override
   void initState() {
     _showDetailCard = false;
+    _markerType = MapElementType.EVENT;
     super.initState();
+  }
+  
+  Widget getMarkerDetailWidget(){
+    switch(_markerType){
+      case MapElementType.EVENT: return EventMapMarketDetail();
+      case MapElementType.STORE: return StoreMapMarketDetail();
+    }
   }
 
   @override
@@ -94,92 +105,7 @@ class _CraftMapState extends State<CraftMap>
             right: 0,
             child: Visibility(
               visible: _showDetailCard,
-              child: Container(
-                height: 280.0,
-                width: double.infinity,
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'El mejor evento cervecero',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20.0, color: mapDescriptionColor),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      'Este evento es patrocinado por los aguacates de Martinez',
-                      style: TextStyle(fontSize: 15.0, color: Colors.grey),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.restaurant, color: Colors.blue),
-                                SizedBox(width: 10.0,),
-                                Text('Nachos, Tacos, Fajas y Asados')
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.queue_music, color: Colors.black38),
-                                SizedBox(width: 10.0,),
-                                Text('Banda en vivo')
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.people,
-                                  color: Colors.orangeAccent,
-                                ),
-                                SizedBox(width: 10.0,),
-                                Text('100')
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.accessible_forward,
-                                    color: Colors.lightGreen),
-                                SizedBox(width: 10.0,),
-                                Text('Fácil acceso')
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.local_parking,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(width: 10.0,),
-                                Text('Parking')
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.airport_shuttle),
-                                SizedBox(width: 10.0,),
-                                Text('Cerca a transporte público')
-                              ],
-                            ),
-                          ],
-                        ),
-                        Image.asset('assets/event.gif', width: 145.0,),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              child: getMarkerDetailWidget()
             ),
           )
         ],
@@ -197,6 +123,7 @@ class _CraftMapState extends State<CraftMap>
         onTap: () {
           setState(() {
             _showDetailCard = !_showDetailCard;
+            _markerType = MapElementType.STORE;
           });
         },
       ),
@@ -208,6 +135,7 @@ class _CraftMapState extends State<CraftMap>
         onTap: () {
           setState(() {
             _showDetailCard = !_showDetailCard;
+            _markerType = MapElementType.EVENT;
           });
         },
       )

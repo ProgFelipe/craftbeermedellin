@@ -50,6 +50,8 @@ class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAlive
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     var categoriesData = Provider.of<CategoriesData>(context);
     List<BeerType> categories = categoriesData.categories;
     List<Beer> beers = Provider.of<BrewersData>(context).beers;
@@ -161,7 +163,7 @@ class FilterBeersByTypeView extends StatelessWidget {
         child: Center(
             child: Icon(
               Icons.all_inclusive,
-              color: citrusEndCustomColor,
+              color: kCitrusEndCustomColor,
               size: 40.0,
             )),
       );
@@ -208,7 +210,7 @@ class BeerItem extends StatelessWidget {
             child: Text(
               beer.name,
               textAlign: TextAlign.center,
-              style: TextStyle(color: citrusEndCustomColor),
+              style: TextStyle(color: kCitrusEndCustomColor),
             ),
           )
         ],

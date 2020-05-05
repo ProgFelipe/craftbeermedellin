@@ -55,33 +55,33 @@ class UserView extends StatelessWidget {
                   height: 20.0,
                 ),
                 titleView(S.of(context).login_benefits_title,
-                    color: zelyonyGreenLightColor),
+                    color: kZelyonyGreenLightColor),
                 ListTile(
                   leading: MyBullet(),
                   title: Text(
                     S.of(context).login_benefits_one,
-                    style: TextStyle(color: zhenZhuBaiPearl),
+                    style: TextStyle(color: kZhenZhuBaiPearl),
                   ),
                 ),
                 ListTile(
                   leading: MyBullet(),
                   title: Text(
                     S.of(context).login_benefits_two,
-                    style: TextStyle(color: zhenZhuBaiPearl),
+                    style: TextStyle(color: kZhenZhuBaiPearl),
                   ),
                 ),
                 ListTile(
                   leading: MyBullet(),
                   title: Text(
                     S.of(context).login_benefits_three,
-                    style: TextStyle(color: zhenZhuBaiPearl),
+                    style: TextStyle(color: kZhenZhuBaiPearl),
                   ),
                 ),
                 ListTile(
                   leading: MyBullet(),
                   title: Text(
                     S.of(context).login_benefits_fourth,
-                    style: TextStyle(color: zhenZhuBaiPearl),
+                    style: TextStyle(color: kZhenZhuBaiPearl),
                   ),
                 ),
               ],

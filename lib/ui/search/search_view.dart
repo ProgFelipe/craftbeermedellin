@@ -30,14 +30,16 @@ class _SearchViewState extends State<SearchView> {
       body: SafeArea(
         child: SingleChildScrollView(
             controller: _scrollController,
-            child: Column(
-              children: [
-                ConnectivityWidget(),
-                titleView(S.of(context).local_brewers, color: Colors.black),
-                BrewersGrid(),
-                titleView(S.of(context).categories, color: Colors.black),
-                CategoriesView(scrollUp),
-              ],
+            child: Expanded(
+              child: Column(
+                children: [
+                  ConnectivityWidget(),
+                  titleView(S.of(context).local_brewers, color: Colors.black),
+                  BrewersGrid(),
+                  titleView(S.of(context).categories, color: Colors.black),
+                  CategoriesView(scrollUp),
+                ],
+              ),
             )),
       ),
     );

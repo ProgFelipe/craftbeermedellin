@@ -14,7 +14,7 @@ class ImageProviderWidget extends StatelessWidget {
       return Center(
         child: CachedNetworkImage(
           fadeInDuration: Duration(milliseconds: 250),
-          imageUrl: imageUri,
+          imageUrl: '',
           height: height,
           width: width,
           fit: BoxFit.cover,

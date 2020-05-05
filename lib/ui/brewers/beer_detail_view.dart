@@ -2,6 +2,7 @@ import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
+import 'package:craftbeer/ui/components/ios_back_nav.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -44,11 +45,14 @@ class _BeerDetailViewState extends State<BeerDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: moonlitAsteroidMidColor,
+      backgroundColor: kMoonlitAsteroidMidColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Stack(
             children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                  child: IosBackNav()),
               Container(
                 padding: EdgeInsets.only(
                   top: Consts.avatarRadius + Consts.padding,
@@ -96,7 +100,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                                 height: 70.0,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  color: citrusStartCustomColor,
+                                  color: kCitrusStartCustomColor,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(1.0)),
                                 ),
@@ -116,7 +120,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                                 height: 70.0,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  color: citrusStartCustomColor,
+                                  color: kCitrusStartCustomColor,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10.0)),
                                 ),
@@ -134,7 +138,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                                 height: 70.0,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  color: citrusStartCustomColor,
+                                  color: kCitrusStartCustomColor,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10.0)),
                                 ),
@@ -160,7 +164,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                       height: 30.0,
                     ),
                     Card(
-                      color: moonlitAsteroidStartColor,
+                      color: kMoonlitAsteroidStartColor,
                       elevation: 4.0,
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
@@ -405,7 +409,7 @@ class _FeedbackBoxState extends State<FeedbackBox> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: moonlitAsteroidStartColor,
+      color: kMoonlitAsteroidStartColor,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

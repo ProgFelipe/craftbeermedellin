@@ -13,12 +13,12 @@ class ArticlesWidget extends StatefulWidget {
 
 class RandomColor {
   final colors = [
-    citrusEndCustomColor,
-    citrusStartCustomColor,
-    moonlitAsteroidStartColor,
-    moonlitAsteroidEndColor,
-    ziSePurpleColor,
-    zelyonyGreenColor
+    kCitrusEndCustomColor,
+    kCitrusStartCustomColor,
+    kMoonlitAsteroidStartColor,
+    kMoonlitAsteroidEndColor,
+    kZiSePurpleColor,
+    kZelyonyGreenColor
   ];
 
   final random = Random();

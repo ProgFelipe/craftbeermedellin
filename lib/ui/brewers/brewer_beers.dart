@@ -1,9 +1,9 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
+import 'package:craftbeer/ui/brewers/beer_detail_view.dart';
 import 'package:craftbeer/ui/brewers/start_rating.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
-import 'package:craftbeer/ui/brewers/beer_tasted_dialog.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -76,9 +76,9 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
               childAspectRatio: MediaQuery.of(context).size.width /
                   (MediaQuery.of(context).size.height / 1.2),
             ),
-            //physics: const NeverScrollableScrollPhysics(),
             itemCount: brewerData.currentBrewer.beers.length,
             itemBuilder: (context, index) {
+              final beer = brewerData.currentBrewer.beers[index];
               return GestureDetector(
                 onTap: () => showBeerDialog(context, brewerData, index),
                 child: Stack(
@@ -88,26 +88,26 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                       children: <Widget>[
                         Expanded(
                           child: Hero(
-                            tag: brewerData.currentBrewer.beers[index].name,
+                            tag: beer.name,
                             child: ImageProviderWidget(
-                              brewerData.currentBrewer.beers[index].imageUri,
+                              beer.imageUri,
                               height: 100.0,
                             ),
                           ),
                         ),
                         Text(
-                          '${brewerData.currentBrewer.beers[index].name}',
+                          '${beer.name}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 15.0),
                         ),
                         beerPropertiesText(S.of(context).ibu,
-                            brewerData.currentBrewer.beers[index].ibu),
+                            beer.ibu),
                         beerPropertiesText(S.of(context).abv,
-                            brewerData.currentBrewer.beers[index].abv),
+                            beer.abv),
                         beerPropertiesText(S.of(context).srm,
-                            brewerData.currentBrewer.beers[index].srm),
+                            beer.srm),
                         Text(
-                          '\$ ${brewerData.currentBrewer.beers[index].price}',
+                          '\$ ${beer.price}',
                           style: TextStyle(
                             fontSize: 15.0,
                             wordSpacing: 2.0,
@@ -116,7 +116,7 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                           ),
                         ),
                         StarRating(
-                          rating: brewerData.currentBrewer.beers[index].ranking
+                          rating: beer.ranking
                               .toDouble(),
                         ),
                         SizedBox(
@@ -124,7 +124,7 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                         ),
                       ],
                     ),
-                    brewerData.currentBrewer.beers[index].doITasted
+                    beer.doITasted
                         ? Positioned(
                             top: 0.0,
                             right: 0.0,

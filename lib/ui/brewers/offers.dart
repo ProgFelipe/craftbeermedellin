@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class Offers extends StatelessWidget {
   final List<Promotion> promos;
-  Offers(this.promos);
+  Offers({@required this.promos});
 
   @override
   Widget build(BuildContext context) {
