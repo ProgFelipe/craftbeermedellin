@@ -11,7 +11,6 @@ import 'package:craftbeer/ui/home/home_view.dart';
 import 'package:craftbeer/ui/map/map_view.dart';
 import 'package:craftbeer/ui/search/search_view.dart';
 import 'package:craftbeer/ui/user/user_admin_view.dart';
-import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -54,9 +53,6 @@ class MyApp extends StatelessWidget {
             primaryColor: Colors.orange,
             cursorColor: Colors.orange,
             fontFamily: 'Patua',
-            textTheme: TextTheme(
-              headline6: TextStyle(color: Colors.yellowAccent),
-            ),
             pageTransitionsTheme: PageTransitionsTheme(builders: {
               TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
@@ -152,7 +148,7 @@ class _NavigatorState extends State<Navigator> {
             title: Text(S.of(context).home_nav_title),
           ),
           BottomNavigationBarItem(
-            icon: Icon(BeerIcon.ticket_empty, color: Colors.white,),
+            icon: Icon(BeerIcon.ticket_empty, color: Colors.grey,),
             activeIcon: Icon(
               BeerIcon.ticket_filled,
               color: Colors.white,

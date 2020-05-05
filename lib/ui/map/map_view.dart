@@ -74,8 +74,8 @@ class _CraftMapState extends State<CraftMap>
   
   Widget getMarkerDetailWidget(){
     switch(_markerType){
-      case MapElementType.EVENT: return EventMapMarketDetail();
-      case MapElementType.STORE: return StoreMapMarketDetail();
+      case MapElementType.EVENT: return EventMapMarketDetail(eventName: 'El mejor evento cervecero', eventDescription: 'Este evento es patrocinado por los aguacates de Martinez asdasdajosdasdj oasdasjdasndasnd kandnasndlsa', foodDescription: 'Nachos, Tacos, Frisoles, sdasdasdasda asdasdasdasdasdasdasdas s', capacity:  100, parkingLots:  4,);
+      case MapElementType.STORE: return StoreMapMarketDetail(storeName: 'Pub Envigado', storeDescription: 'Somos un bar 100% cervecero');
     }
   }
 
