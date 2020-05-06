@@ -3,6 +3,7 @@ import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/ui/events/event_card_widget.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -18,13 +19,13 @@ class _EventsViewState extends State<EventsView> with AutomaticKeepAliveClientMi
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
-      color:  Colors.black87,
+      color:  kBlackColor,
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               ConnectivityWidget(),
-              titleView(S.of(context).events_title),
+              titleView(S.of(context).events_title, color: kBlackLightColor),
               EventsWidget(),
             ],
           ),

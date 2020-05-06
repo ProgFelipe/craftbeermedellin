@@ -1,3 +1,4 @@
+import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/database/beers_dao.dart';
 import 'package:craftbeer/database/database_provider.dart';
@@ -52,6 +53,14 @@ class BrewerDao{
     final Database db = await DataBaseProvider().getDataBase();
     List<Map<String, dynamic>> result = await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewerId]);
     return result?.isEmpty ?? false;
+  }
+
+  Future<Brewer> fetchBrewerById(int brewerId) async {
+    final Database db = await DataBaseProvider().getDataBase();
+    List<Map<String, dynamic>> result = await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewerId]);
+    Brewer brewer = Brewer.fromDB(result.first);
+    brewer.beers = await beersDao.getBeersByBrewer(brewerId);
+    return brewer;
   }
 
   Future<void> setFavorite(Brewer brewer) async {

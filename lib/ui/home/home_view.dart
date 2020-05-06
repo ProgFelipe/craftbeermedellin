@@ -6,6 +6,7 @@ import 'package:craftbeer/ui/home/articles.dart';
 import 'package:craftbeer/ui/home/new_releases.dart';
 import 'package:craftbeer/ui/home/search_view.dart';
 import 'package:craftbeer/ui/home/top_beers.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -14,14 +15,13 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
-
-  ScrollController _scrollController =  ScrollController(
+class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
+  ScrollController _scrollController = ScrollController(
     initialScrollOffset: 0.0,
     keepScrollOffset: true,
   );
 
-  void putScrollAtTop(){
+  void putScrollAtTop() {
     _scrollController.animateTo(
       240.0,
       duration: const Duration(milliseconds: 500),
@@ -34,7 +34,7 @@ class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
     super.build(context);
     return Container(
       height: double.infinity,
-      color: Colors.black87,
+      color: kBlackColor,
       child: SafeArea(
         child: SingleChildScrollView(
           controller: _scrollController,
@@ -54,14 +54,14 @@ class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin<Home> {
               ),
               Padding(
                   padding:
-                  EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
+                      EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
                   child: SearchWidget(putScrollAtTop)),
-              titleView(S.of(context).top_week_title),
+              titleView(S.of(context).top_week_title, color: kBlackLightColor),
               TopBeersView(),
-              titleView(S.of(context).home_learn_title),
+              titleView(S.of(context).home_learn_title, color:  kBlackLightColor),
               ArticlesWidget(),
-              //titleView(S.of(context).promotions_title),
-              //PromotionsWidget(),
+              /*titleView('Feeds', color: Colors.white),
+              LastComments(),*/
             ],
           ),
         ),

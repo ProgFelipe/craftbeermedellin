@@ -6,6 +6,7 @@ import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/components/beer_detail_dialog.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/components/ios_back_nav.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class BrewerHeader extends StatefulWidget {
@@ -148,7 +149,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
                       ? Icons.favorite
                       : Icons.favorite_border,
                   size: 40.0,
-                  color: Colors.orange,
+                  color: kYellowColor,
                 ),
                 label: Text(''),
               ),

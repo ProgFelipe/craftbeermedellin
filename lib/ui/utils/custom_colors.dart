@@ -11,3 +11,11 @@ const kZelyonyGreenColor = const Color(0xff016612);
 const kZelyonyGreenLightColor = const Color(0xffa7ff83);
 const kOhGreenColor = const Color(0xff071e3d);
 const kMapDescriptionColor = const Color(0xff5c5757);
+
+const kGreenColor = const Color(0xff60B911);
+const kRedColor = const Color(0xffC3332A);
+const kYellowColor = const Color(0xffFCDC32);
+const kBlackColor = const Color(0xff222120);
+const kBlackLightColor = const Color(0xff3C3837);
+const kBlueColor = const Color(0xff2371B5);
+const kWhiteColor = const Color(0xffFEFEFC);

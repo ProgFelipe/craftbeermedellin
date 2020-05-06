@@ -15,6 +15,7 @@ class BrewersData extends ChangeNotifier {
   List<Brewer> brewers;
   List<Beer> beers;
   Brewer currentBrewer;
+  List<Beer> tastedBeers = List();
 
   bool underMaintain = false;
   bool checkYourInternet = false;
@@ -33,19 +34,17 @@ class BrewersData extends ChangeNotifier {
     return prefs;
   }
 
-
-  BrewersData(){
+  BrewersData() {
     getBrewers();
   }
 
   void getBrewers() async {
     try {
-      if(brewers?.isEmpty ?? true) {
+      if (brewers?.isEmpty ?? true) {
         debugPrint('TOMANDO DATOS DE DATABASE');
         brewers = await brewerDAO.getBrewers();
-        beers = await beersDAO.getBeers();
         //await shouldUpdateData()
-        if (brewers == null || brewers.isEmpty ) {
+        if (brewers == null || brewers.isEmpty) {
           debugPrint('TOMANDO DATOS DE INTERNET');
           var response = await api.fetchBrewers();
           switch (response.statusCode) {
@@ -81,7 +80,9 @@ class BrewersData extends ChangeNotifier {
                 return;
               }
           }
-        }else{
+        } else {
+          beers = await beersDAO.getBeers();
+          tastedBeers = await getMyTastedBeers();
           addBrewers(brewers, beers);
         }
       }
@@ -100,10 +101,11 @@ class BrewersData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeCurrentBrewerFavoriteState(){
+  void changeCurrentBrewerFavoriteState() {
     currentBrewer.favorite = !currentBrewer.favorite;
     notifyListeners();
   }
+
   void saveCurrentBrewerFavoriteState() {
     brewerDAO.setFavorite(currentBrewer);
   }
@@ -117,13 +119,15 @@ class BrewersData extends ChangeNotifier {
   Future<bool> shouldUpdateData() async {
     SharedPreferences prefs = await getSharedPreference();
     String lastUpdate = (prefs.getString('last_update'));
-    try{
-      if(lastUpdate != null && DateTime.parse(lastUpdate).difference(DateTime.now()).inDays > CACHE_TIME_IN_DAYS){
+    try {
+      if (lastUpdate != null &&
+          DateTime.parse(lastUpdate).difference(DateTime.now()).inDays >
+              CACHE_TIME_IN_DAYS) {
         return true;
-      }else{
+      } else {
         return false;
       }
-    }catch(exception){
+    } catch (exception) {
       print(exception);
       return true;
     }
@@ -135,16 +139,24 @@ class BrewersData extends ChangeNotifier {
     return beers.sublist(0, beers.length >= 5 ? 5 : beers.length);
   }
 
-
-  void sendBeerFeedback(Beer beer, int index){
-    print("Guardando POLA");
+  void sendBeerFeedback(Beer beer, int index) async {
     currentBrewer.beers[index] = beer;
+    if (beer.doITasted) {
+      tastedBeers.add(beer);
+    } else {
+      tastedBeers.remove(beer);
+    }
     beersDAO.updateBeer(beer);
     notifyListeners();
   }
 
   Future<Brewer> getBrewerById(int brewerId) async {
-    currentBrewer = brewers.where((brewer) => brewer.id == brewerId).first;
+    currentBrewer = await Future.microtask(() => brewers.where((brewer) => brewer.id == brewerId).first);
+    //currentBrewer = await brewerDAO.fetchBrewerById(brewerId);
     return currentBrewer;
+  }
+
+  Future<List<Beer>> getMyTastedBeers() async {
+    return await beersDAO.getMyTastedBeers();
   }
 }

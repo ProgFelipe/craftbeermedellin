@@ -14,7 +14,6 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesView extends StatefulWidget {
-
   final Function scrollUp;
 
   CategoriesView(this.scrollUp);
@@ -23,8 +22,8 @@ class CategoriesView extends StatefulWidget {
   _CategoriesViewState createState() => _CategoriesViewState();
 }
 
-class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAliveClientMixin<CategoriesView> {
-
+class _CategoriesViewState extends State<CategoriesView>
+    with AutomaticKeepAliveClientMixin<CategoriesView> {
   BeerType _selectedCategory;
 
   @override
@@ -68,8 +67,8 @@ class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAlive
           _selectedCategory != null
               ? FilterBeersByTypeView(category: _selectedCategory, beers: beers)
               : SizedBox(
-            height: 0.0,
-          ),
+                  height: 0.0,
+                ),
           GridView.builder(
             itemCount: categories.length ?? 0,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -100,12 +99,14 @@ class _CategoriesViewState extends State<CategoriesView> with AutomaticKeepAlive
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            SizedBox(height: 15.0,),
+                            SizedBox(
+                              height: 15.0,
+                            ),
                             Expanded(
                                 child: ImageProviderWidget(
-                                  categories[index].imageUri,
-                                  height: 60.0,
-                                )),
+                              categories[index].imageUri,
+                              height: 60.0,
+                            )),
                             Text(
                               categories[index].name,
                               style: TextStyle(color: Colors.white),
@@ -156,26 +157,16 @@ class FilterBeersByTypeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (category.beers?.length == 0 ?? true && beers?.length == 0 ?? true) {
-      return Container(
-        height: 140.0,
-        decoration: BoxDecoration(),
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Center(
-            child: Icon(
-              Icons.all_inclusive,
-              color: kCitrusEndCustomColor,
-              size: 40.0,
-            )),
-      );
+      return SizedBox();
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0,),
-      child: Row(
-        children: List.generate(
-          category.beers?.length ?? 0,
-              (index) => BeerItem(category.beers[index]),
-        ),
-      ),);
+        height: 180.0,
+        margin: EdgeInsets.symmetric(horizontal: 15.0),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: category.beers.length,
+          itemBuilder: (context, index) => BeerItem(category.beers[index]),
+        ));
   }
 }
 
@@ -191,29 +182,66 @@ class BeerItem extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => BrewersDetail(brewerId: beer.brewerId)));
       },
-      child: Stack(
-        children: <Widget>[
-          Container(
-            height: 140.0,
-            width: 100.0,
-            margin: EdgeInsets.only(bottom: 20.0),
-            child: Card(
-              elevation: 20.0,
-                child: ImageProviderWidget(
+      child: Container(
+        height: 140.0,
+        width: 100.0,
+        alignment: Alignment.center,
+        margin: EdgeInsets.symmetric(vertical: 20.0),
+        child: Card(
+            elevation: 20.0,
+            child: Column(
+              children: [
+                ImageProviderWidget(
                   beer.imageUri,
                   height: 90.0,
-                )),
-          ),
-          Positioned(
-            top: 5.0,
-            left: 10.0,
-            child: Text(
-              beer.name,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: kCitrusEndCustomColor),
-            ),
-          )
-        ],
+                ),
+                SizedBox(height: 10.0,),
+                Text(
+                  beer.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: kMoonlitAsteroidStartColor),
+                ),
+              ],
+            )),
+      ),
+    );
+  }
+}
+
+
+class TastedBeerItem extends StatelessWidget {
+  final Beer beer;
+
+  TastedBeerItem({@required this.beer});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BrewersDetail(brewerId: beer.brewerId)));
+      },
+      child: Container(
+        height: 140.0,
+        width: 100.0,
+        alignment: Alignment.center,
+        margin: EdgeInsets.symmetric(vertical: 20.0),
+        child: Card(
+            elevation: 20.0,
+            child: Column(
+              children: [
+                ImageProviderWidget(
+                  beer.imageUri,
+                  height: 90.0,
+                ),
+                SizedBox(height: 10.0,),
+                Text(
+                  beer.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: kMoonlitAsteroidStartColor),
+                ),
+              ],
+            )),
       ),
     );
   }

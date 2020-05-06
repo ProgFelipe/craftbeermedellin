@@ -1,6 +1,8 @@
 import 'package:craftbeer/abstractions/promotion_model.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/ui/components/decoration_constants.dart';
+import 'package:craftbeer/ui/components/image_provider.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +21,6 @@ class PromotionsWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 2.0),
       height: 200.0,
       child: ListView.builder(
-        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         itemCount: promotions.length,
@@ -27,10 +28,10 @@ class PromotionsWidget extends StatelessWidget {
           return Card(
               shape: cardDecoration(),
               elevation: 3.0,
-              color: Colors.white,
+              color: kBlackLightColor,
               semanticContainer: true,
-              child: Image.network(promotions[index].imageUri,
-                  width: 160.0, height: 100.0, fit: BoxFit.cover));
+              child: ImageProviderEventWidget(promotions[index].imageUri,
+                  width: 160.0, height: 100.0));
         },
       ),
     );

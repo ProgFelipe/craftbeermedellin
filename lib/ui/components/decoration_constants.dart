@@ -1,3 +1,4 @@
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 ///Cards
@@ -12,10 +13,21 @@ class DecorationConsts {
 
 Widget cardTitle(String title) {
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+    padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
     child: Text(
       title ?? '',
-      style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),
+      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, color: kWhiteColor),
+      textAlign: TextAlign.left,
+    ),
+  );
+}
+
+Widget cardDescription(String title) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
+    child: Text(
+      title ?? '',
+      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, color: kGreenColor),
       textAlign: TextAlign.left,
     ),
   );

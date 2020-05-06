@@ -3,6 +3,7 @@ import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,12 +49,12 @@ class _BrewersGridState extends State<BrewersGrid> {
       return LoadingWidget();
     }
     return Container(
-      margin: EdgeInsets.only(bottom: 40.0, left: 10.0, right: 10.0),
+      height: 100.0,
+      margin: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
       child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
+          crossAxisCount: 1,
           crossAxisSpacing: 1.0,
           mainAxisSpacing: 1.0,
         ),
@@ -97,7 +98,7 @@ class BrewerItem extends StatelessWidget {
         margin: EdgeInsets.all(10.0),
         child: Stack(
           children: <Widget>[
-            Hero(tag: brewer.name ,child: ImageProviderWidget(brewer.imageUri)),
+            Hero(tag: brewer.name ,child: ImageProviderWidget(brewer.imageUri,)),
             Positioned(
               top: 0.0,
               right: 0.0,
@@ -106,7 +107,7 @@ class BrewerItem extends StatelessWidget {
                     ? Icons.favorite
                     : Icons.favorite_border,
                 size: 40.0,
-                color: Colors.orange,
+                color: kYellowColor,
               ),
             ),
           ],

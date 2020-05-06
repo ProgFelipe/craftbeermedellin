@@ -5,6 +5,7 @@ import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/components/decoration_constants.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -105,6 +106,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
   Widget build(BuildContext context) {
     return Card(
       shape: cardDecoration(),
+      color: kBlackLightColor,
       elevation: 0.0,
       child: Stack(
         children: <Widget>[
@@ -129,29 +131,26 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Icon(Icons.date_range, color: Colors.black38),
+                      Icon(Icons.date_range, color: kBlueColor),
                       Text(
                         event.timestamp != null
                             ? _dateFormat.format(event.timestamp.toDate())
                             : '',
                         style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.blue,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: kBlueColor,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              cardTitle(event.description),
+              cardDescription(event.description),
               cardTitle(event.city),
-              SizedBox( height: 10.0,),
               Visibility(
                   visible: showRemainEventDaysLabel,
                   child: Center(child: _buildTimerButton())),
-              SizedBox(
-                height: 10.0,
-              )
             ],
           ),
           Visibility(

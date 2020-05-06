@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.orange,
             primaryColor: Colors.orange,
             cursorColor: Colors.orange,
-            fontFamily: 'Patua',
+            fontFamily: 'Roboto',
             pageTransitionsTheme: PageTransitionsTheme(builders: {
               TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
@@ -173,14 +173,14 @@ class _NavigatorState extends State<Navigator> {
             ),
             title: Text('Mapa'),
           ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             icon: Icon(BeerIcon.user_empty, color: Colors.grey,),
             activeIcon: Icon(
               BeerIcon.user_filled,
               color: Colors.white,
             ),
             title: Text('Yo'),
-          ),
+          ),*/
         ],
       ),
     );

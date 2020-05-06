@@ -1,9 +1,34 @@
+import 'package:craftbeer/abstractions/article_model.dart';
+import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
+import 'package:craftbeer/models/brewer_data_notifier.dart';
+import 'package:craftbeer/ui/components/beer_icon_icons.dart';
+import 'package:craftbeer/ui/home/article_card.dart';
+import 'package:craftbeer/ui/home/promotions.dart';
 import 'package:craftbeer/ui/search/brewers_grid.dart';
+import 'package:craftbeer/ui/search/categories_chips.dart';
 import 'package:craftbeer/ui/search/categories_widget.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+const List<String> titles = [
+  'El aroma',
+  'Que tipos de cerveza hay?',
+  'La fermentación',
+  'La temperatura',
+  'El alcochol'
+];
+
+const List<String> images = [
+  'assets/art_senses.jpg',
+  'assets/art_beer_types.jpg',
+  'assets/art_brewing.jpg',
+  'assets/art_temperature.jpg',
+  'assets/art_alcohol_levels.jpg'
+];
 
 class SearchView extends StatefulWidget {
   @override
@@ -26,20 +51,72 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [kBlackColor, kBlackLightColor])),
+      child: SafeArea(
         child: SingleChildScrollView(
             controller: _scrollController,
-            child: Expanded(
-              child: Column(
-                children: [
-                  ConnectivityWidget(),
-                  titleView(S.of(context).local_brewers, color: Colors.black),
-                  BrewersGrid(),
-                  titleView(S.of(context).categories, color: Colors.black),
-                  CategoriesView(scrollUp),
-                ],
-              ),
+            child: Column(
+              children: [
+                ConnectivityWidget(),
+                titleView(S.of(context).promotions_title, color: kRedColor),
+                PromotionsWidget(),
+                titleView(S.of(context).local_brewers, color: kGreenColor),
+                BrewersGrid(),
+                titleView(S.of(context).categories, color: kWhiteColor),
+                //CategoriesView(scrollUp),
+                CategoriesChips(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      Icon(BeerIcon.tasted_full, color: kWhiteColor,),
+                      Expanded(child: titleView('Tasted beers', color: kGreenColor)),
+                    ],
+                  ),
+                ),
+                Consumer<BrewersData>(
+                  builder: (context, brewersData, child) {
+                    if (brewersData.tastedBeers != null &&
+                        brewersData.tastedBeers.isNotEmpty) {
+                      debugPrint('Tenemos datos');
+                      return Container(
+                        height: 200.0,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: brewersData.tastedBeers.length,
+                          itemBuilder: (context, index) => Container(
+                            child:
+                            TastedBeerItem(beer: brewersData.tastedBeers[index]),
+                          ),
+                        ),
+                      );
+                    }
+                    return Text(
+                      'You currently don\'t have tasted any beer',
+                      style: TextStyle(color: kWhiteColor),
+                    );
+                  },
+                ),
+                Container(
+                  child: ListView.builder(
+                    itemCount: titles.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20.0,
+                    ),
+                    itemBuilder: (context, index) => ArticleCard(
+                      article: Article(title: titles[index],
+                        imageUri: images[index], content: 'afsasdfasdfa sdfasd fasdfasdfasdfas')
+                    ),
+                  ),
+                )
+              ],
             )),
       ),
     );

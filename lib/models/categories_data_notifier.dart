@@ -9,6 +9,13 @@ class CategoriesData extends ChangeNotifier{
   List<Beer> selectedCategoryBeers;
   final api = DataBaseService();
 
+  BeerType selectedCategory;
+
+  void updateSelection(BeerType newSelection){
+    selectedCategory = newSelection;
+    notifyListeners();
+  }
+
   CategoriesData(){
     getCategories();
   }

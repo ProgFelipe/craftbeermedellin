@@ -45,7 +45,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kMoonlitAsteroidMidColor,
+      backgroundColor: kBlackLightColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Stack(
@@ -261,7 +261,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                       height: 15.0,
                     ),
                     Visibility(
-                      visible: !widget.selectedBeer.doITasted,
+                      visible: !_tasted,
                       child: Text(
                         S.of(context).do_you_tasted,
                         style: TextStyle(
@@ -284,6 +284,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                           FlatButton.icon(
                               onPressed: () {
                                 tasted = true;
+                                widget.onTastedMark(true, 0, '');
                               },
                               icon: Icon(BeerIcon.tasted_full,
                                   color: Colors.green),
@@ -298,14 +299,14 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    /*SizedBox(
                       height: 15.0,
                     ),
                     Visibility(
                       visible: _tasted,
                       child:
                           FeedbackBox(widget.onTastedMark, widget.selectedBeer),
-                    )
+                    )*/
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/database/database_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BeersDao{
@@ -39,6 +40,16 @@ class BeersDao{
   Future<List<Beer>> getBeersByBrewer(int brewerID) async {
     final Database db = await DataBaseProvider().getDataBase();
     final List<Map<String, dynamic>> beersMap = await db.query(BEER_TABLE, where: "brewerId = ?", whereArgs: [brewerID] );
+    List<Beer> beers = List();
+    beersMap.forEach((beer) {
+      beers.add(Beer.fromDB(beer));
+    });
+    return beers;
+  }
+
+  Future<List<Beer>> getMyTastedBeers() async {
+    final Database db = await DataBaseProvider().getDataBase();
+    final List<Map<String, dynamic>> beersMap = await db.query(BEER_TABLE, where: "tasted = ?", whereArgs: [1] );
     List<Beer> beers = List();
     beersMap.forEach((beer) {
       beers.add(Beer.fromDB(beer));

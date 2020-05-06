@@ -77,26 +77,33 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Image.asset(
-                        'assets/icon.png',
-                        height: 70.0,
+                      Expanded(
+                        child: Image.asset(
+                          'assets/icon.png',
+                          height: 60.0,
+                        ),
                       ),
-                      Image.asset(
-                        'assets/icon.png',
-                        height: 70.0,
+                      Expanded(
+                        child: Text(
+                          widget.title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Image.asset(
+                          'assets/icon.png',
+                          height: 60.0,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 SizedBox(
                   height: 10.0,
-                ),
-                Text(
-                  widget.title,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.w700,
-                  ),
                 ),
                 SizedBox(height: 16.0),
                 Text(
@@ -173,7 +180,7 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
             right: Consts.padding,
             child: CircleAvatar(
               child: ImageProviderWidget(widget.avatarImage),
-              backgroundColor: widget.avatarColor,
+              backgroundColor: Colors.white,
               radius: Consts.avatarRadius,
             ),
           ),
