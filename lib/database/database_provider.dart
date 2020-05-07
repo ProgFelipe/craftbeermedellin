@@ -21,7 +21,8 @@ class DataBaseProvider {
         ' can_sale INTEGER, favorite INTEGER)',
     'CREATE TABLE beer(id NUMERIC PRIMARY KEY, name TEXT, description TEXT, history TEXT, '
         'imageUri Text, type TEXT, flavors TEXT, scents TEXT, ingredients TEXT,'
-        ' abv NUMERIC, ibu NUMERIC, srm NUMERIC, tasted INTEGER, my_vote INTEGER, comment TEXT, price TEXT,'
+        ' abv NUMERIC, ibu NUMERIC, srm NUMERIC, tasted INTEGER, bitter INTEGER, candy INTEGER, my_vote INTEGER,'
+        ' salty INTEGER, hotSpicy INTEGER, comment TEXT, price TEXT,'
         ' ranking NUMERIC, votes NUMERIC, release TEXT, sell INTEGER, brewerId INTEGER, categoryId INTEGER)',
     'CREATE TABLE promotion(id INTEGER PRIMARY KEY AUTOINCREMENT, imageUri TEXT,'
         ' description TEXT, brewer_id INTEGER, '

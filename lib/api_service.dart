@@ -32,6 +32,8 @@ class DataBaseService {
 
   Future<http.Response> fetchBeerTypes() async => await http.get('$BASE_URL/categories/?format=json');
 
+  Future<http.Response> fetchArticles() async => await http.get('$BASE_URL/articles/?format=json');
+
   ///Brewer item
   Future<Brewer> futureBrewerByID(List<Brewer> brewers,
       int brewerID) async {

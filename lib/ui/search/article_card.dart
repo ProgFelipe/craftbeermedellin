@@ -1,11 +1,17 @@
 import 'package:craftbeer/abstractions/article_model.dart';
 import 'package:craftbeer/ui/components/articlet_reader_page.dart';
+import 'package:craftbeer/ui/components/image_provider.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
 
   const ArticleCard({@required this.article});
+
+  bool isArticleNew(){
+    return article.timeStamp.toDate().difference(DateTime.now()).inDays < 5;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +31,9 @@ class ArticleCard extends StatelessWidget {
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: Hero(
                 tag: article.title,
-                child: Image.asset(
+                child: ImageProviderWidget(
                   article.imageUri,
-                  fit: BoxFit.fill,
+                  //fit: BoxFit.fill,
                 ),
               ),
               shape: RoundedRectangleBorder(
@@ -43,6 +49,14 @@ class ArticleCard extends StatelessWidget {
               left: 15.0,
               bottom: 20.0,
             ),
+            Visibility(
+              visible: isArticleNew(),
+              child: Positioned(
+                right: 15.0,
+                bottom: 20.0,
+                child: Chip(label: Text('NEW', style: TextStyle(color: kWhiteColor),), backgroundColor: kGreenColor, ),
+              ),
+            )
           ],
         ),
       ),

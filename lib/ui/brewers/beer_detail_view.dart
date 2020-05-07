@@ -27,6 +27,8 @@ class BeerDetailView extends StatefulWidget {
   _BeerDetailViewState createState() => _BeerDetailViewState();
 }
 
+const double barHeight = 24.0;
+
 class _BeerDetailViewState extends State<BeerDetailView> {
   bool _tasted = false;
 
@@ -176,7 +178,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                               children: [
                                 Container(
                                   width: 50.0,
-                                  height: 100.0,
+                                  height: widget.selectedBeer.bitter * 24.0,
                                   color: Colors.green,
                                 ),
                                 Text(
@@ -189,7 +191,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                               children: [
                                 Container(
                                   width: 50.0,
-                                  height: 120.0,
+                                  height: widget.selectedBeer.candy * 24.0,
                                   color: Colors.green,
                                 ),
                                 Text(S.of(context).beer_detail_candy,
@@ -200,7 +202,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                               children: [
                                 Container(
                                   width: 50.0,
-                                  height: 10.0,
+                                  height: widget.selectedBeer.salty * 24.0,
                                   color: Colors.green,
                                 ),
                                 Text(S.of(context).beer_detail_salty,
@@ -211,7 +213,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                               children: [
                                 Container(
                                   width: 50.0,
-                                  height: 120.0,
+                                  height: widget.selectedBeer.hotSpicy * 24.0,
                                   color: Colors.green,
                                 ),
                                 Text(S.of(context).beer_detail_hot_spicy,

@@ -16,9 +16,9 @@ class CategoriesChips extends StatelessWidget {
           direction: Axis.horizontal,
           children: categoriesData?.categories
               ?.map((e) => CategoryChip(
-                  categoryName: e.name,
-                  numBeers: e.beers?.length ?? 0,
-                  onCategoryTap: () => categoriesData.updateSelection(e)))
+                  name: e.name,
+                  quantity: e.beers?.length ?? 0,
+                  onTapCallBack: () => categoriesData.updateSelection(e)))
               ?.toList(),
         ),
         Visibility(
@@ -33,19 +33,19 @@ class CategoriesChips extends StatelessWidget {
 }
 
 class CategoryChip extends StatelessWidget {
-  final String categoryName;
-  final int numBeers;
-  final Function onCategoryTap;
+  final String name;
+  final int quantity;
+  final Function onTapCallBack;
 
   CategoryChip(
-      {@required this.categoryName,
-      @required this.numBeers,
-      @required this.onCategoryTap});
+      {@required this.name,
+        @required this.quantity,
+        @required this.onTapCallBack});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onCategoryTap,
+      onTap: onTapCallBack,
       child: Container(
         height: 30.0,
         decoration: BoxDecoration(
@@ -55,24 +55,26 @@ class CategoryChip extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: RichText(
             textAlign: TextAlign.center,
-            text: numBeers != 0
+            text: quantity != 0
                 ? TextSpan(
-                    style: TextStyle(color: kWhiteColor,),
-                    children: [
-                        TextSpan(
-                          text: categoryName,
-                        ),
-                        TextSpan(text: " "),
-                        TextSpan(
-                            text: numBeers.toString(),)
-                      ])
+                style: TextStyle(
+                  color: kWhiteColor,
+                ),
+                children: [
+                  TextSpan(
+                    text: name,
+                  ),
+                  TextSpan(text: " "),
+                  TextSpan(
+                    text: quantity.toString(),
+                  )
+                ])
                 : TextSpan(
-                    style: TextStyle(
-                        color: kBlackLightColor,
-                        fontWeight: FontWeight.bold),
-                    children: [
-                        TextSpan(text: categoryName),
-                      ]),
+                style: TextStyle(
+                    color: kBlackLightColor, fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(text: name),
+                ]),
           ),
         ),
       ),

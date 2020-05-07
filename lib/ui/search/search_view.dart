@@ -1,10 +1,9 @@
-import 'package:craftbeer/abstractions/article_model.dart';
-import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
+import 'package:craftbeer/models/articles_data_notifier.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
-import 'package:craftbeer/ui/home/article_card.dart';
+import 'package:craftbeer/ui/search/article_card.dart';
 import 'package:craftbeer/ui/home/promotions.dart';
 import 'package:craftbeer/ui/search/brewers_grid.dart';
 import 'package:craftbeer/ui/search/categories_chips.dart';
@@ -74,8 +73,12 @@ class _SearchViewState extends State<SearchView> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Row(
                     children: [
-                      Icon(BeerIcon.tasted_full, color: kWhiteColor,),
-                      Expanded(child: titleView('Tasted beers', color: kGreenColor)),
+                      Icon(
+                        BeerIcon.tasted_full,
+                        color: kWhiteColor,
+                      ),
+                      Expanded(
+                          child: titleView('Tasted beers', color: kGreenColor)),
                     ],
                   ),
                 ),
@@ -90,8 +93,8 @@ class _SearchViewState extends State<SearchView> {
                           scrollDirection: Axis.horizontal,
                           itemCount: brewersData.tastedBeers.length,
                           itemBuilder: (context, index) => Container(
-                            child:
-                            TastedBeerItem(beer: brewersData.tastedBeers[index]),
+                            child: TastedBeerItem(
+                                beer: brewersData.tastedBeers[index]),
                           ),
                         ),
                       );
@@ -102,18 +105,28 @@ class _SearchViewState extends State<SearchView> {
                     );
                   },
                 ),
+                SizedBox(
+                  height: 20.0,
+                ),
                 Container(
-                  child: ListView.builder(
-                    itemCount: titles.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20.0,
-                    ),
-                    itemBuilder: (context, index) => ArticleCard(
-                      article: Article(title: titles[index],
-                        imageUri: images[index], content: 'afsasdfasdfa sdfasd fasdfasdfasdfas')
-                    ),
+                  child: Consumer<ArticlesData>(
+                    builder: (context, articlesData, child) =>
+                        articlesData.articles != null &&
+                                articlesData.articles.isNotEmpty
+                            ? ListView.builder(
+                                itemCount: articlesData.articles.length,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 20.0,
+                                ),
+                                itemBuilder: (context, index) => ArticleCard(
+                                    article: articlesData.articles[index]),
+                              )
+                            : Text(
+                                'Could not get articles',
+                                style: TextStyle(color: kWhiteColor),
+                              ),
                   ),
                 )
               ],

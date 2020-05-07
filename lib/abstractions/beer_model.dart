@@ -12,6 +12,7 @@ class Beer {
       scents,
       ingredients,
       price;
+  final int bitter, candy, salty, hotSpicy;
   final int id;
   final int brewerId;
   final int categoryId;
@@ -21,31 +22,36 @@ class Beer {
   bool doITasted;
   int myVote;
   String myComment;
-  final bool sell; /// IF HAS INVIMA AND IS AVAILABLE FOR SALE
+  final bool sell;
+
+  /// IF HAS INVIMA AND IS AVAILABLE FOR SALE
 
   Beer(
       {this.id,
-        this.name,
-        this.brewerId,
-        this.categoryId,
-        this.description,
-        this.history,
-        this.abv,
-        this.ibu,
-        this.srm,
-        this.myComment,
-        this.doITasted,
-        this.myVote,
-        this.price,
-        this.flavors,
-        this.scents,
-        this.ingredients,
-        this.imageUri,
-        this.ranking,
-        this.votes,
-        this.release,
-        this.sell
-      });
+      this.name,
+      this.brewerId,
+      this.categoryId,
+      this.description,
+      this.history,
+      this.abv,
+      this.ibu,
+      this.srm,
+      this.myComment,
+      this.doITasted,
+      this.myVote,
+      this.price,
+      this.bitter,
+      this.candy,
+      this.salty,
+      this.hotSpicy,
+      this.flavors,
+      this.scents,
+      this.ingredients,
+      this.imageUri,
+      this.ranking,
+      this.votes,
+      this.release,
+      this.sell});
 
   factory Beer.fromJson(Map<String, dynamic> data) {
     var beer = Beer(
@@ -63,8 +69,12 @@ class Beer {
         votes: data['votes'] ?? 0,
         doITasted: false,
         price: data['price']?.toString() ?? '',
+        bitter: data['bitter'] ?? 0,
+        candy: data['candy'] ?? 0,
+        salty: data['salty'] ?? 0,
+        hotSpicy: data['hotSpicy'] ?? 0,
         release:
-        Timestamp.fromDate(DateTime.parse(data['release_date'])) ?? null,
+            Timestamp.fromDate(DateTime.parse(data['release_date'])) ?? null,
         sell: data['on_sale'] ?? false,
         flavors: data['flavors'] ?? '',
         scents: data['scents'] ?? '',
@@ -72,11 +82,11 @@ class Beer {
     return beer;
   }
 
-  Map<String, dynamic> toDaoMap(){
+  Map<String, dynamic> toDaoMap() {
     return {
       'id': id,
       'name': name,
-      'description':  description,
+      'description': description,
       'history': history,
       'abv': abv,
       'ibu': ibu,
@@ -85,7 +95,7 @@ class Beer {
       'ranking': ranking,
       'price': price,
       'votes': votes,
-      'tasted': doITasted==true ? 1 : 0,
+      'tasted': doITasted == true ? 1 : 0,
       'my_vote': myVote ?? 0,
       'comment': myComment ?? '',
       'release': dateFormat.format(release.toDate()),
@@ -95,6 +105,10 @@ class Beer {
       'ingredients': ingredients,
       'categoryId': categoryId,
       'brewerId': brewerId,
+      'bitter': bitter,
+      'candy': candy,
+      'salty': salty,
+      'hotSpicy': hotSpicy,
     };
   }
 
@@ -110,15 +124,18 @@ class Beer {
         ibu: data['ibu'] ?? 0.0,
         srm: data['srm'] ?? 0.0,
         price: data['price'] ?? '',
+        bitter: data['bitter'] ?? 0,
+        candy: data['candy'] ?? 0,
+        salty: data['salty'] ?? 0,
+        hotSpicy: data['hotSpicy'] ?? 0,
         imageUri: data['beer_pic'] ?? '',
         ranking: data['ranking'] as num ?? 0,
         votes: data['votes'] ?? 0,
         doITasted: data['tasted'] == 1 ? true : false,
         myVote: data['myVote'] ?? 0,
         myComment: data['comment'] ?? '',
-        release:
-        Timestamp.fromDate(DateTime.parse(data['release'])) ?? null,
-        sell: data['sell'] == 1  ? true : false,
+        release: Timestamp.fromDate(DateTime.parse(data['release'])) ?? null,
+        sell: data['sell'] == 1 ? true : false,
         flavors: data['flavors'] ?? '',
         scents: data['scents'] ?? '',
         ingredients: data['ingredients'] ?? '');

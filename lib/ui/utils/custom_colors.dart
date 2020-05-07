@@ -17,5 +17,6 @@ const kRedColor = const Color(0xffC3332A);
 const kYellowColor = const Color(0xffFCDC32);
 const kBlackColor = const Color(0xff222120);
 const kBlackLightColor = const Color(0xff3C3837);
+const kBlackLightAccentColor = const Color(0xffaaa19e);
 const kBlueColor = const Color(0xff2371B5);
 const kWhiteColor = const Color(0xffFEFEFC);

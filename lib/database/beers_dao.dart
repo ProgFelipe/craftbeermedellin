@@ -1,6 +1,5 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/database/database_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BeersDao{

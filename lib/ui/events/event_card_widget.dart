@@ -6,6 +6,7 @@ import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/components/decoration_constants.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
+import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -107,7 +108,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
     return Card(
       shape: cardDecoration(),
       color: kBlackLightColor,
-      elevation: 0.0,
+      elevation: kCardElevation,
       child: Stack(
         children: <Widget>[
           Column(
