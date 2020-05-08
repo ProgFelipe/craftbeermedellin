@@ -105,111 +105,107 @@ class _EventCardWidgetState extends State<EventCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Card(
-          shape: cardDecoration(),
-          elevation: kCardElevation,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: 240.0,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(DecorationConsts.cardRadius),
-                    ),
-                    child: ImageProviderWidget(event.imageUri)),
-              ),
-              Visibility(
-                visible: showTodayCounter,
-                child: Positioned(
-                  child: Text(
-                    remainEventCountDown ?? '',
-                    style: TextStyle(
-                        color: Colors.redAccent, fontWeight: FontWeight.bold),
-                  ),
-                  top: 10.0,
-                  right: 10.0,
-                ),
-              )
-            ],
-          ),
-        ),
-        Visibility(
-          visible: event?.timestamp != null,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kMarginLeft),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return Card(
+      child: Column(
+        children: [
+          Card(
+            shape: cardDecoration(),
+            elevation: kCardElevation,
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Stack(
               children: <Widget>[
-                Icon(
-                  Icons.date_range,
-                  color: kWhiteColor,
-                  size: 15.0,
+                Container(
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(DecorationConsts.cardRadius),
+                      ),
+                      child: ImageProviderWidget(
+                        event.imageUri,
+                        myBoxFit: BoxFit.fill,
+                      )),
                 ),
-                Text(
-                  event.timestamp != null
-                      ? _dateFormat.format(event.timestamp.toDate())
-                      : '',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    color: kWhiteColor,
+                Visibility(
+                  visible: showTodayCounter,
+                  child: Positioned(
+                    child: Text(
+                      remainEventCountDown ?? '',
+                      style: TextStyle(
+                          color: Colors.redAccent, fontWeight: FontWeight.bold),
+                    ),
+                    top: 10.0,
+                    right: 10.0,
                   ),
+                ),
+                Column(
+                  children: [],
                 ),
               ],
             ),
           ),
-        ),
-        /*Text(
-          event.description ?? '',
-          style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.normal,
-              color: kGreenColor),
-          textAlign: TextAlign.left,
-        ),*/
-        Text(
-          event.city ?? '',
-          style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.normal,
-              color: kWhiteColor),
-          textAlign: TextAlign.left,
-        ),
-        Visibility(
-            visible: showRemainEventDaysLabel,
-            child: Center(child: _buildTimerButton())),
-      ],
-    );
-  }
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+              child: Column(children: [
+                Visibility(
+                  visible: event?.timestamp != null,
+                  child: Container(
+                    width: double.infinity,
+                    child: Text(
+                      event.timestamp != null
+                          ? _dateFormat.format(event.timestamp.toDate())
+                          : '',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: kBlackColor,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  child: Text(
+                    event.city ?? '',
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.normal,
+                        color: kBlackColor),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Visibility(
+                  visible: showRemainEventDaysLabel,
+                  child: Container(
+                    width: double.infinity,
+                    child: eventLeftTime?.inDays > 0 ? Text(
+                      //'8 hours 20 min',
+                      "${eventLeftTime?.inDays ?? ''} ${S.of(context).days} left",
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                      textAlign: TextAlign.left,
+                    ) : Text(
+                      //'8 hours 20 min',
+                      "Is Today!!",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: kZelyonyGreenLightColor,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.0,
+                )
 
-  Widget _buildTimerButton() {
-    return Container(
-        alignment: Alignment.center,
-        width: 130.0,
-        margin: const EdgeInsets.symmetric(horizontal: 10.0),
-        padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
-        decoration: BoxDecoration(
-            color: Colors.transparent,
-            border: Border.all(color: Colors.blue),
-            borderRadius: new BorderRadius.all(Radius.circular(10.0))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Icon(
-              Icons.access_time,
-              color: Colors.blue,
-            ),
-            Text(
-              //'8 hours 20 min',
-              "${eventLeftTime?.inDays ?? ''} ${S.of(context).days}",
-              style: TextStyle(
-                fontSize: 12.0,
-                color: Colors.blue,
-              ),
-            ),
-          ],
-        ));
+              ],)),
+
+        ],
+      ),
+    );
   }
 }

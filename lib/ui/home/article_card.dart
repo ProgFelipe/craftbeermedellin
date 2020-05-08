@@ -9,7 +9,7 @@ class ArticleCard extends StatelessWidget {
 
   const ArticleCard({@required this.article});
 
-  bool isArticleNew(){
+  bool isArticleNew() {
     return article.timeStamp.toDate().difference(DateTime.now()).inDays < 5;
   }
 
@@ -24,7 +24,6 @@ class ArticleCard extends StatelessWidget {
         },
       )),
       child: Container(
-        height: 200.0,
         child: Stack(
           children: [
             Card(
@@ -34,7 +33,7 @@ class ArticleCard extends StatelessWidget {
                 tag: article.title,
                 child: ImageProviderWidget(
                   article.imageUri,
-                  //fit: BoxFit.fill,
+                  myBoxFit: BoxFit.fill,
                 ),
               ),
               shape: RoundedRectangleBorder(
@@ -45,7 +44,7 @@ class ArticleCard extends StatelessWidget {
             Positioned(
               child: Text(
                 article.title,
-                style: TextStyle(color: Colors.white, fontSize: 20.0),
+                style: TextStyle(color: Colors.black54, fontSize: 20.0),
               ),
               left: 15.0,
               bottom: 20.0,
@@ -54,8 +53,14 @@ class ArticleCard extends StatelessWidget {
               visible: isArticleNew(),
               child: Positioned(
                 right: 15.0,
-                bottom: 20.0,
-                child: Chip(label: Text('NEW', style: TextStyle(color: kWhiteColor),), backgroundColor: kGreenColor, ),
+                bottom: 10.0,
+                child: Chip(
+                  label: Text(
+                    'NEW',
+                    style: TextStyle(color: kWhiteColor),
+                  ),
+                  backgroundColor: kGreenColor,
+                ),
               ),
             )
           ],

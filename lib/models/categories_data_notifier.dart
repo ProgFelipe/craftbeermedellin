@@ -25,12 +25,18 @@ class CategoriesData extends ChangeNotifier{
       var response = await api.fetchBeerTypes();
       switch(response.statusCode){
         case 200: {
-            //[beer1, beer2, beer3, ...]
+          print('CATEGORIAS');
+          try {
             final jsonData = json.decode(utf8.decode(response.bodyBytes));
             for (Map beerType in jsonData) {
               categories.add(BeerType.fromJson(beerType));
             }
+            print('CATEGORIAS');
+            print(categories.length);
             notifyListeners();
+          }catch(e, stacktrace){
+            print(stacktrace);
+          }
             return;
         }
         case 404: {
@@ -43,10 +49,6 @@ class CategoriesData extends ChangeNotifier{
     }catch(exception){
 
     }
-
   }
-  
-  void onSelectCategory(CategoryBeer categoryBeer){
 
-  }
 }

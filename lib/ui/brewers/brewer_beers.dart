@@ -3,8 +3,6 @@ import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/beer_detail_view.dart';
 import 'package:craftbeer/ui/brewers/beer_item.dart';
-import 'package:craftbeer/ui/components/beer_icon_icons.dart';
-import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

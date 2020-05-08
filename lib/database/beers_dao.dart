@@ -46,6 +46,20 @@ class BeersDao{
     return beers;
   }
 
+
+  Future<List<Beer>> getBeersFromCategory(List<int> beerIds) async {
+    final Database db = await DataBaseProvider().getDataBase();
+    List<Beer> beers = List();
+
+    for(var id in beerIds){
+      final List<Map<String, dynamic>> beersMap = await db.query(BEER_TABLE, where: "id = ?", whereArgs: [id] );
+      var beer = beersMap.first;
+      beers.add(Beer.fromDB(beer));
+    }
+    
+    return beers;
+  }
+
   Future<List<Beer>> getMyTastedBeers() async {
     final Database db = await DataBaseProvider().getDataBase();
     final List<Map<String, dynamic>> beersMap = await db.query(BEER_TABLE, where: "tasted = ?", whereArgs: [1] );

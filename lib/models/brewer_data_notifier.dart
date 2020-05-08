@@ -43,6 +43,7 @@ class BrewersData extends ChangeNotifier {
       if (brewers?.isEmpty ?? true) {
         debugPrint('TOMANDO DATOS DE DATABASE');
         brewers = await brewerDAO.getBrewers();
+        debugPrint('HAY POLAS ${brewers.length}');
         //await shouldUpdateData()
         if (brewers == null || brewers.isEmpty) {
           debugPrint('TOMANDO DATOS DE INTERNET');
@@ -158,5 +159,9 @@ class BrewersData extends ChangeNotifier {
 
   Future<List<Beer>> getMyTastedBeers() async {
     return await beersDAO.getMyTastedBeers();
+  }
+
+  Future<List<Beer>> fetchBeersByCategory(List<int> categoryId) async {
+    return await beersDAO.getBeersFromCategory(categoryId);
   }
 }

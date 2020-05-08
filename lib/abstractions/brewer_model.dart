@@ -56,7 +56,7 @@ class Brewer with ChangeNotifier {
     var brewer = Brewer(
       id: data['id'],
       description: data['description'] ?? '',
-      imageUri: data['profile_pic'] ?? '',
+      imageUri: data['imageUri'] ?? '',
       name: data['name'] ?? '',
       favorite: data['favorite']==1 ? true : false,
       aboutUs: data['about_us'] ?? '',

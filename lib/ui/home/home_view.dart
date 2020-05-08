@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/home/articles.dart';

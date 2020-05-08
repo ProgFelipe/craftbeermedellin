@@ -128,7 +128,7 @@ class Beer {
         candy: data['candy'] ?? 0,
         salty: data['salty'] ?? 0,
         hotSpicy: data['hotSpicy'] ?? 0,
-        imageUri: data['beer_pic'] ?? '',
+        imageUri: data['imageUri'] ?? '',
         ranking: data['ranking'] as num ?? 0,
         votes: data['votes'] ?? 0,
         doITasted: data['tasted'] == 1 ? true : false,
