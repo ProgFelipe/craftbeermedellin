@@ -50,13 +50,14 @@ class _BrewersGridState extends State<BrewersGrid> {
     }
     return Container(
       height: 100.0,
-      margin: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
+      alignment: Alignment.topLeft,
       child: GridView.builder(
         scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,
-          crossAxisSpacing: 1.0,
-          mainAxisSpacing: 1.0,
+          crossAxisSpacing: 5.0,
+          mainAxisSpacing: 5.0,
         ),
         itemCount: brewersData.brewers.length,
         itemBuilder: (context, index) {
@@ -72,7 +73,7 @@ class _BrewersGridState extends State<BrewersGrid> {
 }
 
 class BrewerItem extends StatelessWidget {
-  Function changeCurrentBrewerOnTap;
+  final Function changeCurrentBrewerOnTap;
   BrewerItem(this.changeCurrentBrewerOnTap);
 
   @override
@@ -95,18 +96,17 @@ class BrewerItem extends StatelessWidget {
       },
       child: Container(
         decoration: _brewersDecoration(),
-        margin: EdgeInsets.all(10.0),
         child: Stack(
           children: <Widget>[
             Hero(tag: brewer.name ,child: ImageProviderWidget(brewer.imageUri,)),
             Positioned(
-              top: 0.0,
-              right: 0.0,
+              bottom: 7.0,
+              right: 5.0,
               child: Icon(
                 (brewer?.favorite ?? false)
                     ? Icons.favorite
                     : Icons.favorite_border,
-                size: 40.0,
+                size: 30.0,
                 color: kYellowColor,
               ),
             ),
@@ -122,10 +122,11 @@ BoxDecoration _brewersDecoration() {
     borderRadius: BorderRadius.all(
       Radius.circular(90.0),
     ),
-    gradient: LinearGradient(
+    color: kWhiteColor,
+    /*gradient: LinearGradient(
       begin: FractionalOffset.topCenter,
       end: FractionalOffset.bottomCenter,
       colors: [Colors.black, Colors.white.withOpacity(0.4)],
-    ),
+    ),*/
   );
 }

@@ -22,7 +22,7 @@ class ArticleReader extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    titleView(article.title, color: kBlueColor, padding: 5.0),
+                    titleView(article.title, color: kBlueColor),
                     Text(
                       article.content,
                       textAlign: TextAlign.justify,

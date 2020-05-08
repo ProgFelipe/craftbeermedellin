@@ -7,6 +7,7 @@ import 'package:craftbeer/ui/home/new_releases.dart';
 import 'package:craftbeer/ui/home/search_view.dart';
 import 'package:craftbeer/ui/home/top_beers.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
+import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -44,22 +45,38 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
             children: <Widget>[
               ConnectivityWidget(),
               BeerReleases(),
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                child: Image.asset(
-                  'assets/icon.png',
-                  alignment: Alignment.center,
-                  height: 100.0,
+              SizedBox(
+                height: kBigMargin,
+              ),
+              SearchWidget(putScrollAtTop),
+              SizedBox(
+                height: kBigMargin,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: kMarginLeft),
+                child: Column(
+                  children: [
+                    titleView(S.of(context).top_week_title,
+                        color: kWhiteColor),
+                    SizedBox(
+                      height: kMarginTopFromTitle,
+                    ),
+                    TopBeersView(),
+                    SizedBox(
+                      height: kBigMargin,
+                    ),
+                    titleView(S.of(context).home_learn_title,
+                        color: kWhiteColor),
+                    SizedBox(
+                      height: kMarginTopFromTitle,
+                    ),
+                    ArticlesWidget(),
+                    SizedBox(
+                      height: kBigMargin,
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                  padding:
-                      EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
-                  child: SearchWidget(putScrollAtTop)),
-              titleView(S.of(context).top_week_title, color: kBlackLightColor),
-              TopBeersView(),
-              titleView(S.of(context).home_learn_title, color:  kBlackLightColor),
-              ArticlesWidget(),
               /*titleView('Feeds', color: Colors.white),
               LastComments(),*/
             ],

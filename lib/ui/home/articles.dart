@@ -1,8 +1,9 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:craftbeer/abstractions/article_model.dart';
 import 'package:craftbeer/models/articles_data_notifier.dart';
-import 'package:craftbeer/ui/components/decoration_constants.dart';
+import 'package:craftbeer/ui/home/article_card.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,9 @@ class ArticlesWidget extends StatefulWidget {
 class RandomColor {
   final colors = [
     kCitrusEndCustomColor,
-    kRedColor,
     kBlueColor,
     kBlackLightColor,
     kZiSePurpleColor,
-    kYellowColor,
     kGreenColor
   ];
 
@@ -33,55 +32,93 @@ class RandomColor {
 }
 
 class _ArticlesWidgetState extends State<ArticlesWidget> {
-  final RandomColor _randomColor = RandomColor();
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ArticlesData>(
+        builder: (context, articlesData, child) => Column(
+              children: [
+                Container(height:150.0, alignment: Alignment.topLeft, child: MoreArticles(articles: articlesData.secondaryArticles, randomColor: RandomColor(),)),
+                PrimaryArticles(articles: articlesData.articles)
+              ],
+            ));
+  }
+}
+class MoreArticles extends StatelessWidget {
+  final RandomColor randomColor;
+
+  final List<Article> articles;
+
+  const MoreArticles({this.articles, this.randomColor});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 150.0,
-      alignment: Alignment.topLeft,
-      child: Consumer<ArticlesData>(
-        builder: (context, articlesData, child) =>
-            articlesData.secondaryArticles != null &&
-                    articlesData.secondaryArticles.isNotEmpty
-                ? StaggeredGridView.countBuilder(
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 1,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: articlesData.secondaryArticles.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) {
-                              return ArticleReader( articlesData.secondaryArticles[index]);
-                            },
-                          ));
-                        },
-                        child: Card(
-                            shape: cardDecoration(),
-                            elevation: 3.0,
-                            color: _randomColor.getRandomColor(),
-                            semanticContainer: true,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                articlesData.secondaryArticles[index].title,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            )),
-                      );
-                    },
-                    staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+    return articles!= null &&
+        articles.isNotEmpty
+        ? StaggeredGridView.countBuilder(
+      crossAxisCount: 4,
+      mainAxisSpacing: 1,
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: articles.length,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(PageRouteBuilder(
+              pageBuilder:
+                  (context, animation, secondaryAnimation) {
+                return ArticleReader( articles[index]);
+              },
+            ));
+          },
+          child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.all(
+                      Radius.elliptical(0, 0)
                   )
-                : Text(
-                    'Text not articles found',
-                    style: TextStyle(color: kWhiteColor),
-                  ),
-      ),
+              ),
+              elevation: 3.0,
+              color: randomColor.getRandomColor(),
+              semanticContainer: true,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  articles[index].title,
+                  style: TextStyle(color: Colors.white),
+                ),
+              )),
+        );
+      },
+      staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+    )
+        : Text(
+      'Text not articles found',
+      style: TextStyle(color: kWhiteColor),
     );
+  }
+}
+
+class PrimaryArticles extends StatelessWidget {
+  final List<Article> articles;
+
+  const PrimaryArticles({this.articles});
+
+  @override
+  Widget build(BuildContext context) {
+    return articles != null && articles.isNotEmpty
+        ? ListView.builder(
+            itemCount: articles.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(
+              vertical: 20.0,
+            ),
+            itemBuilder: (context, index) =>
+                ArticleCard(article: articles[index]),
+          )
+        : Text(
+            'Could not get articles',
+            style: TextStyle(color: kWhiteColor),
+          );
   }
 }
 
@@ -112,7 +149,9 @@ class _ArticleReaderState extends State<ArticleReader> {
                 Text(
                   widget.article.content,
                   textAlign: TextAlign.justify,
-                  style: TextStyle(fontSize: 15.0,),
+                  style: TextStyle(
+                    fontSize: 15.0,
+                  ),
                 ),
               ],
             ),

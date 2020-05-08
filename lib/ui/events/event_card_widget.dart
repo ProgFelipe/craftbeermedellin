@@ -105,69 +105,82 @@ class _EventCardWidgetState extends State<EventCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: cardDecoration(),
-      color: kBlackLightColor,
-      elevation: kCardElevation,
-      child: Stack(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      children: [
+        Card(
+          shape: cardDecoration(),
+          elevation: kCardElevation,
+          child: Stack(
             children: <Widget>[
               Container(
+                height: 240.0,
                 child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(DecorationConsts.cardRadius),
-                        topRight: Radius.circular(DecorationConsts.cardRadius)),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(DecorationConsts.cardRadius),
+                    ),
                     child: ImageProviderWidget(event.imageUri)),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 8.0,
-                  top:10.0,
-                ),
-                child: Visibility(
-                  visible: event?.timestamp != null,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Icon(Icons.date_range, color: kBlueColor),
-                      Text(
-                        event.timestamp != null
-                            ? _dateFormat.format(event.timestamp.toDate())
-                            : '',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: kBlueColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              cardDescription(event.description),
-              cardTitle(event.city),
               Visibility(
-                  visible: showRemainEventDaysLabel,
-                  child: Center(child: _buildTimerButton())),
+                visible: showTodayCounter,
+                child: Positioned(
+                  child: Text(
+                    remainEventCountDown ?? '',
+                    style: TextStyle(
+                        color: Colors.redAccent, fontWeight: FontWeight.bold),
+                  ),
+                  top: 10.0,
+                  right: 10.0,
+                ),
+              )
             ],
           ),
-          Visibility(
-            visible: showTodayCounter,
-            child: Positioned(
-              child: Text(
-                remainEventCountDown ?? '',
-                style: TextStyle(
-                    color: Colors.redAccent, fontWeight: FontWeight.bold),
-              ),
-              top: 10.0,
-              right: 10.0,
+        ),
+        Visibility(
+          visible: event?.timestamp != null,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kMarginLeft),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Icon(
+                  Icons.date_range,
+                  color: kWhiteColor,
+                  size: 15.0,
+                ),
+                Text(
+                  event.timestamp != null
+                      ? _dateFormat.format(event.timestamp.toDate())
+                      : '',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                    color: kWhiteColor,
+                  ),
+                ),
+              ],
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+        /*Text(
+          event.description ?? '',
+          style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.normal,
+              color: kGreenColor),
+          textAlign: TextAlign.left,
+        ),*/
+        Text(
+          event.city ?? '',
+          style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.normal,
+              color: kWhiteColor),
+          textAlign: TextAlign.left,
+        ),
+        Visibility(
+            visible: showRemainEventDaysLabel,
+            child: Center(child: _buildTimerButton())),
+      ],
     );
   }
 

@@ -30,13 +30,13 @@ class BrewerContent extends StatelessWidget {
             child: Column(
               children: [
                 titleView(S.of(context).offers,
-                    color: Colors.black, size: 30.0, padding: 0.0),
+                    color: Colors.black, size: 30.0),
                 Offers(promos: brewer.promotions),
               ],
             ),
           ),
           titleView(S.of(context).our_beers,
-              color: Colors.black, size: 30.0, padding: 0.0),
+              color: Colors.black, size: 30.0),
           BrewerBeersWidget(),
           SizedBox(
             height: 10.0,

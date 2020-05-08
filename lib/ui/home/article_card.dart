@@ -24,6 +24,7 @@ class ArticleCard extends StatelessWidget {
         },
       )),
       child: Container(
+        height: 200.0,
         child: Stack(
           children: [
             Card(

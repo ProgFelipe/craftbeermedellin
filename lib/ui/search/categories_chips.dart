@@ -11,8 +11,8 @@ class CategoriesChips extends StatelessWidget {
     return Column(
       children: [
         Wrap(
-          spacing: 15.0,
-          runSpacing: 15.0,
+          spacing: 8.0,
+          runSpacing: 4.0,
           direction: Axis.horizontal,
           children: categoriesData?.categories
               ?.map((e) => CategoryChip(
@@ -46,36 +46,30 @@ class CategoryChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTapCallBack,
-      child: Container(
-        height: 30.0,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            color: kGreenColor),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: quantity != 0
-                ? TextSpan(
-                style: TextStyle(
-                  color: kWhiteColor,
+      child: Chip(
+        backgroundColor: kGreenColor,
+        label: RichText(
+          textAlign: TextAlign.center,
+          text: quantity != 0
+              ? TextSpan(
+              style: TextStyle(
+                color: kWhiteColor, fontWeight: FontWeight.bold
+              ),
+              children: [
+                TextSpan(
+                  text: name,
                 ),
-                children: [
-                  TextSpan(
-                    text: name,
-                  ),
-                  TextSpan(text: " "),
-                  TextSpan(
-                    text: quantity.toString(),
-                  )
-                ])
-                : TextSpan(
-                style: TextStyle(
-                    color: kBlackLightColor, fontWeight: FontWeight.bold),
-                children: [
-                  TextSpan(text: name),
-                ]),
-          ),
+                TextSpan(text: " "),
+                TextSpan(
+                  text: quantity.toString(),
+                )
+              ])
+              : TextSpan(
+              style: TextStyle(
+                  color: kOhGreenColor),
+              children: [
+                TextSpan(text: name),
+              ]),
         ),
       ),
     );

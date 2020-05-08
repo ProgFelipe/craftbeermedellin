@@ -7,9 +7,11 @@ import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/components/decoration_constants.dart';
+import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchWidget extends StatefulWidget {
   final Function scrollViewToTop;
@@ -76,6 +78,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     }
     return Container(
       height: 50.0,
+      margin: EdgeInsets.symmetric(horizontal: kMarginLeft),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
@@ -95,7 +98,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(
               prefixIcon: Icon(
-                Icons.search,
+                FontAwesomeIcons.search,
                 color: DecorationConsts.hintGreyColor,
               ),
               suffixIcon: IconButton(

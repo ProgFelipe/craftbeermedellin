@@ -19,20 +19,17 @@ class PromotionsWidget extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 2.0),
       height: 200.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         itemCount: promotions.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
               shape: cardDecoration(),
               elevation: kCardElevation,
-              color: kBlackLightColor,
               semanticContainer: true,
               child: ImageProviderEventWidget(promotions[index].imageUri,
-                  width: 160.0, height: 100.0));
+                  width: 150.0, height: 200.0));
         },
       ),
     );
