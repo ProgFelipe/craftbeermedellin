@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DecorationConsts {
   DecorationConsts._();
 
-  static const double cardRadius = 10.0;
+  static const double cardRadius = 5.0;
   static Color hintGreyColor = Colors.grey[300];
 }
 

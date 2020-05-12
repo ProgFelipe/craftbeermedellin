@@ -27,13 +27,13 @@ class _CraftMapState extends State<CraftMap>
     if (_markerIconBeer == null) {
       final ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context);
-      BitmapDescriptor.fromAssetImage(imageConfiguration, 'assets/mapbeer.png')
+      BitmapDescriptor.fromAssetImage(imageConfiguration, 'assets/marker_beer.png')
           .then(_updateBeerBitmap);
     }
     if (_markerIconEvent == null) {
       final ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context);
-      BitmapDescriptor.fromAssetImage(imageConfiguration, 'assets/event.png')
+      BitmapDescriptor.fromAssetImage(imageConfiguration, 'assets/marker_event.png')
           .then(_updateEventBitmap);
     }
   }
@@ -58,12 +58,6 @@ class _CraftMapState extends State<CraftMap>
   );
 
   BitmapDescriptor marketIcon;
-
-  setCustomMapPin() async {
-    return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(devicePixelRatio: 2.5), 'assets/beer.png')
-        .then((value) => marketIcon = value);
-  }
 
   @override
   void initState() {

@@ -42,9 +42,15 @@ class ArticleCard extends StatelessWidget {
               elevation: 5,
             ),
             Positioned(
-              child: Text(
-                article.title,
-                style: TextStyle(color: Colors.black54, fontSize: 20.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                  color: kBlackLightColor,
+                ),
+                child: Text(
+                  article.title,
+                  style: TextStyle(color: kWhiteColor, fontSize: 20.0),
+                ),
               ),
               left: 15.0,
               bottom: 20.0,

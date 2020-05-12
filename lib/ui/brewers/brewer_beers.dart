@@ -50,7 +50,7 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
               child: Column(
                 children: <Widget>[
                   Image.asset(
-                    'assets/emptybeers.gif',
+                    'assets/empty_state_beers.gif',
                     scale: 1.7,
                   ),
                   SizedBox(

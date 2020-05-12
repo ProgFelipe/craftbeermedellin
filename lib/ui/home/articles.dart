@@ -3,10 +3,10 @@ import 'dart:ui';
 
 import 'package:craftbeer/abstractions/article_model.dart';
 import 'package:craftbeer/models/articles_data_notifier.dart';
+import 'package:craftbeer/ui/components/articlet_reader_page.dart';
 import 'package:craftbeer/ui/home/article_card.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
-import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -71,9 +71,10 @@ class MoreArticles extends StatelessWidget {
                 itemBuilder: (context, index) => GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return ArticleReader(articles[index]);
+                          pageBuilder: (context, animation, secondaryAnimation) {
+                            return ArticleReader(
+                              article: articles[index],
+                            );
                           },
                         ));
                       },
@@ -127,45 +128,5 @@ class PrimaryArticles extends StatelessWidget {
             'Could not get articles',
             style: TextStyle(color: kWhiteColor),
           );
-  }
-}
-
-class ArticleReader extends StatefulWidget {
-  final Article article;
-
-  ArticleReader(this.article);
-
-  @override
-  _ArticleReaderState createState() => _ArticleReaderState();
-}
-
-class _ArticleReaderState extends State<ArticleReader> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                titleView(widget.article.title, color: kBlueColor),
-                SizedBox(
-                  height: 40.0,
-                ),
-                Text(
-                  widget.article.content,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }

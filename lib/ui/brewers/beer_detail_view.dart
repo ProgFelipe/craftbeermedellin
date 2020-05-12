@@ -152,6 +152,35 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                         )
                       ],
                     ),
+                    Visibility(
+                      visible: !_tasted,
+                      child: SizedBox(
+                        height: 15.0,
+                      ),
+                    ),
+                    Visibility(
+                      visible: !_tasted,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FlatButton.icon(
+                              onPressed: () {
+                                tasted = true;
+                                widget.onTastedMark(true, 0, '');
+                              },
+                              icon: Icon(BeerIcon.tasted_full,
+                                  color: Colors.green),
+                              label: Text(S.of(context).yes)),
+                          FlatButton.icon(
+                              onPressed: () {
+                                tasted = false;
+                              },
+                              icon: Icon(BeerIcon.tasted_empty,
+                                  color: Colors.grey),
+                              label: Text(S.of(context).no)),
+                        ],
+                      ),
+                    ),
                     SizedBox(
                       height: 30.0,
                     ),
@@ -270,35 +299,6 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                           fontSize: 17.0,
                           fontWeight: FontWeight.w700,
                         ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: !_tasted,
-                      child: SizedBox(
-                        height: 15.0,
-                      ),
-                    ),
-                    Visibility(
-                      visible: !_tasted,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FlatButton.icon(
-                              onPressed: () {
-                                tasted = true;
-                                widget.onTastedMark(true, 0, '');
-                              },
-                              icon: Icon(BeerIcon.tasted_full,
-                                  color: Colors.green),
-                              label: Text(S.of(context).yes)),
-                          FlatButton.icon(
-                              onPressed: () {
-                                tasted = false;
-                              },
-                              icon: Icon(BeerIcon.tasted_empty,
-                                  color: Colors.grey),
-                              label: Text(S.of(context).no)),
-                        ],
                       ),
                     ),
                     /*SizedBox(

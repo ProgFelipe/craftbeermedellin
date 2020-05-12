@@ -1,12 +1,9 @@
 import 'package:craftbeer/connectivity_widget.dart';
-import 'package:craftbeer/ui/components/title_with_icon.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/models/articles_data_notifier.dart';
 import 'package:craftbeer/models/brewer_data_notifier.dart';
 import 'package:craftbeer/ui/components/beer_card.dart';
-import 'package:craftbeer/ui/components/beer_icon_icons.dart';
-import 'package:craftbeer/ui/home/article_card.dart';
-import 'package:craftbeer/ui/home/promotions.dart';
+import 'package:craftbeer/ui/components/generic_empty_state.dart';
+import 'package:craftbeer/ui/search/promotions.dart';
 import 'package:craftbeer/ui/search/brewers_grid.dart';
 import 'package:craftbeer/ui/search/categories_chips.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
@@ -36,7 +33,8 @@ class SearchView extends StatefulWidget {
   _SearchViewState createState() => _SearchViewState();
 }
 
-class _SearchViewState extends State<SearchView> {
+class _SearchViewState extends State<SearchView>
+    with AutomaticKeepAliveClientMixin<SearchView> {
   ScrollController _scrollController = ScrollController(
     initialScrollOffset: 0.0,
     keepScrollOffset: true,
@@ -52,6 +50,7 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -98,22 +97,18 @@ class _SearchViewState extends State<SearchView> {
                     builder: (context, brewersData, child) {
                       if (brewersData.tastedBeers != null &&
                           brewersData.tastedBeers.isNotEmpty) {
-                        debugPrint('Tenemos datos');
                         return Container(
                           width: double.infinity,
                           height: kBeerCardHeight,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: brewersData.tastedBeers.length,
-                            itemBuilder: (context, index) => BeerCard(
-                                beer: brewersData.tastedBeers[index]),
+                            itemBuilder: (context, index) =>
+                                BeerCard(beer: brewersData.tastedBeers[index]),
                           ),
                         );
                       }
-                      return Text(
-                        'You currently don\'t have tasted any beer',
-                        style: TextStyle(color: kWhiteColor),
-                      );
+                      return GenericEmptyState();
                     },
                   ),
                   SizedBox(
@@ -134,4 +129,7 @@ class _SearchViewState extends State<SearchView> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

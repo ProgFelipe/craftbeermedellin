@@ -12,6 +12,7 @@ import 'package:craftbeer/ui/home/home_view.dart';
 import 'package:craftbeer/ui/map/map_view.dart';
 import 'package:craftbeer/ui/search/search_view.dart';
 import 'package:craftbeer/ui/user/user_admin_view.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
         ],
         theme: ThemeData(
             primarySwatch: Colors.orange,
-            primaryColor: Colors.orange,
+            primaryColor: kBlackLightColor,
             cursorColor: Colors.orange,
             fontFamily: 'Roboto',
             pageTransitionsTheme: PageTransitionsTheme(builders: {
@@ -117,7 +118,6 @@ class _NavigatorState extends State<Navigator> {
         onWillPop: onWillPop,
         child: PageView(
           physics: _currentIndex == 3 ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
-          //physics: NeverScrollableScrollPhysics(),
           controller: _pageController,
           onPageChanged: (newPage) {
             FocusScope.of(context).requestFocus(FocusNode());

@@ -54,8 +54,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                 margin: EdgeInsets.only(left: kMarginLeft),
                 child: Column(
                   children: [
-                    titleView(S.of(context).top_week_title,
-                        color: kWhiteColor),
+                    titleView(S.of(context).top_week_title, color: kWhiteColor),
                     SizedBox(
                       height: kMarginTopFromTitle,
                     ),

@@ -6,7 +6,6 @@ import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/components/decoration_constants.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
-import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -21,7 +20,7 @@ class EventCardWidget extends StatefulWidget {
 
 class _EventCardWidgetState extends State<EventCardWidget> {
   final Event event;
-  final DateFormat _dateFormat = new DateFormat(" dd \'de\' MMMM");
+  final DateFormat _dateFormat = new DateFormat("MMMM dd");
 
   _EventCardWidgetState({this.event});
 
@@ -105,106 +104,121 @@ class _EventCardWidgetState extends State<EventCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          Card(
-            shape: cardDecoration(),
-            elevation: kCardElevation,
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Stack(
+    return GestureDetector(
+      onTap: (){
+        showDialog(context: context,
+        builder: (context) => ImageProviderWidget(event.imageUri,),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius:  BorderRadius.circular(DecorationConsts.cardRadius),
+        ),
+        child: Column(
+          children: [
+            Stack(
               children: <Widget>[
-                Container(
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(DecorationConsts.cardRadius),
-                      ),
-                      child: ImageProviderWidget(
-                        event.imageUri,
-                        myBoxFit: BoxFit.fill,
-                      )),
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(DecorationConsts.cardRadius),
+                    topRight: Radius.circular(DecorationConsts.cardRadius),
+                  ),
+                  child: ImageProviderWidget(
+                    event.imageUri,
+                    myBoxFit: BoxFit.fill,
+                  ),
                 ),
                 Visibility(
                   visible: showTodayCounter,
                   child: Positioned(
-                    child: Text(
-                      remainEventCountDown ?? '',
-                      style: TextStyle(
-                          color: Colors.redAccent, fontWeight: FontWeight.bold),
+                    child: Container(
+                      padding: EdgeInsets.all(2.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                          color: Colors.orangeAccent),
+                      child: Text(
+                        remainEventCountDown ?? '',
+                        style: TextStyle(
+                            color:  kBlackColor, fontWeight: FontWeight.bold),
+                      ),
                     ),
                     top: 10.0,
                     right: 10.0,
                   ),
                 ),
-                Column(
-                  children: [],
+                Visibility(
+                  visible: true,
+                  child: Positioned(
+                    bottom: 10.0,
+                    right: 10.0,
+                    child: Container(
+                      padding: EdgeInsets.all(2.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                          color: kBlackLightColor),
+                      child: eventLeftTime != null && eventLeftTime.inDays > 0
+                          ? Text(
+                        //'8 hours 20 min',
+                        "${eventLeftTime?.inDays ?? ''} ${S.of(context).days} left",
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: kWhiteColor,
+                        ),
+                        textAlign: TextAlign.left,
+                      )
+                          : Text(
+                        //'8 hours 20 min',
+                        "Is Today!!",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                          color: kZelyonyGreenLightColor,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-              child: Column(children: [
-                Visibility(
-                  visible: event?.timestamp != null,
-                  child: Container(
-                    width: double.infinity,
-                    child: Text(
-                      event.timestamp != null
-                          ? _dateFormat.format(event.timestamp.toDate())
-                          : '',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: kBlackColor,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  child: Text(
-                    event.city ?? '',
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.normal,
-                        color: kBlackColor),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                Visibility(
-                  visible: showRemainEventDaysLabel,
-                  child: Container(
-                    width: double.infinity,
-                    child: eventLeftTime?.inDays > 0 ? Text(
-                      //'8 hours 20 min',
-                      "${eventLeftTime?.inDays ?? ''} ${S.of(context).days} left",
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                      textAlign: TextAlign.left,
-                    ) : Text(
-                      //'8 hours 20 min',
-                      "Is Today!!",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                        color: kZelyonyGreenLightColor,
+            Container(
+                margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                child: Column(
+                  children: [
+                    Visibility(
+                      visible: event?.timestamp != null,
+                      child: Container(
+                        width: double.infinity,
+                        child: Text(
+                          event.timestamp != null
+                              ? _dateFormat.format(event.timestamp.toDate())
+                              : '',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: kBlackColor,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 2.0,
-                )
-
-              ],)),
-
-        ],
+                    Container(
+                      width: double.infinity,
+                      child: Text(
+                        event.city ?? '',
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.normal,
+                            color: kBlackColor),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2.0,
+                    )
+                  ],
+                )),
+          ],
+        ),
       ),
     );
   }
