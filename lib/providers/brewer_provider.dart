@@ -3,13 +3,14 @@ import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/database/beers_dao.dart';
 import 'package:craftbeer/database/brewer_dao.dart';
+import 'package:craftbeer/providers/base_provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
-class BrewersData extends ChangeNotifier {
+class BrewersData extends BaseProvider {
   static const CACHE_TIME_IN_DAYS = 3;
 
   List<Brewer> brewers;
@@ -17,10 +18,6 @@ class BrewersData extends ChangeNotifier {
   Brewer currentBrewer;
   List<Beer> tastedBeers = List();
 
-  bool underMaintainState = false;
-  bool loadingState = false;
-  bool checkYourInternet = false;
-  bool errorStatus = false;
 
   final api = DataBaseService();
   final brewerDAO = BrewerDao();
@@ -37,16 +34,6 @@ class BrewersData extends ChangeNotifier {
 
   BrewersData() {
     getBrewers();
-  }
-
-  void showLoading(){
-    loadingState = true;
-    notifyListeners();
-  }
-
-  void hideLoading(){
-    loadingState = false;
-    notifyListeners();
   }
 
   void getBrewers() async {
@@ -75,6 +62,7 @@ class BrewersData extends ChangeNotifier {
                 brewerDAO.insertBrewers(brewers);
                 underMaintainState = false;
                 checkYourInternet = false;
+                errorStatus = false;
                 addBrewers(brewers, beers);
                 return;
               }

@@ -89,13 +89,6 @@ flutter:
     - family:  BeerIcon
       fonts:
         - asset: fonts/BeerIcon.ttf
-    - family: Roboto
-      fonts:
-        - asset: fonts/Roboto-Regular.ttf
-        - asset: fonts/Roboto-Bold.ttf
-        - asset: fonts/Roboto-Thin.ttf
-        - asset: fonts/Roboto-Light.ttf
-        - asset: fonts/Roboto-Medium.ttf
     - family: FellGreat
       fonts:
         - asset: fonts/IMFellGreatPrimer-Regular.ttf

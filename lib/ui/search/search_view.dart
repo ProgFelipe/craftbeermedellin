@@ -12,22 +12,6 @@ import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-const List<String> titles = [
-  'El aroma',
-  'Que tipos de cerveza hay?',
-  'La fermentación',
-  'La temperatura',
-  'El alcochol'
-];
-
-const List<String> images = [
-  'assets/art_senses.jpg',
-  'assets/art_beer_types.jpg',
-  'assets/art_brewing.jpg',
-  'assets/art_temperature.jpg',
-  'assets/art_alcohol_levels.jpg'
-];
-
 class SearchView extends StatefulWidget {
   @override
   _SearchViewState createState() => _SearchViewState();
@@ -84,6 +68,7 @@ class _SearchViewState extends State<SearchView>
                           alignment: Alignment.topLeft,
                         ),
                       ),
+                      Container( alignment: Alignment.topLeft,child: Container(width: 200, height: 20, color: Colors.yellowAccent,)),
                       titleView(S.of(context).local_brewers),
                       SizedBox(
                         height: kMarginTopFromTitle,
@@ -103,6 +88,7 @@ class _SearchViewState extends State<SearchView>
                           alignment: Alignment.topLeft,
                         ),
                       ),
+                      Container( alignment: Alignment.topLeft,child: Container(width: 200, height: 20, color: Colors.pinkAccent,)),
                       titleView(S.of(context).tasted_beers_title),
                       SizedBox(
                         height: kMarginTopFromTitle,
@@ -119,7 +105,7 @@ class _SearchViewState extends State<SearchView>
                                     width: kEmptyStateWidth,
                                   ),
                                   Text(
-                                    'No Favorite Beers',
+                                    S.of(context).empty_state_favorite_beers,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20.0,
@@ -159,6 +145,7 @@ class _SearchViewState extends State<SearchView>
                           alignment: Alignment.topLeft,
                         ),
                       ),
+                      Container( alignment: Alignment.topLeft,child: Container(width: 200, height: 20, color: kGreenColor,)),
                       titleView(S.of(context).categories),
                       //CategoriesView(scrollUp),
                       SizedBox(

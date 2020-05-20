@@ -2,6 +2,7 @@ import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
+import 'package:craftbeer/ui/components/failure_status.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
@@ -36,17 +37,11 @@ class _BrewersGridState extends State<BrewersGrid> {
   Widget build(BuildContext context) {
     var brewersData = Provider.of<BrewersData>(context);
 
-    if(brewersData.underMaintainState){
-      return Text('Estamo en mantenimiento');
-    }
-    if(brewersData.checkYourInternet){
-      return Text('Revisa tú conexión a internet',);
-    }
-    if(brewersData.errorStatus){
-      return Text('Ah ocurrido un error', style: TextStyle(color: Colors.red));
-    }
-    if (brewersData.brewers == null || brewersData.brewers.length == 0) {
+    if(brewersData.loadingState){
       return LoadingWidget();
+    }
+    if(brewersData.underMaintainState || brewersData.errorStatus || brewersData.checkYourInternet){
+      return ErrorStatusWidget(baseProvider: brewersData);
     }
     return Container(
       height: 100.0,

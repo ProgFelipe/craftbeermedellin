@@ -1,7 +1,9 @@
 import 'package:craftbeer/abstractions/category_model.dart';
+import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/providers/categories_provider.dart';
 import 'package:craftbeer/ui/components/beer_card.dart';
+import 'package:craftbeer/ui/components/failure_status.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,12 @@ class CategoriesChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var categoriesData = Provider.of<CategoriesData>(context);
+    if(categoriesData.loadingState){
+      return LoadingWidget();
+    }
+    if(categoriesData.underMaintainState || categoriesData.errorStatus || categoriesData.checkYourInternet){
+      return ErrorStatusWidget(baseProvider: categoriesData);
+    }
     return Column(
       children: [
         Wrap(

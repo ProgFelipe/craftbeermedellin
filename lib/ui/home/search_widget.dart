@@ -98,7 +98,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(
               prefixIcon: Icon(
-                FontAwesomeIcons.eye,
+                FontAwesomeIcons.search,
                 color: DecorationConsts.hintGreyColor,
               ),
               suffixIcon: IconButton(

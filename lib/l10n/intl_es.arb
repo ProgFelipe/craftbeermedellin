@@ -48,5 +48,6 @@
   "beer_detail_thanks_for_feedback": "Gracias!!\nTú opinión nos ayuda a mejorar",
   "tasted_beers_title": "TASTED BEERS",
   "event_today": "Es HOY!!",
-  "event_in_pass": "Pasado"
+  "event_in_pass": "Pasado",
+  "empty_state_favorite_beers": "No tienes Cervezas Favoritas"
 }

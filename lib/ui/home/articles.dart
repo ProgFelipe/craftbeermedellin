@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:craftbeer/abstractions/article_model.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/articles_provider.dart';
+import 'package:craftbeer/ui/components/failure_status.dart';
 import 'package:craftbeer/ui/home/article_card.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
@@ -35,8 +36,16 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ArticlesData>(
-      builder: (context, articlesData, child) =>
-          PrimaryArticles(articles: articlesData.articles),
+      builder: (context, articlesData, child) {
+        if (articlesData.loadingState) {
+          return LoadingWidget();
+        }
+        if (articlesData.underMaintainState || articlesData.errorStatus ||
+            articlesData.checkYourInternet) {
+          return ErrorStatusWidget(baseProvider: articlesData);
+        }
+        return PrimaryArticles(articles: articlesData.articles);
+      },
     );
   }
 }
@@ -78,9 +87,10 @@ class PrimaryArticles extends StatelessWidget {
         itemCount: articles.length,
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemBuilder: (context, index) => ArticleCard(
-          article: articles[index],
-        ),
+        itemBuilder: (context, index) =>
+            ArticleCard(
+              article: articles[index],
+            ),
       ),
     );
   }

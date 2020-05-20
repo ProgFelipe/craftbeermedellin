@@ -19,6 +19,7 @@ class News extends StatelessWidget {
       stories.add(StoryItem.inlineImage(
         url: release.imageUri,
         controller: controller,
+        duration: Duration(seconds: 5),
         roundedTop: false,
         imageFit: BoxFit.fitHeight,
         caption: Text(
@@ -38,7 +39,7 @@ class News extends StatelessWidget {
             controller: controller,
             storyItems: stories,
             progressPosition: ProgressPosition.bottom,
-            repeat: false,
+            repeat: true,
           ));
     } else {
       return Text(

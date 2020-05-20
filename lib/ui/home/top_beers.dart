@@ -1,6 +1,7 @@
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/components/beer_card.dart';
+import 'package:craftbeer/ui/components/failure_status.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,10 @@ class TopBeersView extends StatelessWidget {
       if(brewerData.loadingState){
         return LoadingWidget();
       }
-      if (brewerData.beers.isEmpty) {
+      if(brewerData.underMaintainState || brewerData.errorStatus || brewerData.checkYourInternet){
+        return ErrorStatusWidget(baseProvider: brewerData);
+      }
+      if (brewerData.beers == null || brewerData.beers.isEmpty) {
         return Container(
           child: Column(
             children: [
