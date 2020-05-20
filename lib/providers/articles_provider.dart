@@ -7,7 +7,6 @@ class ArticlesData extends ChangeNotifier {
   final api = DataBaseService();
 
   List<Article> articles;
-  List<Article> secondaryArticles;
 
   ArticlesData() {
     fetchArticles();
@@ -20,14 +19,9 @@ class ArticlesData extends ChangeNotifier {
         {
           final jsonData = json.decode(utf8.decode(response.bodyBytes));
           articles = List();
-          secondaryArticles = List();
           for (Map article in jsonData) {
             var articleObj = Article.fromJson(article);
-            if (articleObj.articleType == 'MAIN') {
-              articles.add(articleObj);
-            } else {
-              secondaryArticles.add(articleObj);
-            }
+            articles.add(articleObj);
           }
           notifyListeners();
         }

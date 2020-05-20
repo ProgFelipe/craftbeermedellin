@@ -14,25 +14,27 @@ class Brewer with ChangeNotifier {
 
   Brewer(
       {this.id,
-        this.beers,
-        this.favorite,
-        this.promotions,
-        this.description,
-        this.imageUri,
-        this.name,
-        this.brewersImageUri,
-        this.aboutUs,
-        this.phone,
-        this.instagram,
-        this.facebook,
-        this.youtube,
-        this.website,
-        this.canSale});
+      this.beers,
+      this.favorite,
+      this.promotions,
+      this.description,
+      this.imageUri,
+      this.name,
+      this.brewersImageUri,
+      this.aboutUs,
+      this.phone,
+      this.instagram,
+      this.facebook,
+      this.youtube,
+      this.website,
+      this.canSale});
 
   factory Brewer.fromJson(Map<String, dynamic> data) {
     var brewer = Brewer(
       id: data['id'],
-      beers: data['beers']?.map<Beer>((beer) => Beer.fromJson(beer))?.toList() ?? [],
+      beers:
+          data['beers']?.map<Beer>((beer) => Beer.fromJson(beer))?.toList() ??
+              [],
 /*      promotions: data['promos']
           ?.map<Promotion>((promotion) => Promotion.fromMap(promotion))
           ?.toList() ??
@@ -58,8 +60,8 @@ class Brewer with ChangeNotifier {
       description: data['description'] ?? '',
       imageUri: data['imageUri'] ?? '',
       name: data['name'] ?? '',
-      favorite: data['favorite']==1 ? true : false,
-      aboutUs: data['about_us'] ?? '',
+      favorite: data['favorite'] == 1 ? true : false,
+      aboutUs: data['aboutUs'] ?? '',
       phone: data['phone'] ?? '',
       instagram: data['instagram'] ?? '',
       facebook: data['facebook'] ?? '',
@@ -70,28 +72,25 @@ class Brewer with ChangeNotifier {
     return brewer;
   }
 
-
   Map<String, dynamic> toDbMap() {
     return {
-      'id' : id,
-      'name' : name,
-      'description' : description,
-      'imageUri' : imageUri,
-      'aboutUs' : aboutUs,
-      'phone' : phone,
-      'instagram' : instagram,
-      'facebook' : facebook,
-      'youtube' : youtube,
-      'website' : website,
-      'favorite' : favorite ? 1 : 0,
-      'can_sale' : canSale ? 1 : 0
+      'id': id,
+      'name': name,
+      'description': description,
+      'imageUri': imageUri,
+      'aboutUs': aboutUs,
+      'phone': phone,
+      'instagram': instagram,
+      'facebook': facebook,
+      'youtube': youtube,
+      'website': website,
+      'favorite': favorite ? 1 : 0,
+      'can_sale': canSale ? 1 : 0
     };
   }
-
 
   set updateFavorite(bool newValue) {
     favorite = newValue;
     notifyListeners();
   }
-
 }

@@ -4,23 +4,20 @@ import 'package:flutter/cupertino.dart';
 class Article {
   final String title;
   final String imageUri;
-  final String content;
-  final String articleType;
+  final String contentUri;
   final Timestamp timeStamp;
 
   Article(
       {@required this.timeStamp,
       @required this.title,
-      @required this.articleType,
       @required this.imageUri,
-      @required this.content});
+      @required this.contentUri});
 
   factory Article.fromJson(Map<String, dynamic> data) {
     return Article(
       title: data['name'] ?? '',
       imageUri: data['article_pic'] ?? '',
-      content: data['content'] ?? '',
-      articleType: data['article_type'] ?? '',
+      contentUri: data['content_uri'] ?? '',
       timeStamp:
           Timestamp.fromDate(DateTime.parse(data['release_date'])) ?? null,
     );

@@ -142,16 +142,35 @@ class _BrewerHeaderState extends State<BrewerHeader> {
                   ),
                 ),
               ),
-              FlatButton.icon(
-                onPressed: widget.onFavSelected,
-                icon: Icon(
-                  widget.brewer.favorite
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  size: 40.0,
-                  color: kYellowColor,
+              SizedBox(width: 10.0,),
+              GestureDetector(
+                onTap:  widget.onFavSelected,
+                child: CircleAvatar(
+                  backgroundColor: kCitrusEndCustomColor,
+                  radius: 20.0,
+                  child: Icon(
+                    widget.brewer.favorite
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    size: 20.0,
+                    color: kWhiteColor,
+                  ),
                 ),
-                label: Text(''),
+              ),
+              SizedBox(width: 10.0,),
+              GestureDetector(
+                onTap: (){},
+                child: CircleAvatar(
+                  backgroundColor: kCitrusEndCustomColor,
+                  radius: 20.0,
+                  child: Center(
+                    child:  Icon(
+                      Icons.share,
+                      size: 20.0,
+                      color: kWhiteColor,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

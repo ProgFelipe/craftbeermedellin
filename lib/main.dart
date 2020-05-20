@@ -3,9 +3,10 @@ import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/abstractions/promotion_model.dart';
 import 'package:craftbeer/abstractions/release_model.dart';
 import 'package:craftbeer/api_service.dart';
-import 'package:craftbeer/models/articles_data_notifier.dart';
-import 'package:craftbeer/models/brewer_data_notifier.dart';
-import 'package:craftbeer/models/categories_data_notifier.dart';
+import 'package:craftbeer/providers/articles_provider.dart';
+import 'package:craftbeer/providers/brewer_provider.dart';
+import 'package:craftbeer/providers/categories_provider.dart';
+import 'package:craftbeer/providers/push_notifications_provider.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/events/events_view.dart';
 import 'package:craftbeer/ui/home/home_view.dart';
@@ -33,10 +34,12 @@ class MyApp extends StatelessWidget {
       providers: [
         StreamProvider<ConnectivityResult>.value(
             value: connectivity.onConnectivityChanged),
+
         ///Django
         ChangeNotifierProvider<BrewersData>.value(value: BrewersData()),
         ChangeNotifierProvider<CategoriesData>.value(value: CategoriesData()),
         ChangeNotifierProvider<ArticlesData>.value(value: ArticlesData()),
+
         ///FireStore
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
         StreamProvider<List<Promotion>>.value(
@@ -44,6 +47,7 @@ class MyApp extends StatelessWidget {
         StreamProvider<List<Event>>.value(value: database.streamEvents()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Craft Beer Co',
         supportedLocales: S.delegate.supportedLocales,
         localizationsDelegates: [
@@ -55,7 +59,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.orange,
             primaryColor: kBlackLightColor,
             cursorColor: Colors.orange,
-            fontFamily: 'Roboto',
+            fontFamily: 'FellGreat',
             pageTransitionsTheme: PageTransitionsTheme(builders: {
               TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
@@ -63,7 +67,7 @@ class MyApp extends StatelessWidget {
         home: SplashScreen.navigate(
           name: 'assets/splash.flr',
           next: (context) => Navigator(),
-          until: () => Future.delayed(Duration(seconds: 3)),
+          until: () => Future.delayed(Duration(seconds: 2)),
           startAnimation: 'Splash',
           backgroundColor: Colors.white,
         ),
@@ -82,19 +86,49 @@ class Navigator extends StatefulWidget {
 class _NavigatorState extends State<Navigator> {
   int _currentIndex = 0;
   PageController _pageController;
+  PushNotificationsProvider _pushProvider;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   final List<Widget> screens = [
     Home(),
-    EventsView(),
     SearchView(),
+    EventsView(),
     CraftMap(),
     UserView(),
   ];
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+    _pushProvider.dispose();
+  }
 
   @override
   void initState() {
     _pageController = PageController(
       initialPage: _currentIndex,
     );
+
+    _pushProvider = PushNotificationsProvider();
+    _pushProvider.initNotifications();
+    _pushProvider.messages.listen((event) {
+      print('EVENTO');
+      print(event);
+      //new_event ??
+      //new_beer ??
+      //navigate_to ??
+      if (event == 'nav_event') {
+        _pageController.animateToPage(2,
+            duration: Duration(seconds: 2), curve: Curves.easeInOut);
+      } else {
+        scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text(event),
+          duration: Duration(seconds: 3),
+        ));
+      }
+    });
+
     super.initState();
   }
 
@@ -114,10 +148,13 @@ class _NavigatorState extends State<Navigator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: WillPopScope(
         onWillPop: onWillPop,
         child: PageView(
-          physics: _currentIndex == 3 ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
+          physics: _currentIndex == 3
+              ? NeverScrollableScrollPhysics()
+              : AlwaysScrollableScrollPhysics(),
           controller: _pageController,
           onPageChanged: (newPage) {
             FocusScope.of(context).requestFocus(FocusNode());
@@ -142,7 +179,10 @@ class _NavigatorState extends State<Navigator> {
         currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(BeerIcon.home_empty, color: Colors.grey,),
+            icon: Icon(
+              BeerIcon.home_empty,
+              color: Colors.grey,
+            ),
             activeIcon: Icon(
               BeerIcon.home_filled,
               color: Colors.white,
@@ -150,16 +190,10 @@ class _NavigatorState extends State<Navigator> {
             title: Text(S.of(context).home_nav_title),
           ),
           BottomNavigationBarItem(
-            icon: Icon(BeerIcon.ticket_empty, color: Colors.grey,),
-            activeIcon: Icon(
-              BeerIcon.ticket_filled,
-              color: Colors.white,
+            icon: Icon(
+              BeerIcon.beer_empty,
+              color: Colors.grey,
             ),
-            backgroundColor: Colors.black,
-            title: Text(S.of(context).events_nav_title),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(BeerIcon.beer_empty, color: Colors.grey,),
             activeIcon: Icon(
               BeerIcon.beer_filled,
               color: Colors.white,
@@ -168,7 +202,22 @@ class _NavigatorState extends State<Navigator> {
             title: Text(S.of(context).beer_nav_title),
           ),
           BottomNavigationBarItem(
-            icon: Icon(BeerIcon.map_empty, color: Colors.grey,),
+            icon: Icon(
+              BeerIcon.ticket_empty,
+              color: Colors.grey,
+            ),
+            activeIcon: Icon(
+              BeerIcon.ticket_filled,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.black,
+            title: Text(S.of(context).events_nav_title),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              BeerIcon.map_empty,
+              color: Colors.grey,
+            ),
             activeIcon: Icon(
               BeerIcon.map_empty,
               color: Colors.white,

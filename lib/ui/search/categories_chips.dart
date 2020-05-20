@@ -1,6 +1,6 @@
 import 'package:craftbeer/abstractions/category_model.dart';
-import 'package:craftbeer/models/brewer_data_notifier.dart';
-import 'package:craftbeer/models/categories_data_notifier.dart';
+import 'package:craftbeer/providers/brewer_provider.dart';
+import 'package:craftbeer/providers/categories_provider.dart';
 import 'package:craftbeer/ui/components/beer_card.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';

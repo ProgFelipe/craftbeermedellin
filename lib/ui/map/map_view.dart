@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:craftbeer/models/map_data_notifier.dart';
+import 'package:craftbeer/providers/map_data_notifier.dart';
 import 'package:craftbeer/ui/map/event_map_detail.dart';
 import 'package:craftbeer/ui/map/store_map_detail.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class _CraftMapState extends State<CraftMap>
   BitmapDescriptor _markerIconBeer;
   BitmapDescriptor _markerIconEvent;
   MarkerId selectedMarker;
-  int _markerIdCounter = 1;
   bool _showDetailCard = false;
   MapElementType _markerType;
 
@@ -75,6 +73,7 @@ class _CraftMapState extends State<CraftMap>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     _createMarkerImageFromAsset(context);
 
     return Scaffold(
@@ -134,54 +133,6 @@ class _CraftMapState extends State<CraftMap>
         },
       )
     ].toSet();
-  }
-
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    //  controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
-
-  void _onMarkerTapped(MarkerId markerId) {
-    final Marker tappedMarker = markers[markerId];
-    if (tappedMarker != null) {
-      setState(() {
-        if (markers.containsKey(selectedMarker)) {
-          final Marker resetOld = markers[selectedMarker]
-              .copyWith(iconParam: BitmapDescriptor.defaultMarker);
-          markers[selectedMarker] = resetOld;
-        }
-        selectedMarker = markerId;
-        final Marker newMarker = tappedMarker.copyWith(
-          iconParam: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueGreen,
-          ),
-        );
-        markers[markerId] = newMarker;
-      });
-    }
-  }
-
-  void _add() {
-    final int markerCount = markers.length;
-
-    if (markerCount == 12) {
-      return;
-    }
-
-    final String markerIdVal = 'marker_id_$_markerIdCounter';
-    _markerIdCounter++;
-    final MarkerId markerId = MarkerId(markerIdVal);
-
-    final Marker marker = Marker(
-      markerId: markerId,
-      icon: marketIcon,
-      position: LatLng(
-        _mapCenter.latitude + sin(_markerIdCounter * pi / 6.0) / 20.0,
-        _mapCenter.longitude + cos(_markerIdCounter * pi / 6.0) / 20.0,
-      ),
-    );
-
-    markers[markerId] = marker;
   }
 
   @override

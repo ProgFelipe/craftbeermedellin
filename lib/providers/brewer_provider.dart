@@ -17,7 +17,8 @@ class BrewersData extends ChangeNotifier {
   Brewer currentBrewer;
   List<Beer> tastedBeers = List();
 
-  bool underMaintain = false;
+  bool underMaintainState = false;
+  bool loadingState = false;
   bool checkYourInternet = false;
   bool errorStatus = false;
 
@@ -38,8 +39,19 @@ class BrewersData extends ChangeNotifier {
     getBrewers();
   }
 
+  void showLoading(){
+    loadingState = true;
+    notifyListeners();
+  }
+
+  void hideLoading(){
+    loadingState = false;
+    notifyListeners();
+  }
+
   void getBrewers() async {
     try {
+      showLoading();
       if (brewers?.isEmpty ?? true) {
         debugPrint('TOMANDO DATOS DE DATABASE');
         brewers = await brewerDAO.getBrewers();
@@ -61,7 +73,7 @@ class BrewersData extends ChangeNotifier {
                   brewers.add(Brewer.fromJson(brewer));
                 }
                 brewerDAO.insertBrewers(brewers);
-                underMaintain = false;
+                underMaintainState = false;
                 checkYourInternet = false;
                 addBrewers(brewers, beers);
                 return;
@@ -69,7 +81,7 @@ class BrewersData extends ChangeNotifier {
             case 404:
               {
                 print('404');
-                underMaintain = true;
+                underMaintainState = true;
                 notifyListeners();
                 return;
               }
@@ -87,10 +99,11 @@ class BrewersData extends ChangeNotifier {
           addBrewers(brewers, beers);
         }
       }
+      hideLoading();
     } catch (exception, stacktrace) {
       print(stacktrace);
       errorStatus = true;
-      notifyListeners();
+      hideLoading();
     }
   }
 

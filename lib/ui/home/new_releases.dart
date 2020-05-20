@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
 
-class BeerReleases extends StatelessWidget {
+class News extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Release> releases = Provider.of<List<Release>>(context);
+    final StoryController controller = StoryController();
 
     if (releases == null) {
       return LoadingWidget();
     }
     List<StoryItem> stories = List();
     releases.forEach((release) {
-      stories.add(StoryItem.inlineGif(
-        release.imageUri,
+      stories.add(StoryItem.inlineImage(
+        url: release.imageUri,
+        controller: controller,
         roundedTop: false,
         imageFit: BoxFit.fitHeight,
         caption: Text(
@@ -33,8 +35,9 @@ class BeerReleases extends StatelessWidget {
       return Container(
           height: 240,
           child: StoryView(
-            stories,
-            progressPosition: ProgressPosition.top,
+            controller: controller,
+            storyItems: stories,
+            progressPosition: ProgressPosition.bottom,
             repeat: false,
           ));
     } else {

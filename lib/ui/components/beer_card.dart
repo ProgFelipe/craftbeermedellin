@@ -2,10 +2,11 @@ import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
+import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/material.dart';
 
-const kBeerCardHeight = 140.0;
-const kBeerCardWidth = 100.0;
+const kBeerCardHeight = 200.0;
+const kBeerCardWidth = 150.0;
 
 class BeerCard extends StatelessWidget {
   final Beer beer;
@@ -24,9 +25,10 @@ class BeerCard extends StatelessWidget {
         width: kBeerCardWidth,
         alignment: Alignment.center,
         child: Card(
+          elevation: kCardElevation,
           shape: RoundedRectangleBorder(
               borderRadius: const BorderRadius.all(
-                  Radius.elliptical(0, 0)
+                  Radius.circular(kCardRadius)
               )
           ),
           child: Column(
@@ -38,7 +40,7 @@ class BeerCard extends StatelessWidget {
               Text(
                 beer.name,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: kMoonlitAsteroidStartColor, fontWeight: FontWeight.bold),
+                style: TextStyle(color: kMoonlitAsteroidStartColor, fontWeight: FontWeight.bold, fontSize: 15.0),
               ),
             ],
           ),

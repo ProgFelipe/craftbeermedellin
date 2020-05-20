@@ -2,6 +2,7 @@ import 'package:craftbeer/abstractions/article_model.dart';
 import 'package:craftbeer/ui/components/articlet_reader_page.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
+import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/material.dart';
 
 class ArticleCard extends StatelessWidget {
@@ -24,51 +25,54 @@ class ArticleCard extends StatelessWidget {
         },
       )),
       child: Container(
-        child: Stack(
+        height: 300.0,
+        margin: EdgeInsets.symmetric(horizontal: 5.0),
+        child: Column(
           children: [
-            Card(
-              semanticContainer: true,
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: Hero(
-                tag: article.title,
-                child: ImageProviderWidget(
-                  article.imageUri,
-                  myBoxFit: BoxFit.fill,
-                ),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 5,
-            ),
-            Positioned(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                  color: kBlackLightColor,
-                ),
-                child: Text(
-                  article.title,
-                  style: TextStyle(color: kWhiteColor, fontSize: 20.0),
-                ),
-              ),
-              left: 15.0,
-              bottom: 20.0,
-            ),
-            Visibility(
-              visible: isArticleNew(),
-              child: Positioned(
-                right: 15.0,
-                bottom: 10.0,
-                child: Chip(
-                  label: Text(
-                    'NEW',
-                    style: TextStyle(color: kWhiteColor),
+            Expanded(
+              child: Stack(
+                children: [
+                  Hero(
+                    tag: article.title,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(kCardRadius),
+                      child: ImageProviderWidget(
+                        article.imageUri,
+                        myBoxFit: BoxFit.fill,
+                      ),
+                    ),
                   ),
-                  backgroundColor: kGreenColor,
-                ),
+                  Visibility(
+                    visible: isArticleNew(),
+                    child: Positioned(
+                      right: 20.0,
+                      bottom: 10.0,
+                      child: Container(
+                        padding: EdgeInsets.all(2.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                            color: kGreenColor),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            'NEW',
+                            style: TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              alignment: Alignment.center,
+              child: Text(
+                article.title,
+                style: TextStyle(color: kWhiteColor, fontSize: 20.0),
+              ),
+            ),
           ],
         ),
       ),

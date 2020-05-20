@@ -7,19 +7,11 @@ import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class BeerDetailView extends StatefulWidget {
-  final String saveAndBackButtonText;
-  final Color avatarColor;
-  final String avatarImage;
   final Function onTastedMark;
   final Beer selectedBeer;
-  final bool tastedStatus;
 
   BeerDetailView({
-    @required this.saveAndBackButtonText,
-    this.avatarColor,
-    this.tastedStatus,
     this.selectedBeer,
-    this.avatarImage,
     this.onTastedMark,
   });
 
@@ -34,7 +26,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
 
   @override
   void initState() {
-    _tasted = widget.tastedStatus;
+    _tasted = widget.selectedBeer.doITasted;
     super.initState();
   }
 
@@ -44,8 +36,19 @@ class _BeerDetailViewState extends State<BeerDetailView> {
     });
   }
 
+  void updateBeer(bool tastedSelected) {
+    if (_tasted != tastedSelected) {
+      widget.selectedBeer.doITasted = tastedSelected;
+      widget.onTastedMark(_tasted);
+      setState(() {
+        _tasted = tastedSelected;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    //BrewersData model = Provider.of<BrewersData>(context);
     return Scaffold(
       backgroundColor: kBlackLightColor,
       body: SafeArea(
@@ -53,8 +56,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
           child: Stack(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                  child: IosBackNav()),
+                  padding: EdgeInsets.only(left: 10.0), child: IosBackNav()),
               Container(
                 padding: EdgeInsets.only(
                   top: Consts.avatarRadius + Consts.padding,
@@ -94,99 +96,17 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
-                          children: [
-                            ClipOval(
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: kCitrusStartCustomColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(1.0)),
-                                ),
-                                child: Text(
-                                  widget.selectedBeer.ibu.toString(),
-                                ),
-                              ),
-                            ),
-                            Text('IBU')
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            ClipOval(
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: kCitrusStartCustomColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                                child: Text(widget.selectedBeer.abv.toString()),
-                              ),
-                            ),
-                            Text('ABV')
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            ClipOval(
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: kCitrusStartCustomColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                                child: Text(widget.selectedBeer.srm.toString()),
-                              ),
-                            ),
-                            Text('SRM')
-                          ],
-                        )
+                        beerProperty('IBU', widget.selectedBeer.ibu.toString()),
+                        beerProperty('ABV', widget.selectedBeer.abv.toString()),
+                        beerProperty('SRM', widget.selectedBeer.srm.toString()),
                       ],
-                    ),
-                    Visibility(
-                      visible: !_tasted,
-                      child: SizedBox(
-                        height: 15.0,
-                      ),
-                    ),
-                    Visibility(
-                      visible: !_tasted,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FlatButton.icon(
-                              onPressed: () {
-                                tasted = true;
-                                widget.onTastedMark(true, 0, '');
-                              },
-                              icon: Icon(BeerIcon.tasted_full,
-                                  color: Colors.green),
-                              label: Text(S.of(context).yes)),
-                          FlatButton.icon(
-                              onPressed: () {
-                                tasted = false;
-                              },
-                              icon: Icon(BeerIcon.tasted_empty,
-                                  color: Colors.grey),
-                              label: Text(S.of(context).no)),
-                        ],
-                      ),
                     ),
                     SizedBox(
                       height: 30.0,
                     ),
                     Text(
                       widget.selectedBeer.description,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.justify,
                       style: TextStyle(
                         fontSize: 16.0,
                       ),
@@ -194,62 +114,100 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                     SizedBox(
                       height: 30.0,
                     ),
-                    Card(
-                      color: kMoonlitAsteroidStartColor,
-                      elevation: 4.0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Column(
-                              children: [
-                                Container(
-                                  width: 50.0,
-                                  height: widget.selectedBeer.bitter * 24.0,
-                                  color: Colors.green,
-                                ),
-                                Text(
-                                  S.of(context).beer_detail_bitter,
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: 50.0,
-                                  height: widget.selectedBeer.candy * 24.0,
-                                  color: Colors.green,
-                                ),
-                                Text(S.of(context).beer_detail_candy,
-                                    style: TextStyle(color: Colors.white))
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: 50.0,
-                                  height: widget.selectedBeer.salty * 24.0,
-                                  color: Colors.green,
-                                ),
-                                Text(S.of(context).beer_detail_salty,
-                                    style: TextStyle(color: Colors.white))
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: 50.0,
-                                  height: widget.selectedBeer.hotSpicy * 24.0,
-                                  color: Colors.green,
-                                ),
-                                Text(S.of(context).beer_detail_hot_spicy,
-                                    style: TextStyle(color: Colors.white))
-                              ],
-                            )
-                          ],
+                    Text(
+                      S.of(context).do_you_tasted,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FlatButton.icon(
+                            onPressed: () {
+                              updateBeer(true);
+                            },
+                            icon: Icon(BeerIcon.tasted_full,
+                                color:
+                                    _tasted ? kGreenColor : Colors.grey[400]),
+                            label: Text(S.of(context).yes)),
+                        FlatButton.icon(
+                            onPressed: () {
+                              updateBeer(false);
+                            },
+                            icon: Icon(BeerIcon.tasted_empty,
+                                color:
+                                    !_tasted ? kGreenColor : Colors.grey[400]),
+                            label: Text(S.of(context).no)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Container(
+                      height: 190.0,
+                      alignment: Alignment.bottomCenter,
+                      child: Card(
+                        color: kMoonlitAsteroidStartColor,
+                        elevation: 4.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    child: Text('5',
+                                        style: TextStyle(color: Colors.white)),
+                                    height: 24.0,
+                                  ),
+                                  Container(
+                                    child: Text('4',
+                                        style: TextStyle(color: Colors.white)),
+                                    height: 24.0,
+                                  ),
+                                  Container(
+                                    child: Text('3',
+                                        style: TextStyle(color: Colors.white)),
+                                    height: 24.0,
+                                  ),
+                                  Container(
+                                    child: Text('2',
+                                        style: TextStyle(color: Colors.white)),
+                                    height: 24.0,
+                                  ),
+                                  Container(
+                                    child: Text('1',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        )),
+                                    height: 24.0,
+                                  ),
+                                  Container(
+                                    child: Text('0',
+                                        style: TextStyle(color: Colors.white)),
+                                  ),
+                                  SizedBox(
+                                    height: 5.0,
+                                  )
+                                ],
+                              ),
+                              graphBarItem(context, widget.selectedBeer.bitter,
+                                  S.of(context).beer_detail_bitter),
+                              graphBarItem(context, widget.selectedBeer.candy,
+                                  S.of(context).beer_detail_candy),
+                              graphBarItem(context, widget.selectedBeer.salty,
+                                  S.of(context).beer_detail_salty),
+                              graphBarItem(
+                                  context,
+                                  widget.selectedBeer.hotSpicy,
+                                  S.of(context).beer_detail_hot_spicy),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -291,16 +249,6 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    Visibility(
-                      visible: !_tasted,
-                      child: Text(
-                        S.of(context).do_you_tasted,
-                        style: TextStyle(
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
                     /*SizedBox(
                       height: 15.0,
                     ),
@@ -318,8 +266,8 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                 child: CircleAvatar(
                   child: Hero(
                       tag: widget.selectedBeer.name,
-                      child: ImageProviderWidget(widget.avatarImage)),
-                  backgroundColor: widget.avatarColor,
+                      child: ImageProviderWidget(widget.selectedBeer.imageUri)),
+                  backgroundColor: kCitrusStartCustomColor,
                   radius: Consts.avatarRadius,
                 ),
               ),
@@ -327,6 +275,53 @@ class _BeerDetailViewState extends State<BeerDetailView> {
           ),
         ),
       ),
+    );
+  }
+
+  Column beerProperty(String propertyName, String propertyValue) {
+    return Column(
+      children: [
+        ClipOval(
+          child: Container(
+            width: 70.0,
+            height: 70.0,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: kCitrusStartCustomColor,
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            child: Text(
+              propertyValue,
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        Text(
+          propertyName,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+        )
+      ],
+    );
+  }
+
+  Column graphBarItem(
+      BuildContext context, int propertyValue, String propertyName) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          width: 50.0,
+          height: propertyValue * 24.0,
+          color: Colors.green,
+        ),
+        Text(
+          propertyName,
+          style: TextStyle(color: Colors.white),
+        )
+      ],
     );
   }
 }
@@ -504,7 +499,12 @@ class _FeedbackBoxState extends State<FeedbackBox> {
                 ],
               ),
             ),
-            Visibility(visible: _saving, child: Text(S.of(context).beer_detail_thanks_for_feedback, style: TextStyle(color: Colors.white),)),
+            Visibility(
+                visible: _saving,
+                child: Text(
+                  S.of(context).beer_detail_thanks_for_feedback,
+                  style: TextStyle(color: Colors.white),
+                )),
           ],
         ),
       ),

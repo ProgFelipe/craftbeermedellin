@@ -2,7 +2,7 @@ import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/home/articles.dart';
 import 'package:craftbeer/ui/home/new_releases.dart';
-import 'package:craftbeer/ui/home/search_view.dart';
+import 'package:craftbeer/ui/home/search_widget.dart';
 import 'package:craftbeer/ui/home/top_beers.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
@@ -33,7 +33,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
     super.build(context);
     return Container(
       height: double.infinity,
-      color: kBlackColor,
+      color: Colors.black,
       child: SafeArea(
         child: SingleChildScrollView(
           controller: _scrollController,
@@ -42,7 +42,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               ConnectivityWidget(),
-              BeerReleases(),
+              News(),
               SizedBox(
                 height: kBigMargin,
               ),
@@ -50,29 +50,33 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               SizedBox(
                 height: kBigMargin,
               ),
-              Container(
-                margin: EdgeInsets.only(left: kMarginLeft),
-                child: Column(
-                  children: [
-                    titleView(S.of(context).top_week_title, color: kWhiteColor),
-                    SizedBox(
-                      height: kMarginTopFromTitle,
-                    ),
-                    TopBeersView(),
-                    SizedBox(
-                      height: kBigMargin,
-                    ),
-                    titleView(S.of(context).home_learn_title,
-                        color: kWhiteColor),
-                    SizedBox(
-                      height: kMarginTopFromTitle,
-                    ),
-                    ArticlesWidget(),
-                    SizedBox(
-                      height: kBigMargin,
-                    ),
-                  ],
-                ),
+              Column(
+                children: [
+                  Container(
+                      width: double.infinity,
+                      child: Image.asset('assets/pubbeer.png', height: 150.0, alignment: Alignment.topLeft,)),
+                  titleView(S.of(context).top_week_title,
+                      color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
+                  SizedBox(
+                    height: kMarginTopFromTitle,
+                  ),
+                  TopBeersView(),
+                  SizedBox(
+                    height: kBigMargin,
+                  ),
+                  Container(
+                      width: double.infinity,
+                      child: Image.asset('assets/kraken.png', height: 150.0, alignment: Alignment.topLeft,)),
+                  titleView(S.of(context).home_learn_title,
+                      color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
+                  SizedBox(
+                    height: kMarginTopFromTitle,
+                  ),
+                  ArticlesWidget(),
+                  SizedBox(
+                    height: kBigMargin,
+                  ),
+                ],
               ),
               /*titleView('Feeds', color: Colors.white),
               LastComments(),*/

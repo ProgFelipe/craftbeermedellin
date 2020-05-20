@@ -1,6 +1,5 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
-import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/models/brewer_data_notifier.dart';
+import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/beer_detail_view.dart';
 import 'package:craftbeer/ui/brewers/beer_item.dart';
 import 'package:flutter/material.dart';
@@ -17,25 +16,13 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => BeerDetailView(
-                onTastedMark: (bool tasted, int vote, String comment) {
-                  if (tasted) {
-                    beer.doITasted = tasted;
-                    if (vote != null && vote != beer.myVote) {
-                      beer.myVote = vote;
-                    }
-                    if (comment != null && comment != beer.myComment) {
-                      beer.myComment = comment;
-                    }
-                    model.sendBeerFeedback(beer, index);
-                  }
-                },
-                selectedBeer: beer,
-                saveAndBackButtonText: S.of(context).back,
-                avatarColor: Colors.orangeAccent[200],
-                avatarImage: beer.imageUri,
-                tastedStatus: beer.doITasted,
-              )),
+        builder: (context) => BeerDetailView(
+          onTastedMark: (bool tasted) {
+            model.sendBeerFeedback(beer, index);
+          },
+          selectedBeer: beer,
+        ),
+      ),
     );
   }
 
@@ -77,9 +64,10 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
             itemCount: brewerData.currentBrewer.beers.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () => showBeerDialog(context, brewerData, index),
-                child: BeerItem(beer: brewerData.currentBrewer.beers[index],)
-              );
+                  onTap: () => showBeerDialog(context, brewerData, index),
+                  child: BeerItem(
+                    beer: brewerData.currentBrewer.beers[index],
+                  ));
             },
           ),
         );

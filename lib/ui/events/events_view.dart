@@ -2,7 +2,6 @@ import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
-import 'package:craftbeer/ui/components/generic_empty_state.dart';
 import 'package:craftbeer/ui/events/event_card_widget.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
@@ -10,7 +9,6 @@ import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class EventsView extends StatefulWidget {
   @override
@@ -30,9 +28,9 @@ class _EventsViewState extends State<EventsView>
           children: <Widget>[
             ConnectivityWidget(),
             SizedBox(
-              height: 10.0,
+              height: kBigMargin,
             ),
-            Container(
+            /* Container(
               height: 100.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -54,7 +52,7 @@ class _EventsViewState extends State<EventsView>
                   ),
                 ),
               ),
-            ),
+            ),*/
             //YoutubeVideoPlayer(),
             Padding(
                 padding: EdgeInsets.only(left: kMarginLeft),
@@ -83,8 +81,30 @@ class EventsWidget extends StatelessWidget {
     List<Event> events = Provider.of<List<Event>>(context);
     if (events == null) {
       return LoadingWidget();
-    } else if (events.isEmpty) {
-      return GenericEmptyState();
+    }
+    if (events.isEmpty) {
+      return Center(
+        child: Container(
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/empty_state_events.png',
+                width: kEmptyStateWidth,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Text(
+                'No Events Found',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+        ),
+      );
     }
     return Expanded(
       flex: 2,
@@ -99,122 +119,6 @@ class EventsWidget extends StatelessWidget {
           crossAxisSpacing: 4.0,
         ),
       ),
-    );
-  }
-}
-
-///https://pub.dev/packages/youtube_player_flutter#-example-tab-
-class YoutubeVideoPlayer extends StatefulWidget {
-  @override
-  _YoutubeVideoPlayerState createState() => _YoutubeVideoPlayerState();
-}
-
-class _YoutubeVideoPlayerState extends State<YoutubeVideoPlayer> {
-  YoutubePlayerController _controller;
-  TextEditingController _idController;
-  TextEditingController _seekToController;
-
-  PlayerState _playerState;
-  YoutubeMetaData _videoMetaData;
-  double _volume = 50;
-  bool _muted = false;
-  bool _isPlayerReady = false;
-
-  final List<String> _ids = [
-    'KpqRKLigVTw',
-    'qiYKD1FZ5YM',
-    'gQDByCdjUXw',
-    'iLnmTe5Q2Qw',
-    '_WoCV4c6XOE',
-    'KmzdUe0RSJo',
-    '6jZDSSZZxjQ',
-    'p2lYr3vM_1w',
-    '7QUtEmBT_-w',
-    '34_PXCzGw1M',
-  ];
-
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {
-        _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
-      });
-    }
-  }
-
-  @override
-  void deactivate() {
-    // Pauses video while navigating to next page.
-    _controller.pause();
-    super.deactivate();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _idController.dispose();
-    _seekToController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    _controller = YoutubePlayerController(
-      initialVideoId: _ids.first,
-      flags: YoutubePlayerFlags(
-        mute: false,
-        autoPlay: false,
-        disableDragSeek: false,
-        loop: false,
-        isLive: false,
-        forceHD: false,
-        enableCaption: true,
-      ),
-    )..addListener(listener);
-    _idController = TextEditingController();
-    _seekToController = TextEditingController();
-    _videoMetaData = YoutubeMetaData();
-    _playerState = PlayerState.unknown;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return YoutubePlayer(
-      controller: _controller,
-      showVideoProgressIndicator: true,
-      progressIndicatorColor: Colors.blueAccent,
-      topActions: <Widget>[
-        SizedBox(width: 8.0),
-        Expanded(
-          child: Text(
-            _controller.metadata.title,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18.0,
-            ),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.settings,
-            color: Colors.white,
-            size: 25.0,
-          ),
-          onPressed: () {
-            //_showSnackBar('Settings Tapped!');
-          },
-        ),
-      ],
-      onReady: () {
-        _isPlayerReady = true;
-      },
-      onEnded: (data) {
-        _controller.load(_ids[(_ids.indexOf(data.videoId) + 1) % _ids.length]);
-        //_showSnackBar('Next Video Started!');
-      },
     );
   }
 }

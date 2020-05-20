@@ -1,6 +1,6 @@
 import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/loading_widget.dart';
-import 'package:craftbeer/models/brewer_data_notifier.dart';
+import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
@@ -36,7 +36,7 @@ class _BrewersGridState extends State<BrewersGrid> {
   Widget build(BuildContext context) {
     var brewersData = Provider.of<BrewersData>(context);
 
-    if(brewersData.underMaintain){
+    if(brewersData.underMaintainState){
       return Text('Estamo en mantenimiento');
     }
     if(brewersData.checkYourInternet){
@@ -107,7 +107,7 @@ class BrewerItem extends StatelessWidget {
                     ? Icons.favorite
                     : Icons.favorite_border,
                 size: 30.0,
-                color: kYellowColor,
+                color: kCitrusEndCustomColor,
               ),
             ),
           ],

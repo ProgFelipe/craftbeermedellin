@@ -1,4 +1,3 @@
-import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/database/beers_dao.dart';
 import 'package:craftbeer/database/database_provider.dart';

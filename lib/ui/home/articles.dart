@@ -2,8 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:craftbeer/abstractions/article_model.dart';
-import 'package:craftbeer/models/articles_data_notifier.dart';
-import 'package:craftbeer/ui/components/articlet_reader_page.dart';
+import 'package:craftbeer/loading_widget.dart';
+import 'package:craftbeer/providers/articles_provider.dart';
 import 'package:craftbeer/ui/home/article_card.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
@@ -32,75 +32,12 @@ class RandomColor {
 }
 
 class _ArticlesWidgetState extends State<ArticlesWidget> {
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ArticlesData>(
-        builder: (context, articlesData, child) => Column(
-              children: [
-                MoreArticles(
-                  articles: articlesData.secondaryArticles,
-                  randomColor: RandomColor(),
-                ),
-                SizedBox(
-                  height: kBigMargin,
-                ),
-                PrimaryArticles(
-                    articles: articlesData.articles)
-              ],
-            ));
-  }
-}
-
-class MoreArticles extends StatelessWidget {
-  final RandomColor randomColor;
-
-  final List<Article> articles;
-
-  const MoreArticles({this.articles, this.randomColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return articles != null && articles.isNotEmpty
-        ? Container(
-            height: 80.0,
-            alignment: Alignment.topLeft,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: articles.length,
-                itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) {
-                            return ArticleReader(
-                              article: articles[index],
-                            );
-                          },
-                        ));
-                      },
-                      child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: const BorderRadius.all(
-                                  Radius.elliptical(0, 0))),
-                          elevation: kCardElevation,
-                          color: randomColor.getRandomColor(),
-                          semanticContainer: true,
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                articles[index].title,
-                                maxLines: 3,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )),
-                    )),
-          )
-        : Text(
-            'Text not articles found',
-            style: TextStyle(color: kWhiteColor),
-          );
+      builder: (context, articlesData, child) =>
+          PrimaryArticles(articles: articlesData.articles),
+    );
   }
 }
 
@@ -111,22 +48,40 @@ class PrimaryArticles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return articles != null && articles.isNotEmpty
-        ? Container(
-            alignment: Alignment.topLeft,
-            height: 160.0,
-            child: ListView.builder(
-              itemCount: articles.length,
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              itemBuilder: (context, index) => ArticleCard(
-                article: articles[index],
-              ),
+    if (articles == null) {
+      return LoadingWidget();
+    }
+    if (articles.isEmpty) {
+      return Container(
+        child: Column(
+          children: [
+            Image.asset('assets/empty_state_articles.png',
+                width: kEmptyStateWidth),
+            SizedBox(
+              height: 20.0,
             ),
-          )
-        : Text(
-            'Could not get articles',
-            style: TextStyle(color: kWhiteColor),
-          );
+            Text(
+              'No Articles Found',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+      );
+    }
+    return Container(
+      alignment: Alignment.topLeft,
+      height: 200.0,
+      child: ListView.builder(
+        itemCount: articles.length,
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemBuilder: (context, index) => ArticleCard(
+          article: articles[index],
+        ),
+      ),
+    );
   }
 }

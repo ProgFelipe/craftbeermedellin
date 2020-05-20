@@ -125,7 +125,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                   ),
                   child: ImageProviderWidget(
                     event.imageUri,
-                    myBoxFit: BoxFit.fill,
+                    myBoxFit: BoxFit.cover,
                   ),
                 ),
                 Visibility(
@@ -165,15 +165,23 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                           color: kWhiteColor,
                         ),
                         textAlign: TextAlign.left,
-                      )
-                          : Text(
+                      ) : eventLeftTime?.inDays == 0 ? Text(
                         //'8 hours 20 min',
-                        "Is Today!!",
+                        S.of(context).event_today,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.bold,
                           color: kZelyonyGreenLightColor,
+                        ),
+                      ) :  Text(
+                        //'8 hours 20 min',
+                        S.of(context).event_in_pass,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                          color: kRedColor,
                         ),
                       ),
                     ),
@@ -185,6 +193,17 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                 margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
                 child: Column(
                   children: [
+                    Container(
+                      width: double.infinity,
+                      child: Text(
+                        event.description ?? '',
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.normal,
+                            color: kBlackColor),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
                     Visibility(
                       visible: event?.timestamp != null,
                       child: Container(

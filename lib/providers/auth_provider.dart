@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthData extends ChangeNotifier{
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  /*final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
@@ -20,6 +20,6 @@ class AuthData extends ChangeNotifier{
     final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
     print("signed in " + user.displayName);
     return user;
-  }
+  }*/
 
 }

@@ -19,24 +19,32 @@ class BrewerContent extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+            topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0)),
       ),
       padding:
           EdgeInsets.symmetric(horizontal: 15.0, vertical: headerTopMargin),
       child: Column(
         children: <Widget>[
+          Center(child: Container(width: 50, height: 5, decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20.0)
+          ),),),
+          SizedBox(
+            height: 10.0,
+          ),
           Visibility(
             visible: brewer.promotions != null && brewer.promotions.length > 0,
             child: Column(
               children: [
                 titleView(S.of(context).offers,
-                    color: Colors.black, size: 30.0),
+                    color: Colors.black, size: 20.0),
                 Offers(promos: brewer.promotions),
               ],
             ),
           ),
-          titleView(S.of(context).our_beers,
-              color: Colors.black, size: 30.0),
+          SizedBox(
+            height: 10.0,
+          ),
           BrewerBeersWidget(),
           SizedBox(
             height: 10.0,
