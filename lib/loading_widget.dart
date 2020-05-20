@@ -1,3 +1,4 @@
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
@@ -5,9 +6,12 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-      child: Text(
-        'Loading data...',
-        style: TextStyle(color: Colors.white),
+          height: 100.0,
+      child: Center(
+        child: Text(
+          S.of(context).loading,
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     ));
   }

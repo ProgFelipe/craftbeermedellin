@@ -24,9 +24,9 @@ class _SearchViewState extends State<SearchView>
     keepScrollOffset: true,
   );
 
-  void scrollUp() {
+  void scrollDown() {
     _scrollController.animateTo(
-      _scrollController.position.minScrollExtent,
+      _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
     );
@@ -64,7 +64,7 @@ class _SearchViewState extends State<SearchView>
                         width: double.infinity,
                         child: Image.asset(
                           'assets/brewers.png',
-                          height: 80.0,
+                          height: 100.0,
                           alignment: Alignment.topLeft,
                         ),
                       ),
@@ -84,7 +84,7 @@ class _SearchViewState extends State<SearchView>
                         width: double.infinity,
                         child: Image.asset(
                           'assets/skullflowers.png',
-                          height: 150.0,
+                          height: 200.0,
                           alignment: Alignment.topLeft,
                         ),
                       ),
@@ -141,17 +141,16 @@ class _SearchViewState extends State<SearchView>
                         width: double.infinity,
                         child: Image.asset(
                           'assets/compass.png',
-                          height: 100.0,
+                          height: 200.0,
                           alignment: Alignment.topLeft,
                         ),
                       ),
                       Container( alignment: Alignment.topLeft,child: Container(width: 200, height: 20, color: kGreenColor,)),
                       titleView(S.of(context).categories),
-                      //CategoriesView(scrollUp),
                       SizedBox(
                         height: kMarginTopFromTitle,
                       ),
-                      CategoriesChips(),
+                      CategoriesChips(scrollOnTap: scrollDown,),
                     ],
                   ),
                 ),

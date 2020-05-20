@@ -50,5 +50,6 @@
   "tasted_beers_title": "TASTED BEERS",
   "event_today": "Is Today!!",
   "event_in_pass": "Old event",
-  "empty_state_favorite_beers": "No Favorite Beers"
+  "empty_state_favorite_beers": "No Favorite Beers",
+  "loading": "Loading data..."
 }

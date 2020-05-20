@@ -12,7 +12,6 @@ import 'package:craftbeer/ui/events/events_view.dart';
 import 'package:craftbeer/ui/home/home_view.dart';
 import 'package:craftbeer/ui/map/map_view.dart';
 import 'package:craftbeer/ui/search/search_view.dart';
-import 'package:craftbeer/ui/user/user_admin_view.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +93,6 @@ class _NavigatorState extends State<Navigator> {
     SearchView(),
     EventsView(),
     CraftMap(),
-    UserView(),
   ];
 
   @override

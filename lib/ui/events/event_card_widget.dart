@@ -181,7 +181,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                         style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.bold,
-                          color: kRedColor,
+                          color: Colors.redAccent,
                         ),
                       ),
                     ),

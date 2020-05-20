@@ -10,13 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesChips extends StatelessWidget {
+  final Function scrollOnTap;
+
+  const CategoriesChips({Key key, this.scrollOnTap}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var categoriesData = Provider.of<CategoriesData>(context);
-    if(categoriesData.loadingState){
+    if (categoriesData.loadingState) {
       return LoadingWidget();
     }
-    if(categoriesData.underMaintainState || categoriesData.errorStatus || categoriesData.checkYourInternet){
+    if (categoriesData.underMaintainState ||
+        categoriesData.errorStatus ||
+        categoriesData.checkYourInternet) {
       return ErrorStatusWidget(baseProvider: categoriesData);
     }
     return Column(
@@ -29,16 +35,24 @@ class CategoriesChips extends StatelessWidget {
               ?.map((category) => CategoryChip(
                   name: category.name,
                   quantity: category.beersIds?.length ?? 0,
-                  onTapCallBack: () => categoriesData.updateSelection(category)))
+                  onTapCallBack: () {
+                    categoriesData.updateSelection(category);
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      scrollOnTap();
+                    });
+                  }))
               ?.toList(),
         ),
-        SizedBox(height: kBigMargin,),
-        Visibility(
-          visible: categoriesData.selectedCategory != null,
-          child: FilterBeersByTypeView(
-            selectedCategory: categoriesData.selectedCategory,
-          ),
+        SizedBox(
+          height: kBigMargin,
         ),
+        categoriesData.selectedCategory != null
+            ? FilterBeersByTypeView(
+                selectedCategory: categoriesData.selectedCategory,
+              )
+            : SizedBox(
+                height: 0.0,
+              ),
       ],
     );
   }
@@ -95,17 +109,23 @@ class FilterBeersByTypeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<BrewersData>(
       builder: (context, brewerData, child) => FutureBuilder(
-        future: brewerData.fetchBeersByCategory(selectedCategory.beersIds),
-        builder: (context, snapshot) =>
-         snapshot.hasData ? Container(
-            height: kBeerCardHeight,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data.length ?? 0,
-              itemBuilder: (context, index) =>
-                  BeerCard(beer: snapshot.data[index]),
-            )) : SizedBox(height: 0,),
-      ),
+          future: brewerData.fetchBeersByCategory(selectedCategory.beersIds),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data.length > 0) {
+              return Container(
+                  height: kBeerCardHeight,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data.length ?? 0,
+                    itemBuilder: (context, index) =>
+                        BeerCard(beer: snapshot.data[index]),
+                  ));
+            } else {
+              return SizedBox(
+                height: 0,
+              );
+            }
+          }),
     );
   }
 }
