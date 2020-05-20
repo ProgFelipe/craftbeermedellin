@@ -146,7 +146,7 @@ class BrewersData extends BaseProvider {
     if (beer.doITasted) {
       tastedBeers.add(beer);
     } else {
-      tastedBeers.remove(beer);
+      tastedBeers.removeWhere((element) => element.id == beer.id);
     }
     beersDAO.updateBeer(beer);
     notifyListeners();
