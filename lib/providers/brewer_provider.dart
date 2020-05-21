@@ -44,54 +44,60 @@ class BrewersData extends BaseProvider {
         brewers = await brewerDAO.getBrewers();
         debugPrint('HAY POLAS ${brewers.length}');
         //await shouldUpdateData()
-        if (brewers == null || brewers.isEmpty) {
-          debugPrint('TOMANDO DATOS DE INTERNET');
-          var response = await api.fetchBrewers();
-          switch (response.statusCode) {
-            case 200:
-              {
-                setFetchCurrentDate();
-                final jsonData = json.decode(utf8.decode(response.bodyBytes));
-                List<Brewer> brewers = List();
-                List<Beer> beers = List();
-                for (Map brewer in jsonData) {
-                  var brewerObj = Brewer.fromJson(brewer);
-                  beers.addAll(brewerObj.beers);
-                  brewers.add(Brewer.fromJson(brewer));
-                }
-                brewerDAO.insertBrewers(brewers);
-                underMaintainState = false;
-                checkYourInternet = false;
-                errorStatus = false;
-                addBrewers(brewers, beers);
-                return;
-              }
-            case 404:
-              {
-                print('404');
-                underMaintainState = true;
-                notifyListeners();
-                return;
-              }
-            case 503:
-              {
-                print('503');
-                checkYourInternet = true;
-                notifyListeners();
-                return;
-              }
-          }
-        } else {
+        if (brewers != null || brewers.isNotEmpty) {
           beers = await beersDAO.getBeers();
           tastedBeers = await getMyTastedBeers();
+          loadingState = false;
           addBrewers(brewers, beers);
         }
+        fetchBrewersAndBeers();
       }
-      hideLoading();
     } catch (exception, stacktrace) {
       print(stacktrace);
       errorStatus = true;
       hideLoading();
+    }
+  }
+
+  void fetchBrewersAndBeers() async {
+    debugPrint('TOMANDO DATOS DE INTERNET');
+    var response = await api.fetchBrewers();
+    switch (response.statusCode) {
+      case 200:
+        {
+          setFetchCurrentDate();
+          final jsonData = json.decode(utf8.decode(response.bodyBytes));
+          List<Brewer> brewers = List();
+          List<Beer> beers = List();
+          for (Map brewer in jsonData) {
+            var brewerObj = Brewer.fromJson(brewer);
+            beers.addAll(brewerObj.beers);
+            brewers.add(Brewer.fromJson(brewer));
+          }
+          brewerDAO.insertBrewers(brewers);
+          underMaintainState = false;
+          checkYourInternet = false;
+          errorStatus = false;
+          loadingState = false;
+          addBrewers(brewers, beers);
+          return;
+        }
+      case 404:
+        {
+          print('404');
+          underMaintainState = true;
+          loadingState = false;
+          notifyListeners();
+          return;
+        }
+      case 503:
+        {
+          print('503');
+          checkYourInternet = true;
+          loadingState = false;
+          notifyListeners();
+          return;
+        }
     }
   }
 

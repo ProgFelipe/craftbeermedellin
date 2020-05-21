@@ -30,30 +30,6 @@ class _EventsViewState extends State<EventsView>
             SizedBox(
               height: kBigMargin,
             ),
-            /* Container(
-              height: 100.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 100,
-                itemBuilder: (context, index) => Container(
-                  width: 100.0,
-                  margin: EdgeInsets.only(left: 10.0),
-                  child: GestureDetector(
-                    onTap: (){
-                      showDialog(context: context,
-                        builder: (context) => YoutubeVideoPlayer(),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 90.0,
-                      backgroundColor: Colors.black54,
-                      child: Icon(Icons.video_library),
-                    ),
-                  ),
-                ),
-              ),
-            ),*/
-            //YoutubeVideoPlayer(),
             Padding(
                 padding: EdgeInsets.only(left: kMarginLeft),
                 child:
@@ -83,9 +59,11 @@ class EventsWidget extends StatelessWidget {
       return LoadingWidget();
     }
     if (events.isEmpty) {
-      return Center(
+      return Expanded(
         child: Container(
+          alignment: Alignment.center,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 'assets/empty_state_events.png',
@@ -95,7 +73,8 @@ class EventsWidget extends StatelessWidget {
                 height: 20.0,
               ),
               Text(
-                'No Events Found',
+                S.of(context).empty_state_events,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,

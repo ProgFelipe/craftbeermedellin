@@ -21,3 +21,4 @@ const kBlackLightAccentColor = const Color(0xffaaa19e);
 const kBlueColor = const Color(0xff2371B5);
 const kWhiteColor = const Color(0xffFEFEFC);
 const kGrayEmptyState = const Color(0xff9e9e9e);
+Color emptyStateTextColor =  Colors.grey[500];

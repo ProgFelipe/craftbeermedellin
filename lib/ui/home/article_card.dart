@@ -1,4 +1,5 @@
 import 'package:craftbeer/abstractions/article_model.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/components/articlet_reader_page.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
@@ -55,7 +56,7 @@ class ArticleCard extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Text(
-                            'NEW',
+                            S.of(context).new_label,
                             style: TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold),
                           ),
                         ),

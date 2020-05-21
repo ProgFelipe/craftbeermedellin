@@ -1,7 +1,8 @@
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/components/beer_card.dart';
-import 'package:craftbeer/ui/components/failure_status.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,6 @@ class TopBeersView extends StatelessWidget {
     return Consumer<BrewersData>(builder: (context, brewerData, child) {
       if(brewerData.loadingState){
         return LoadingWidget();
-      }
-      if(brewerData.underMaintainState || brewerData.errorStatus || brewerData.checkYourInternet){
-        return ErrorStatusWidget(baseProvider: brewerData);
       }
       if (brewerData.beers == null || brewerData.beers.isEmpty) {
         return Container(
@@ -29,9 +27,9 @@ class TopBeersView extends StatelessWidget {
                 height: 20.0,
               ),
               Text(
-                'No Top Beers',
+                S.of(context).empty_state_top_beers,
                 style: TextStyle(
-                    color: Colors.white,
+                    color: emptyStateTextColor,
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold),
               )

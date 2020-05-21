@@ -11,7 +11,6 @@ import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchWidget extends StatefulWidget {
   final Function scrollViewToTop;
@@ -98,7 +97,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(
               prefixIcon: Icon(
-                FontAwesomeIcons.search,
+                Icons.search,
                 color: DecorationConsts.hintGreyColor,
               ),
               suffixIcon: IconButton(

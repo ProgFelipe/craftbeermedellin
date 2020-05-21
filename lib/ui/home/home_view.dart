@@ -42,6 +42,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               ConnectivityWidget(),
+              /*
+                    if(brewerData.underMaintainState || brewerData.errorStatus || brewerData.checkYourInternet){
+        return ErrorStatusWidget(baseProvider: brewerData);
+      }
+               */
               News(),
               SizedBox(
                 height: kBigMargin,
@@ -54,7 +59,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                 children: [
                   Container(
                       width: double.infinity,
-                      child: Image.asset('assets/pubbeer.png', height: 150.0, alignment: Alignment.topLeft,)),
+                      child: Image.asset(
+                        'assets/pubbeer.png',
+                        height: 150.0,
+                        alignment: Alignment.topLeft,
+                      )),
                   titleView(S.of(context).top_week_title,
                       color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
                   SizedBox(
@@ -66,7 +75,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                   ),
                   Container(
                       width: double.infinity,
-                      child: Image.asset('assets/kraken.png', height: 150.0, alignment: Alignment.topLeft,)),
+                      child: Image.asset(
+                        'assets/kraken.png',
+                        height: 150.0,
+                        alignment: Alignment.topLeft,
+                      )),
                   titleView(S.of(context).home_learn_title,
                       color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
                   SizedBox(

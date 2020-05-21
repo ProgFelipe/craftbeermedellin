@@ -1,4 +1,5 @@
 import 'package:craftbeer/abstractions/brewer_model.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
@@ -37,11 +38,16 @@ class _BrewersGridState extends State<BrewersGrid> {
   Widget build(BuildContext context) {
     var brewersData = Provider.of<BrewersData>(context);
 
-    if(brewersData.loadingState){
+    if (brewersData.loadingState) {
       return LoadingWidget();
     }
-    if(brewersData.underMaintainState || brewersData.errorStatus || brewersData.checkYourInternet){
+    if (brewersData.underMaintainState ||
+        brewersData.errorStatus ||
+        brewersData.checkYourInternet) {
       return ErrorStatusWidget(baseProvider: brewersData);
+    }
+    if(brewersData.brewers == null || brewersData.brewers.isEmpty){
+      return Text(S.of(context).empty_state_brewers, style: TextStyle(color: Colors.grey[500]),);
     }
     return Container(
       height: 100.0,
@@ -59,7 +65,9 @@ class _BrewersGridState extends State<BrewersGrid> {
           var brewer = brewersData.brewers[index];
           return ChangeNotifierProvider<Brewer>.value(
             value: brewer,
-            child: BrewerItem((brewer){brewersData.currentBrewer = brewer;}),
+            child: BrewerItem((brewer) {
+              brewersData.currentBrewer = brewer;
+            }),
           );
         },
       ),
@@ -69,6 +77,7 @@ class _BrewersGridState extends State<BrewersGrid> {
 
 class BrewerItem extends StatelessWidget {
   final Function changeCurrentBrewerOnTap;
+
   BrewerItem(this.changeCurrentBrewerOnTap);
 
   @override
@@ -93,7 +102,11 @@ class BrewerItem extends StatelessWidget {
         decoration: _brewersDecoration(),
         child: Stack(
           children: <Widget>[
-            Hero(tag: brewer.name ,child: ImageProviderWidget(brewer.imageUri,)),
+            Hero(
+                tag: brewer.name,
+                child: ImageProviderWidget(
+                  brewer.imageUri,
+                )),
             Positioned(
               bottom: 7.0,
               right: 5.0,
@@ -118,10 +131,5 @@ BoxDecoration _brewersDecoration() {
       Radius.circular(90.0),
     ),
     color: kWhiteColor,
-    /*gradient: LinearGradient(
-      begin: FractionalOffset.topCenter,
-      end: FractionalOffset.bottomCenter,
-      colors: [Colors.black, Colors.white.withOpacity(0.4)],
-    ),*/
   );
 }

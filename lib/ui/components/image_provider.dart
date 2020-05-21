@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ImageProviderWidget extends StatelessWidget {
   final String imageUri;
@@ -29,7 +28,7 @@ class ImageProviderWidget extends StatelessWidget {
           fit: BoxFit.scaleDown,
         ),
         errorWidget: (context, url, error) {
-          return Icon(FontAwesomeIcons.exclamationCircle);
+          return Icon(Icons.error);
         },
       ),
     );

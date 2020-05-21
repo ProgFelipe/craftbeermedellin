@@ -11,7 +11,8 @@
   "top_week_title": "TOP SELECTIONS",
   "back": "Back",
   "contact_us": "Contact Us",
-  "days": "Days",
+  "days_left": "Days left",
+  "days": "Días",
   "hours": "Hrs",
   "categories": "CATEGORIES",
   "more_info": "More info",
@@ -51,5 +52,13 @@
   "event_today": "Is Today!!",
   "event_in_pass": "Old event",
   "empty_state_favorite_beers": "No Favorite Beers",
-  "loading": "Loading data..."
+  "loading": "Loading data...",
+  "empty_state_events": "No Events Found",
+  "new_label": "NEW",
+  "empty_state_promotions": "No Promotions Found",
+  "empty_state_brewers": "No Brewers Found",
+  "empty_state_articles": "No Articles Found",
+  "empty_state_categories": "No Categories Found",
+  "empty_state_news": "No New Releases",
+  "empty_state_top_beers": "No Top Beers"
 }

@@ -36,23 +36,25 @@ class CategoriesData extends BaseProvider {
             underMaintainState = false;
             checkYourInternet = false;
             errorStatus = false;
+            loadingState = false;
             notifyListeners();
             return;
           }
         case 404:
           {
             underMaintainState = true;
+            loadingState = false;
             notifyListeners();
             return;
           }
         case 500:
           {
             checkYourInternet = true;
+            loadingState = false;
             notifyListeners();
             return;
           }
       }
-      hideLoading();
     } catch (exception, stacktrace) {
       print(stacktrace);
       errorStatus = true;

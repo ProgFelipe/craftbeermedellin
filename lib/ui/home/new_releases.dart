@@ -1,5 +1,7 @@
 import 'package:craftbeer/abstractions/release_model.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
+import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +45,8 @@ class News extends StatelessWidget {
           ));
     } else {
       return Text(
-        'No New Releases',
-        style: TextStyle(color: Colors.grey[500]),
+        S.of(context).empty_state_news,
+        style: TextStyle(color: emptyStateTextColor),
       );
     }
   }

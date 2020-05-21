@@ -20,7 +20,7 @@ class EventCardWidget extends StatefulWidget {
 
 class _EventCardWidgetState extends State<EventCardWidget> {
   final Event event;
-  final DateFormat _dateFormat = new DateFormat("MMMM dd");
+  final DateFormat _dateFormat = DateFormat("MMMM dd");
 
   _EventCardWidgetState({this.event});
 
@@ -43,7 +43,11 @@ class _EventCardWidgetState extends State<EventCardWidget> {
   }
 
   String getFormattedDayHoursDurationString(Duration duration) =>
-      "${S.of(context).days}: ${twoDigits(duration.inDays)}\n ${S.of(context).hours}:${twoDigits(duration.inHours)}";
+      "${S
+          .of(context)
+          .days}: ${twoDigits(duration.inDays)}\n ${S
+          .of(context)
+          .hours}:${twoDigits(duration.inHours)}";
 
   bool isSameDate(DateTime one, DateTime other) {
     return one.year == other.year &&
@@ -73,18 +77,20 @@ class _EventCardWidgetState extends State<EventCardWidget> {
       showTodayCounter = true;
       showRemainEventDaysLabel = true;
     });
-    _timer = new Timer.periodic(
+    _timer = Timer.periodic(
       oneSecond,
-      (Timer timer) => setState(
-        () {
-          if (eventLeftTime.inSeconds <= 0) {
-            timer.cancel();
-          } else {
-            eventLeftTime = eventLeftTime - oneSecond;
-            remainEventCountDown = getFormattedDurationString(eventLeftTime);
-          }
-        },
-      ),
+          (Timer timer) =>
+          setState(
+                () {
+              if (eventLeftTime.inSeconds <= 0) {
+                timer.cancel();
+              } else {
+                eventLeftTime = eventLeftTime - oneSecond;
+                remainEventCountDown =
+                    getFormattedDurationString(eventLeftTime);
+              }
+            },
+          ),
     );
   }
 
@@ -105,14 +111,14 @@ class _EventCardWidgetState extends State<EventCardWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         showDialog(context: context,
-        builder: (context) => ImageProviderWidget(event.imageUri,),
+          builder: (context) => ImageProviderWidget(event.imageUri,),
         );
       },
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius:  BorderRadius.circular(DecorationConsts.cardRadius),
+          borderRadius: BorderRadius.circular(DecorationConsts.cardRadius),
         ),
         child: Column(
           children: [
@@ -139,7 +145,7 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                       child: Text(
                         remainEventCountDown ?? '',
                         style: TextStyle(
-                            color:  kBlackColor, fontWeight: FontWeight.bold),
+                            color: kBlackColor, fontWeight: FontWeight.bold),
                       ),
                     ),
                     top: 10.0,
@@ -159,7 +165,9 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                       child: eventLeftTime != null && eventLeftTime.inDays > 0
                           ? Text(
                         //'8 hours 20 min',
-                        "${eventLeftTime?.inDays ?? ''} ${S.of(context).days} left",
+                        "${eventLeftTime?.inDays ?? ''} ${S
+                            .of(context)
+                            .days_left}",
                         style: TextStyle(
                           fontSize: 15.0,
                           color: kWhiteColor,
@@ -167,16 +175,20 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                         textAlign: TextAlign.left,
                       ) : eventLeftTime?.inDays == 0 ? Text(
                         //'8 hours 20 min',
-                        S.of(context).event_today,
+                        S
+                            .of(context)
+                            .event_today,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.bold,
                           color: kZelyonyGreenLightColor,
                         ),
-                      ) :  Text(
+                      ) : Text(
                         //'8 hours 20 min',
-                        S.of(context).event_in_pass,
+                        S
+                            .of(context)
+                            .event_in_pass,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 15.0,

@@ -2,9 +2,9 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:craftbeer/abstractions/article_model.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/articles_provider.dart';
-import 'package:craftbeer/ui/components/failure_status.dart';
 import 'package:craftbeer/ui/home/article_card.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
@@ -40,10 +40,6 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
         if (articlesData.loadingState) {
           return LoadingWidget();
         }
-        if (articlesData.underMaintainState || articlesData.errorStatus ||
-            articlesData.checkYourInternet) {
-          return ErrorStatusWidget(baseProvider: articlesData);
-        }
         return PrimaryArticles(articles: articlesData.articles);
       },
     );
@@ -57,10 +53,7 @@ class PrimaryArticles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (articles == null) {
-      return LoadingWidget();
-    }
-    if (articles.isEmpty) {
+    if (articles == null || articles.isEmpty) {
       return Container(
         child: Column(
           children: [
@@ -70,9 +63,9 @@ class PrimaryArticles extends StatelessWidget {
               height: 20.0,
             ),
             Text(
-              'No Articles Found',
+              S.of(context).empty_state_articles,
               style: TextStyle(
-                  color: Colors.white,
+                  color: emptyStateTextColor,
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold),
             )

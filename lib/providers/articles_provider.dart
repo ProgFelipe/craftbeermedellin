@@ -28,6 +28,7 @@ class ArticlesData extends BaseProvider {
             underMaintainState = false;
             checkYourInternet = false;
             errorStatus = false;
+            loadingState = false;
             notifyListeners();
           }
           break;
@@ -35,6 +36,7 @@ class ArticlesData extends BaseProvider {
           {
             print('404');
             underMaintainState = true;
+            loadingState = false;
             notifyListeners();
             break;
           }
@@ -42,13 +44,13 @@ class ArticlesData extends BaseProvider {
           {
             print('503');
             checkYourInternet = true;
+            loadingState = false;
             notifyListeners();
             break;
           }
         default:
           break;
       }
-      hideLoading();
     }catch (exception, stacktrace) {
       print(stacktrace);
       errorStatus = true;

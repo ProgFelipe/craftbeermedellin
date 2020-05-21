@@ -101,24 +101,6 @@ class _BrewerHeaderState extends State<BrewerHeader> {
           SizedBox(
             height: 5.0,
           ),
-          Visibility(
-            visible: !widget.brewer.canSale,
-            child: Card(
-              color: Colors.white10,
-              child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 15.0),
-                  child: Text(
-                    S.of(context).informed_consent,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.0,
-                        letterSpacing: 2.0),
-                  )),
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

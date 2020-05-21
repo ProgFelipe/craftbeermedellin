@@ -11,6 +11,7 @@
   "top_week_title": "TOP SEMANALES",
   "back": "Volver",
   "contact_us": "Contactanos",
+  "days_left": "Días",
   "days": "Días",
   "hours": "Hrs",
   "categories": "CATEGORÍAS",
@@ -18,7 +19,7 @@
   "ibu": "IBU:",
   "abv": "ABV:",
   "srm": "SRM:",
-  "know_us": "Conocenos",
+  "know_us": "Conócenos",
   "offers": "Ofertas",
   "our_beers": "Nuestras Cervezas",
   "did_you_like_it": "¿Qué tanto te gustó?",
@@ -50,5 +51,14 @@
   "event_today": "Es HOY!!",
   "event_in_pass": "Finalizado",
   "empty_state_favorite_beers": "No tienes Cervezas Favoritas",
-  "loading": "'Cargando...'"
+  "loading": "Cargando...",
+  "empty_state_events": "No Encontramos\nEventos",
+  "new_label": "Nuevo",
+  "empty_state_promotions": "No Encontramos Promociones",
+  "empty_state_brewers": "No Encontramos Cerveceros",
+  "empty_state_articles": "No Encontramos Artículos",
+  "empty_state_categories": "No Encontramos Categorías",
+  "empty_state_news": "No Encontramos Noticias",
+  "empty_state_top_beers": "No Encontramos Cervezas"
+
 }
