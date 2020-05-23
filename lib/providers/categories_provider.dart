@@ -20,7 +20,7 @@ class CategoriesData extends BaseProvider {
     getCategories();
   }
 
-  void getCategories() async {
+  Future<void> getCategories() async {
     try {
       var response = await api.fetchBeerTypes();
       switch (response.statusCode) {

@@ -12,25 +12,23 @@ class BrewerDao {
     debugPrint('INSERTAMOS POLAS ${brewers.length}');
     final Database db = await DataBaseProvider().getDataBase();
     brewers.forEach((brewer) async {
-      final List<Map<String, dynamic>> brewerMap = await db.query(
-          BREWER_TABLE, where: "id = ?", whereArgs: [brewer.id]);
+      final List<Map<String, dynamic>> brewerMap =
+          await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewer.id]);
       if (brewerMap?.isEmpty ?? true) {
         //debugPrint('DB ESTABA VACIA');
 
         await db.insert(
           BREWER_TABLE,
           brewer.toDbMap(),
-          conflictAlgorithm: ConflictAlgorithm.replace,);
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
       } else {
         Map<String, dynamic> brewerFromServer = brewer.toDbMap();
         brewerFromServer['favorite'] = brewerMap[0]['favorite'];
         //debugPrint('DB ESTABA LLENA');
 
-        await db.update(
-            BREWER_TABLE,
-            brewerFromServer,
-            where: "id = ?",
-            whereArgs: [brewer.id]);
+        await db.update(BREWER_TABLE, brewerFromServer,
+            where: "id = ?", whereArgs: [brewer.id]);
       }
 
       await beersDao.insertBeers(brewer.beers);
@@ -58,15 +56,15 @@ class BrewerDao {
   ///Favorites
   Future<bool> isFavorite(int brewerId) async {
     final Database db = await DataBaseProvider().getDataBase();
-    List<Map<String, dynamic>> result = await db.query(
-        BREWER_TABLE, where: "id = ?", whereArgs: [brewerId]);
+    List<Map<String, dynamic>> result =
+        await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewerId]);
     return result?.isEmpty ?? false;
   }
 
   Future<Brewer> fetchBrewerById(int brewerId) async {
     final Database db = await DataBaseProvider().getDataBase();
-    List<Map<String, dynamic>> result = await db.query(
-        BREWER_TABLE, where: "id = ?", whereArgs: [brewerId]);
+    List<Map<String, dynamic>> result =
+        await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewerId]);
     Brewer brewer = Brewer.fromDB(result.first);
     brewer.beers = await beersDao.getBeersByBrewer(brewerId);
     return brewer;
@@ -74,8 +72,7 @@ class BrewerDao {
 
   Future<void> setFavorite(Brewer brewer) async {
     final Database db = await DataBaseProvider().getDataBase();
-    await db.update(BREWER_TABLE, brewer.toDbMap(), where: "id = ?",
-        whereArgs: [brewer.id]);
+    await db.update(BREWER_TABLE, brewer.toDbMap(),
+        where: "id = ?", whereArgs: [brewer.id]);
   }
-
 }

@@ -36,7 +36,7 @@ class BrewersData extends BaseProvider {
     getBrewers();
   }
 
-  void getBrewers() async {
+  Future<void> getBrewers() async {
     try {
       showLoading();
       if (brewers?.isEmpty ?? true) {

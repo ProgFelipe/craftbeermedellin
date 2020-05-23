@@ -5,7 +5,6 @@
   "favorites_nav_title": "Favorites",
   "no_data": "No internet connection",
   "local_brewers": "BREWERS",
-  "welcome_story_telling": "Welcome\nLocal Colombian Brewers.!\n\nThe Craft Beer is our pasion \n\nDiscover local Craft Beers!",
   "promotions_title": "PROMOTIONS",
   "events_title": "EVENTS",
   "top_week_title": "TOP SELECTIONS",
@@ -60,5 +59,6 @@
   "empty_state_articles": "No Articles Found",
   "empty_state_categories": "No Categories Found",
   "empty_state_news": "No New Releases",
-  "empty_state_top_beers": "No Top Beers"
+  "empty_state_top_beers": "No Top Beers",
+  "empty_state_coming_soon": "Coming Soon"
 }

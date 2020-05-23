@@ -47,9 +47,9 @@ class BrewerContent extends StatelessWidget {
           ),
           BrewerBeersWidget(),
           Visibility(
-            visible: !brewer.canSale,
+            visible: brewer.canSale,
             child: Card(
-              color: Colors.white10,
+              color: Colors.black38,
               child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: 20.0, vertical: 15.0),

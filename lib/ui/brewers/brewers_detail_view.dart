@@ -61,7 +61,7 @@ class _BrewersDetailState extends State<BrewersDetail>
 
   double get maxHeight => MediaQuery.of(context).size.height;
 
-  double get minHeight => (MediaQuery.of(context).size.height * 0.5);
+  double get minHeight => (MediaQuery.of(context).size.height * 0.6);
 
   @override
   void initState() {

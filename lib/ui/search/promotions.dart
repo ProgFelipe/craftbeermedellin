@@ -14,7 +14,10 @@ class PromotionsWidget extends StatelessWidget {
     if (promotions == null) {
       return LoadingWidget();
     } else if (promotions.isEmpty) {
-      return Text(S.of(context).empty_state_promotions, style: TextStyle(color: emptyStateTextColor),);
+      return Text(
+        S.of(context).empty_state_promotions,
+        style: TextStyle(color: kGrayEmptyState),
+      );
     }
     return Container(
       height: 200.0,

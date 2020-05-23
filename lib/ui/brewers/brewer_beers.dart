@@ -1,4 +1,5 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/beer_detail_view.dart';
 import 'package:craftbeer/ui/brewers/beer_item.dart';
@@ -44,9 +45,9 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
                     height: 20.0,
                   ),
                   Text(
-                    'Muy Pronto',
+                    S.of(context).empty_state_coming_soon,
                     style: TextStyle(fontSize: 15.0, color: Colors.grey),
-                  )
+                  ),
                 ],
               ),
             ),

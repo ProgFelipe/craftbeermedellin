@@ -6,7 +6,7 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-          height: 100.0,
+      height: 100.0,
       child: Center(
         child: Text(
           S.of(context).loading,

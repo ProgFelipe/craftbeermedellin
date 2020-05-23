@@ -7,6 +7,7 @@ import 'package:craftbeer/providers/articles_provider.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/providers/categories_provider.dart';
 import 'package:craftbeer/providers/push_notifications_provider.dart';
+import 'package:craftbeer/providers/store_data_notifier.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/events/events_view.dart';
 import 'package:craftbeer/ui/home/home_view.dart';
@@ -18,10 +19,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'generated/l10n.dart';
 
-void main() => runApp(MyApp());
+void main(){
+  // Pass all uncaught errors from the framework to Crashlytics.
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   final database = DataBaseService();
@@ -38,6 +44,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<BrewersData>.value(value: BrewersData()),
         ChangeNotifierProvider<CategoriesData>.value(value: CategoriesData()),
         ChangeNotifierProvider<ArticlesData>.value(value: ArticlesData()),
+        ChangeNotifierProvider<StoreData>.value(value: StoreData()),
 
         ///FireStore
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
@@ -220,16 +227,8 @@ class _NavigatorState extends State<Navigator> {
               BeerIcon.map_empty,
               color: Colors.white,
             ),
-            title: Text('Mapa'),
+            title: Text(''),
           ),
-          /*BottomNavigationBarItem(
-            icon: Icon(BeerIcon.user_empty, color: Colors.grey,),
-            activeIcon: Icon(
-              BeerIcon.user_filled,
-              color: Colors.white,
-            ),
-            title: Text('Yo'),
-          ),*/
         ],
       ),
     );

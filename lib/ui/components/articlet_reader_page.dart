@@ -45,7 +45,7 @@ class _ArticleReaderState extends State<ArticleReader> {
         child: Builder(builder: (BuildContext context) {
           return Stack(
             children: [
-              Expanded(
+              Container(
                 child: WebView(
                   initialUrl: widget.article.contentUri,
                   javascriptMode: JavascriptMode.unrestricted,

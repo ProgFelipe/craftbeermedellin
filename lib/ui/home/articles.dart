@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:craftbeer/abstractions/article_model.dart';
@@ -14,22 +13,6 @@ import 'package:provider/provider.dart';
 class ArticlesWidget extends StatefulWidget {
   @override
   _ArticlesWidgetState createState() => _ArticlesWidgetState();
-}
-
-class RandomColor {
-  final colors = [
-    kCitrusEndCustomColor,
-    kBlueColor,
-    kBlackLightColor,
-    kZiSePurpleColor,
-    kGreenColor
-  ];
-
-  final random = Random();
-
-  Color getRandomColor() {
-    return colors[random.nextInt(colors.length - 1)];
-  }
 }
 
 class _ArticlesWidgetState extends State<ArticlesWidget> {
@@ -65,7 +48,7 @@ class PrimaryArticles extends StatelessWidget {
             Text(
               S.of(context).empty_state_articles,
               style: TextStyle(
-                  color: emptyStateTextColor,
+                  color: kGrayEmptyState,
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold),
             )
@@ -80,10 +63,9 @@ class PrimaryArticles extends StatelessWidget {
         itemCount: articles.length,
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemBuilder: (context, index) =>
-            ArticleCard(
-              article: articles[index],
-            ),
+        itemBuilder: (context, index) => ArticleCard(
+          article: articles[index],
+        ),
       ),
     );
   }

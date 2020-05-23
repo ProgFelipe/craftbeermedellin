@@ -12,7 +12,7 @@ class TopBeersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<BrewersData>(builder: (context, brewerData, child) {
-      if(brewerData.loadingState){
+      if (brewerData.loadingState) {
         return LoadingWidget();
       }
       if (brewerData.beers == null || brewerData.beers.isEmpty) {
@@ -29,7 +29,7 @@ class TopBeersView extends StatelessWidget {
               Text(
                 S.of(context).empty_state_top_beers,
                 style: TextStyle(
-                    color: emptyStateTextColor,
+                    color: kGrayEmptyState,
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold),
               )

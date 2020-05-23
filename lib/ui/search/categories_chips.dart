@@ -20,8 +20,12 @@ class CategoriesChips extends StatelessWidget {
     if (categoriesData.loadingState) {
       return LoadingWidget();
     }
-    if (categoriesData.categories == null ||categoriesData.categories.isEmpty) {
-      return Text(S.of(context).empty_state_categories, style: TextStyle(color: Colors.grey[500]),);
+    if (categoriesData.categories == null ||
+        categoriesData.categories.isEmpty) {
+      return Text(
+        S.of(context).empty_state_categories,
+        style: TextStyle(color: Colors.grey[500]),
+      );
     }
     return Column(
       children: [

@@ -18,6 +18,9 @@ class DataBaseService {
   Future<http.Response> fetchArticles() async =>
       await http.get('$BASE_URL/articles/?format=json');
 
+  Future<http.Response> fetchStores() async =>
+      await http.get('$BASE_URL/places/?format=json');
+
   ///Brewer item
   Future<Brewer> futureBrewerByID(List<Brewer> brewers, int brewerID) async {
     return brewers.where((brewer) => brewer.id == brewerID).first;

@@ -15,18 +15,13 @@ class ImageProviderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: CachedNetworkImage(
-        fadeInDuration: Duration(milliseconds: 250),
+        fadeInDuration: Duration(milliseconds: 500),
         imageUrl: imageUri,
         height: height,
         width: width,
         fit: myBoxFit ?? BoxFit.cover,
         useOldImageOnUrlChange: true,
-        placeholder: (context, url) => Image.asset(
-          'assets/icon.png',
-          height: height,
-          width: width,
-          fit: BoxFit.scaleDown,
-        ),
+        progressIndicatorBuilder: (context, url, progress) => CircularProgressIndicator(strokeWidth: 10,),
         errorWidget: (context, url, error) {
           return Icon(Icons.error);
         },

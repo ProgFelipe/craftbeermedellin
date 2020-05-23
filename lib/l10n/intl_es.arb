@@ -5,7 +5,6 @@
   "favorites_nav_title": "Favoritos",
   "no_data": "No tienes datos",
   "local_brewers": "CERVECERIAS",
-  "welcome_story_telling": "Bienvenido\nBrewers Colombia.!\n\nLa cerveza artesanal es nuestra pasión \n\nConoce sobre cervezas artesanales locales!",
   "promotions_title": "PROMOCIONES",
   "events_title": "EVENTOS",
   "top_week_title": "TOP SEMANALES",
@@ -59,6 +58,6 @@
   "empty_state_articles": "No Encontramos Artículos",
   "empty_state_categories": "No Encontramos Categorías",
   "empty_state_news": "No Encontramos Noticias",
-  "empty_state_top_beers": "No Encontramos Cervezas"
-
+  "empty_state_top_beers": "No Encontramos Cervezas",
+  "empty_state_coming_soon": "Muy Pronto"
 }

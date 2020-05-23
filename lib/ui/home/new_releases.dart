@@ -46,7 +46,7 @@ class News extends StatelessWidget {
     } else {
       return Text(
         S.of(context).empty_state_news,
-        style: TextStyle(color: emptyStateTextColor),
+        style: TextStyle(color: kGrayEmptyState),
       );
     }
   }
