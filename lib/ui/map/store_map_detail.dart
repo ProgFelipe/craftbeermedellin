@@ -1,21 +1,12 @@
-import 'package:craftbeer/ui/map/item_description.dart';
+import 'package:craftbeer/abstractions/store_model.dart';
+import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class StoreMapMarketDetail extends StatelessWidget {
-  final String storeName;
-  final String storeDescription;
-  final String foodDescription;
-  final int capacity;
-  final bool easyAccess;
-  final int parkingLots;
-  final bool publicTransport;
+  final Store store;
 
-  StoreMapMarketDetail({@required this.storeName, this.storeDescription, this.foodDescription,
-    this.capacity,
-    this.easyAccess,
-    this.parkingLots,
-    this.publicTransport});
+  StoreMapMarketDetail({@required this.store});
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +23,17 @@ class StoreMapMarketDetail extends StatelessWidget {
           children: <Widget>[
             Row(
               children: [
-                Icon(Icons.store, color: kCitrusEndCustomColor,),
-                SizedBox(width: 15.0,),
+                Container(
+                    height: 30.0, child: Image.asset('assets/marker_beer.png')),
+                SizedBox(
+                  width: 15.0,
+                ),
                 Text(
-                  storeName,
-                  style: TextStyle(fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.bold),
+                  store.name,
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -44,7 +41,7 @@ class StoreMapMarketDetail extends StatelessWidget {
               height: 5.0,
             ),
             Text(
-              storeDescription,
+              store.openHours,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -55,15 +52,24 @@ class StoreMapMarketDetail extends StatelessWidget {
             SizedBox(
               height: 10.0,
             ),
-            Column(
+            Expanded(
+              child: ImageProviderWidget(store.imageUrl),
+            ),
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ItemDescription(icon: Icons.restaurant, description: foodDescription ?? '',),
-                ItemDescription(icon: Icons.queue_music, description: 'Banda en vivo',),
-                ItemDescription(icon: Icons.people, description: capacity?.toString() ?? '',),
-                ItemDescription(icon: Icons.accessible_forward, description: 'Fácil acceso',),
-                ItemDescription(icon: Icons.local_parking, description: parkingLots?.toString() ?? '',),
-                ItemDescription(icon: Icons.airport_shuttle, description: 'Cerca a transporte público',),
+                Visibility(
+                    visible: store.publicTransport,
+                    child: Icon(Icons.airport_shuttle, color: kGreenColor)),
+                Visibility(
+                    visible: store.parking,
+                    child: Icon(
+                      Icons.local_parking,
+                      color: kGreenColor,
+                    )),
+                Visibility(
+                    visible: store.easyAccess,
+                    child: Icon(Icons.accessible_forward, color: kGreenColor)),
               ],
             ),
           ],

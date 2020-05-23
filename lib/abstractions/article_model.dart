@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class Article {
-  final String title;
+  String title;
   final String imageUri;
   final String contentUri;
   final Timestamp timeStamp;

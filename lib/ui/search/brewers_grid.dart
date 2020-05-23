@@ -3,7 +3,6 @@ import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
-import 'package:craftbeer/ui/components/failure_status.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
@@ -40,11 +39,6 @@ class _BrewersGridState extends State<BrewersGrid> {
 
     if (brewersData.loadingState) {
       return LoadingWidget();
-    }
-    if (brewersData.underMaintainState ||
-        brewersData.errorStatus ||
-        brewersData.checkYourInternet) {
-      return ErrorStatusWidget(baseProvider: brewersData);
     }
     if(brewersData.brewers == null || brewersData.brewers.isEmpty){
       return Text(S.of(context).empty_state_brewers, style: TextStyle(color: Colors.grey[500]),);

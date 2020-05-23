@@ -3,6 +3,8 @@ import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/providers/base_provider.dart';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 class ArticlesData extends BaseProvider {
   final api = DataBaseService();
 
@@ -24,28 +26,23 @@ class ArticlesData extends BaseProvider {
             for (Map article in jsonData) {
               var articleObj = Article.fromJson(article);
               articles.add(articleObj);
+              if(kDebugMode){
+                print(article.length);
+              }
             }
-            underMaintainState = false;
-            checkYourInternet = false;
-            errorStatus = false;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
           }
           break;
         case 404:
           {
             print('404');
-            underMaintainState = true;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
             break;
           }
         case 503:
           {
             print('503');
-            checkYourInternet = true;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
             break;
           }
         default:
@@ -53,7 +50,6 @@ class ArticlesData extends BaseProvider {
       }
     }catch (exception, stacktrace) {
       print(stacktrace);
-      errorStatus = true;
       hideLoading();
     }
   }

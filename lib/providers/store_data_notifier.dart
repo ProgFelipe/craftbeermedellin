@@ -10,7 +10,7 @@ class StoreData extends BaseProvider {
   final api = DataBaseService();
   var stores = List<Store>();
 
-  StoreData(){
+  StoreData() {
     fetchStores();
   }
 
@@ -26,27 +26,19 @@ class StoreData extends BaseProvider {
               var articleObj = Store.fromJson(article);
               stores.add(articleObj);
             }
-            underMaintainState = false;
-            checkYourInternet = false;
-            errorStatus = false;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
           }
           break;
         case 404:
           {
             print('404');
-            underMaintainState = true;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
             break;
           }
         case 503:
           {
             print('503');
-            checkYourInternet = true;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
             break;
           }
         default:
@@ -54,7 +46,6 @@ class StoreData extends BaseProvider {
       }
     } catch (exception, stacktrace) {
       print(stacktrace);
-      errorStatus = true;
       hideLoading();
     }
   }

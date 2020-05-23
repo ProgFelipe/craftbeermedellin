@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Event {
   String city, date, description, imageUri, name;
   final Timestamp timestamp;
-  String longitude, latitude;
+  final num longitude, latitude;
 
   Event(
       {this.city,
@@ -23,7 +23,7 @@ class Event {
         description: data['description'] ?? '',
         imageUri: data['imageUri'] ?? '',
         name: data['name'] ?? '',
-        longitude: data['longitude'] ?? '',
-        latitude: data['latitude'] ?? '');
+        longitude: data['longitude'] ?? -1.0,
+        latitude: data['latitude'] ?? -1.0);
   }
 }

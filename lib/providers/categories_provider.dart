@@ -33,31 +33,22 @@ class CategoriesData extends BaseProvider {
             }
             print('CATEGORIAS');
             print(categories.length);
-            underMaintainState = false;
-            checkYourInternet = false;
-            errorStatus = false;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
             return;
           }
         case 404:
           {
-            underMaintainState = true;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
             return;
           }
         case 500:
           {
-            checkYourInternet = true;
-            loadingState = false;
-            notifyListeners();
+            hideLoading();
             return;
           }
       }
     } catch (exception, stacktrace) {
       print(stacktrace);
-      errorStatus = true;
       hideLoading();
     }
   }

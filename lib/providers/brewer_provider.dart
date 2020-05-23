@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/database/beers_dao.dart';
 import 'package:craftbeer/database/brewer_dao.dart';
 import 'package:craftbeer/providers/base_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
@@ -13,10 +16,12 @@ import 'package:intl/intl.dart';
 class BrewersData extends BaseProvider {
   static const CACHE_TIME_IN_DAYS = 3;
 
-  List<Brewer> brewers;
-  List<Beer> beers;
+  List<Brewer> brewers = List();
+  List<Beer> beers = List();
   Brewer currentBrewer;
   List<Beer> tastedBeers = List();
+  bool brewerTakenFromDB = false;
+  int tryAgainSeconds = 5;
 
 
   final api = DataBaseService();
@@ -39,74 +44,80 @@ class BrewersData extends BaseProvider {
   Future<void> getBrewers() async {
     try {
       showLoading();
-      if (brewers?.isEmpty ?? true) {
+      if (brewers.isEmpty) {
         debugPrint('TOMANDO DATOS DE DATABASE');
         brewers = await brewerDAO.getBrewers();
         debugPrint('HAY POLAS ${brewers.length}');
         //await shouldUpdateData()
-        if (brewers != null || brewers.isNotEmpty) {
+        if (brewers.isNotEmpty) {
+          brewerTakenFromDB = true;
           beers = await beersDAO.getBeers();
           tastedBeers = await getMyTastedBeers();
-          loadingState = false;
-          addBrewers(brewers, beers);
+          hideLoading();
+          if(kDebugMode) {
+            print(beers.length);
+            print(brewers.length);
+          }
+          hideLoading();
         }
         fetchBrewersAndBeers();
       }
     } catch (exception, stacktrace) {
       print(stacktrace);
-      errorStatus = true;
       hideLoading();
     }
   }
 
   void fetchBrewersAndBeers() async {
+    try{
     debugPrint('TOMANDO DATOS DE INTERNET');
     var response = await api.fetchBrewers();
     switch (response.statusCode) {
       case 200:
         {
-          setFetchCurrentDate();
+          //setFetchCurrentDate();
           final jsonData = json.decode(utf8.decode(response.bodyBytes));
-          List<Brewer> brewers = List();
-          List<Beer> beers = List();
+          beers.clear();
+          brewers.clear();
           for (Map brewer in jsonData) {
             var brewerObj = Brewer.fromJson(brewer);
             beers.addAll(brewerObj.beers);
-            brewers.add(Brewer.fromJson(brewer));
+            brewers.add(brewerObj);
+          }
+          if(kDebugMode) {
+            print(beers.length);
+            print(brewers.length);
           }
           brewerDAO.insertBrewers(brewers);
-          underMaintainState = false;
-          checkYourInternet = false;
-          errorStatus = false;
-          loadingState = false;
-          addBrewers(brewers, beers);
+
+          hideLoading();
           return;
         }
       case 404:
         {
           print('404');
-          underMaintainState = true;
-          loadingState = false;
-          notifyListeners();
+          hideLoading();
           return;
         }
       case 503:
         {
           print('503');
-          checkYourInternet = true;
-          loadingState = false;
-          notifyListeners();
+          hideLoading();
           return;
         }
+    }}catch (exception, stacktrace) {
+      debugPrint('ERROR FETCHING BEERS, BEERS ON DB $brewerTakenFromDB');
+      if(!brewerTakenFromDB){
+        debugPrint('NO BEERS AND ERROR FETCHING BREWERS');
+        debugPrint('tryAgain Seconds $tryAgainSeconds');
+        Future.delayed(Duration(seconds: tryAgainSeconds), fetchBrewersAndBeers);
+        if(tryAgainSeconds <= 40) {
+          tryAgainSeconds += tryAgainSeconds;
+        }
+      }
+      print(stacktrace);
+      hideLoading();
     }
-  }
-
-  void addBrewers(List<Brewer> newBrewers, List<Beer> newBeers) {
-    brewers = newBrewers;
-    beers = newBeers;
-    print(beers.length);
-    print(brewers.length);
-    notifyListeners();
   }
 
   void changeCurrentBrewerFavoriteState() {
@@ -160,7 +171,6 @@ class BrewersData extends BaseProvider {
 
   Future<Brewer> getBrewerById(int brewerId) async {
     currentBrewer = await Future.microtask(() => brewers.where((brewer) => brewer.id == brewerId).first);
-    //currentBrewer = await brewerDAO.fetchBrewerById(brewerId);
     return currentBrewer;
   }
 
