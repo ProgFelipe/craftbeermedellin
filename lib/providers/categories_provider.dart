@@ -4,6 +4,8 @@ import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/providers/base_provider.dart';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 class CategoriesData extends BaseProvider {
   List<BeerType> categories = List();
   List<Beer> selectedCategoryBeers;
@@ -23,32 +25,17 @@ class CategoriesData extends BaseProvider {
   Future<void> getCategories() async {
     try {
       var response = await api.fetchBeerTypes();
-      switch (response.statusCode) {
-        case 200:
-          {
-            print('CATEGORIAS');
-            final jsonData = json.decode(utf8.decode(response.bodyBytes));
-            for (Map beerType in jsonData) {
-              categories.add(BeerType.fromJson(beerType));
-            }
-            print('CATEGORIAS');
-            print(categories.length);
-            hideLoading();
-            return;
-          }
-        case 404:
-          {
-            hideLoading();
-            return;
-          }
-        case 500:
-          {
-            hideLoading();
-            return;
-          }
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(utf8.decode(response.bodyBytes));
+        for (Map beerType in jsonData) {
+          categories.add(BeerType.fromJson(beerType));
+        }
+        debugPrint('CATEGORIAS');
+        debugPrint("${categories.length}");
       }
+      hideLoading();
     } catch (exception, stacktrace) {
-      print(stacktrace);
+      debugPrint("$stacktrace");
       hideLoading();
     }
   }

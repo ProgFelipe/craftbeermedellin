@@ -18,10 +18,8 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
       context,
       MaterialPageRoute(
         builder: (context) => BeerDetailView(
-          onTastedMark: (bool tasted) {
-            model.sendBeerFeedback(beer, index);
-          },
           selectedBeer: beer,
+          heroTagId: UniqueKey(),
         ),
       ),
     );

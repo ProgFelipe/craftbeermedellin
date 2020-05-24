@@ -18,38 +18,20 @@ class ArticlesData extends BaseProvider {
     showLoading();
     try {
       var response = await api.fetchArticles();
-      switch (response.statusCode) {
-        case 200:
-          {
-            final jsonData = json.decode(utf8.decode(response.bodyBytes));
-            articles = List();
-            for (Map article in jsonData) {
-              var articleObj = Article.fromJson(article);
-              articles.add(articleObj);
-              if(kDebugMode){
-                print(article.length);
-              }
-            }
-            hideLoading();
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(utf8.decode(response.bodyBytes));
+        articles = List();
+        for (Map article in jsonData) {
+          var articleObj = Article.fromJson(article);
+          articles.add(articleObj);
+          if (kDebugMode) {
+            print(article.length);
           }
-          break;
-        case 404:
-          {
-            print('404');
-            hideLoading();
-            break;
-          }
-        case 503:
-          {
-            print('503');
-            hideLoading();
-            break;
-          }
-        default:
-          break;
+        }
       }
-    }catch (exception, stacktrace) {
-      print(stacktrace);
+      hideLoading();
+    } catch (exception, stacktrace) {
+      debugPrint("$stacktrace");
       hideLoading();
     }
   }

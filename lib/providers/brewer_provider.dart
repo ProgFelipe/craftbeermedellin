@@ -23,7 +23,6 @@ class BrewersData extends BaseProvider {
   bool brewerTakenFromDB = false;
   int tryAgainSeconds = 5;
 
-
   final api = DataBaseService();
   final brewerDAO = BrewerDao();
   final beersDAO = BeersDao();
@@ -54,7 +53,7 @@ class BrewersData extends BaseProvider {
           beers = await beersDAO.getBeers();
           tastedBeers = await getMyTastedBeers();
           hideLoading();
-          if(kDebugMode) {
+          if (kDebugMode) {
             print(beers.length);
             print(brewers.length);
           }
@@ -63,55 +62,40 @@ class BrewersData extends BaseProvider {
         fetchBrewersAndBeers();
       }
     } catch (exception, stacktrace) {
-      print(stacktrace);
+      debugPrint("$stacktrace");
       hideLoading();
     }
   }
 
   void fetchBrewersAndBeers() async {
-    try{
-    debugPrint('TOMANDO DATOS DE INTERNET');
-    var response = await api.fetchBrewers();
-    switch (response.statusCode) {
-      case 200:
-        {
-          //setFetchCurrentDate();
-          final jsonData = json.decode(utf8.decode(response.bodyBytes));
-          beers.clear();
-          brewers.clear();
-          for (Map brewer in jsonData) {
-            var brewerObj = Brewer.fromJson(brewer);
-            beers.addAll(brewerObj.beers);
-            brewers.add(brewerObj);
-          }
-          if(kDebugMode) {
-            print(beers.length);
-            print(brewers.length);
-          }
-          brewerDAO.insertBrewers(brewers);
-
-          hideLoading();
-          return;
+    try {
+      debugPrint('TOMANDO DATOS DE INTERNET');
+      var response = await api.fetchBrewers();
+      if (response.statusCode == 200) {
+        //setFetchCurrentDate();
+        final jsonData = json.decode(utf8.decode(response.bodyBytes));
+        beers.clear();
+        brewers.clear();
+        for (Map brewer in jsonData) {
+          var brewerObj = Brewer.fromJson(brewer);
+          beers.addAll(brewerObj.beers);
+          brewers.add(brewerObj);
         }
-      case 404:
-        {
-          print('404');
-          hideLoading();
-          return;
+        if (kDebugMode) {
+          print(beers.length);
+          print(brewers.length);
         }
-      case 503:
-        {
-          print('503');
-          hideLoading();
-          return;
-        }
-    }}catch (exception, stacktrace) {
+        brewerDAO.insertBrewers(brewers);
+      }
+      hideLoading();
+    } catch (exception, stacktrace) {
       debugPrint('ERROR FETCHING BEERS, BEERS ON DB $brewerTakenFromDB');
-      if(!brewerTakenFromDB){
+      if (!brewerTakenFromDB) {
         debugPrint('NO BEERS AND ERROR FETCHING BREWERS');
         debugPrint('tryAgain Seconds $tryAgainSeconds');
-        Future.delayed(Duration(seconds: tryAgainSeconds), fetchBrewersAndBeers);
-        if(tryAgainSeconds <= 40) {
+        Future.delayed(
+            Duration(seconds: tryAgainSeconds), fetchBrewersAndBeers);
+        if (tryAgainSeconds <= 40) {
           tryAgainSeconds += tryAgainSeconds;
         }
       }
@@ -158,8 +142,10 @@ class BrewersData extends BaseProvider {
     return beers.sublist(0, beers.length >= 5 ? 5 : beers.length);
   }
 
-  void sendBeerFeedback(Beer beer, int index) async {
-    currentBrewer.beers[index] = beer;
+  void sendBeerFeedback(Beer beer) async {
+    var index = beers.indexWhere((element) => element.id == beer.id);
+    debugPrint('INDEX BEER $index');
+    beers[index] = beer;
     if (beer.doITasted) {
       tastedBeers.add(beer);
     } else {
@@ -170,7 +156,8 @@ class BrewersData extends BaseProvider {
   }
 
   Future<Brewer> getBrewerById(int brewerId) async {
-    currentBrewer = await Future.microtask(() => brewers.where((brewer) => brewer.id == brewerId).first);
+    currentBrewer = await Future.microtask(
+        () => brewers.where((brewer) => brewer.id == brewerId).first);
     return currentBrewer;
   }
 

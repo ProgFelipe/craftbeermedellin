@@ -1,5 +1,5 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
-import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
+import 'package:craftbeer/ui/brewers/beer_detail_view.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
@@ -18,7 +18,7 @@ class BeerCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BrewersDetail(brewerId: beer.brewerId)));
+            builder: (context) => BeerDetailView(selectedBeer: beer, heroTagId: UniqueKey(),)));
       },
       child: Container(
         height: kBeerCardHeight,

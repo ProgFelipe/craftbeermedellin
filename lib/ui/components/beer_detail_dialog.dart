@@ -74,32 +74,13 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
               children: <Widget>[
                 Visibility(
                   visible: widget.starts,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: Image.asset(
-                          'assets/icon.png',
-                          height: 60.0,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          widget.title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Image.asset(
-                          'assets/icon.png',
-                          height: 60.0,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    widget.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 SizedBox(

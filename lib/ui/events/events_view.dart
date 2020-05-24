@@ -55,8 +55,11 @@ class EventsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Event> events = Provider.of<List<Event>>(context);
+    events.forEach((event) {
+      debugPrint('${event.name} === ${event.imageUri}');
+    });
     if (events == null) {
-      return LoadingWidget();
+      return Expanded(child: LoadingWidget());
     }
     if (events.isEmpty) {
       return Expanded(
@@ -89,6 +92,7 @@ class EventsWidget extends StatelessWidget {
       flex: 2,
       child: Container(
         child: StaggeredGridView.countBuilder(
+          key: UniqueKey(),
           crossAxisCount: 4,
           itemCount: events?.length ?? 0,
           itemBuilder: (BuildContext context, int index) =>

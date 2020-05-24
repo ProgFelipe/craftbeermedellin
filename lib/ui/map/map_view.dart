@@ -19,9 +19,10 @@ class _CraftMapState extends State<CraftMap>
   MarkerId selectedMarker;
   bool _showDetailCard = false;
   Set<Marker> _markers = {};
-  bool _storesAdded = false;
-  bool _eventsAdded = false;
   Widget _moreDetails;
+
+  final ImageConfiguration imageConfiguration =
+      ImageConfiguration(devicePixelRatio: 1.5);
 
   Completer<GoogleMapController> _controller = Completer();
 
@@ -39,74 +40,59 @@ class _CraftMapState extends State<CraftMap>
     super.initState();
   }
 
+
   Future<void> createStoreMarkers(List<Store> stores) async {
-    if (!_storesAdded) {
-      final ImageConfiguration imageConfiguration =
-          ImageConfiguration(devicePixelRatio: 2.5);
+    final BitmapDescriptor pinLocationIcon =
+        await BitmapDescriptor.fromAssetImage(
+            imageConfiguration, 'assets/marker_beer.png');
 
-      final BitmapDescriptor pinLocationIcon =
-          await BitmapDescriptor.fromAssetImage(
-              imageConfiguration, 'assets/marker_beer.png');
+    stores?.forEach((store) {
+      var marker = Marker(
+          markerId: MarkerId(store.name),
+          position: LatLng(store.latitude, store.longitude),
+          icon: pinLocationIcon,
+          infoWindow: InfoWindow(
+              title: store.name,
+              snippet: store.openHours,
+              onTap: () {
+                setState(() {
+                  _moreDetails = StoreMapMarketDetail(
+                    store: store,
+                  );
+                  _showDetailCard = true;
+                });
+              }));
+      _markers.add(marker);
+    });
+  }
 
-      stores.forEach((store) {
+  Future<void> createEventsMarkers(List<Event> events) async {
+    final BitmapDescriptor pinLocationIcon =
+        await BitmapDescriptor.fromAssetImage(
+            imageConfiguration, 'assets/marker_event.png');
+
+    var count = 0;
+    events?.forEach((event) {
+      debugPrint("EVENT NAME: ${event.description}");
+      if (event?.latitude != -1.0 && event?.longitude != -1.0) {
         var marker = Marker(
-            markerId: MarkerId(store.name),
-            position: LatLng(store.latitude, store.longitude),
+            markerId: MarkerId(count.toString()),
+            position: LatLng(event.latitude, event.longitude),
             icon: pinLocationIcon,
             infoWindow: InfoWindow(
-                title: store.name,
-                snippet: store.openHours,
+                title: event.description,
                 onTap: () {
                   setState(() {
-                    _moreDetails = StoreMapMarketDetail(
-                      store: store,
+                    _moreDetails = EventMapMarketDetail(
+                      event: event,
                     );
                     _showDetailCard = true;
                   });
                 }));
         _markers.add(marker);
-      });
-      _storesAdded = true;
-      setState(() {});
-    }
-  }
-
-  Future<void> createEventsMarkers(List<Event> events) async {
-    debugPrint("==EVENTOS EN MAPA== ::>> $_eventsAdded");
-
-    if(!_eventsAdded) {
-      final ImageConfiguration imageConfiguration =
-      ImageConfiguration(devicePixelRatio: 1.5);
-
-      final BitmapDescriptor pinLocationIcon =
-      await BitmapDescriptor.fromAssetImage(
-          imageConfiguration, 'assets/marker_event.png');
-
-      var count = 0;
-      events.forEach((event) {
-        debugPrint("EVENT NAME: ${event.description}");
-        if (event?.latitude != -1.0 && event?.longitude != -1.0) {
-          var marker = Marker(
-              markerId: MarkerId(count.toString()),
-              position: LatLng(event.latitude, event.longitude),
-              icon: pinLocationIcon,
-              infoWindow: InfoWindow(
-                  title: event.description,
-                  onTap: () {
-                    setState(() {
-                      _moreDetails = EventMapMarketDetail(
-                        event: event,
-                      );
-                      _showDetailCard = true;
-                    });
-                  }));
-          _markers.add(marker);
-          count++;
-        }
-      });
-      _eventsAdded = true;
-      setState(() {});
-    }
+        count++;
+      }
+    });
   }
 
   @override
@@ -114,14 +100,6 @@ class _CraftMapState extends State<CraftMap>
     super.build(context);
     List<Event> events = Provider.of<List<Event>>(context);
     return Consumer<StoreData>(builder: (context, storeData, child) {
-      if (storeData.stores != null || storeData.stores.isNotEmpty) {
-        createStoreMarkers(storeData.stores);
-      }
-
-      if (events != null && events.isNotEmpty) {
-        createEventsMarkers(events);
-      }
-
       return Scaffold(
         body: Stack(
           children: <Widget>[
@@ -135,6 +113,10 @@ class _CraftMapState extends State<CraftMap>
               },
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
+                createEventsMarkers(events);
+                createStoreMarkers(storeData.stores);
+                setState(() {
+                });
               },
               markers: _markers,
             ),
