@@ -2,10 +2,10 @@ import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/abstractions/promotion_model.dart';
 import 'package:craftbeer/abstractions/release_model.dart';
-import 'package:craftbeer/api.dart';
+import 'package:craftbeer/firestore_api.dart';
 import 'package:http/http.dart' as http;
 
-class DataBaseService {
+class Api {
   //final String BASE_URL = "http://127.0.0.1:8000/api";
   static const String BASE_URL = "https://craftbeerco.herokuapp.com/api";
 

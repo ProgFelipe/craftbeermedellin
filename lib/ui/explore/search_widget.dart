@@ -1,6 +1,6 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/abstractions/brewer_model.dart';
-import 'package:craftbeer/api.dart';
+import 'package:craftbeer/firestore_api.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';

@@ -6,15 +6,17 @@ import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/providers/articles_provider.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/providers/categories_provider.dart';
+import 'package:craftbeer/providers/map_notifier.dart';
 import 'package:craftbeer/providers/push_notifications_provider.dart';
-import 'package:craftbeer/providers/store_data_notifier.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/events/events_view.dart';
+import 'package:craftbeer/ui/explore/explore_view.dart';
 import 'package:craftbeer/ui/home/home_view.dart';
 import 'package:craftbeer/ui/map/map_view.dart';
-import 'package:craftbeer/ui/search/search_view.dart';
+import 'package:craftbeer/ui/user/user_area_view.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,14 +25,16 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'generated/l10n.dart';
 
-void main(){
+void main() {
   // Pass all uncaught errors from the framework to Crashlytics.
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  if(kReleaseMode) {
+    FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  }
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final database = DataBaseService();
+  final database = Api();
   final connectivity = Connectivity();
 
   @override
@@ -44,7 +48,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<BrewersData>.value(value: BrewersData()),
         ChangeNotifierProvider<CategoriesData>.value(value: CategoriesData()),
         ChangeNotifierProvider<ArticlesData>.value(value: ArticlesData()),
-        ChangeNotifierProvider<StoreData>.value(value: StoreData()),
+        ChangeNotifierProvider<MapNotifier>.value(value: MapNotifier()),
 
         ///FireStore
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
@@ -97,7 +101,8 @@ class _NavigatorState extends State<Navigator> {
 
   final List<Widget> screens = [
     Home(),
-    SearchView(),
+    ExploreView(),
+    UserAreaView(),
     EventsView(),
     CraftMap(),
   ];
@@ -118,14 +123,11 @@ class _NavigatorState extends State<Navigator> {
     _pushProvider = PushNotificationsProvider();
     _pushProvider.initNotifications();
     _pushProvider.messages.listen((event) {
-      print('EVENTO');
-      print(event);
-      //new_event ??
-      //new_beer ??
-      //navigate_to ??
+      debugPrint('EVENTO');
+      debugPrint(event);
       if (event == 'nav_event') {
         _pageController.animateToPage(2,
-            duration: Duration(seconds: 2), curve: Curves.easeInOut);
+            duration: Duration(seconds: 2), curve: Curves.bounceOut);
       } else {
         scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text(event),
@@ -157,7 +159,7 @@ class _NavigatorState extends State<Navigator> {
       body: WillPopScope(
         onWillPop: onWillPop,
         child: PageView(
-          physics: _currentIndex == 3
+          physics: _currentIndex == 4
               ? NeverScrollableScrollPhysics()
               : AlwaysScrollableScrollPhysics(),
           controller: _pageController,
@@ -172,11 +174,11 @@ class _NavigatorState extends State<Navigator> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.grey,
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
-        iconSize: 30.0,
+        iconSize: 25.0,
         onTap: (index) {
           this._pageController.animateToPage(index,
               duration: Duration(microseconds: 500), curve: Curves.easeInOut);
@@ -184,12 +186,25 @@ class _NavigatorState extends State<Navigator> {
         currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            backgroundColor: Colors.black,
             icon: Icon(
               BeerIcon.home_empty,
               color: Colors.grey,
             ),
             activeIcon: Icon(
               BeerIcon.home_filled,
+              color: Colors.white,
+            ),
+            title: Text(S.of(context).home_nav_title),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.black,
+            icon: Icon(
+              Icons.search,
+              color: Colors.grey,
+            ),
+            activeIcon: Icon(
+              Icons.search,
               color: Colors.white,
             ),
             title: Text(S.of(context).home_nav_title),

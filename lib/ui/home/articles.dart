@@ -58,11 +58,9 @@ class PrimaryArticles extends StatelessWidget {
     }
     return Container(
       alignment: Alignment.topLeft,
-      height: 200.0,
       child: ListView.builder(
         itemCount: articles.length,
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
         itemBuilder: (context, index) => ArticleCard(
           article: articles[index],
         ),

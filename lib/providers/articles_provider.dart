@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class ArticlesData extends BaseProvider {
-  final api = DataBaseService();
+  final api = Api();
 
   List<Article> articles;
 

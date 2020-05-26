@@ -37,7 +37,7 @@ class _EventsViewState extends State<EventsView>
             SizedBox(
               height: kMarginTopFromTitle,
             ),
-            EventsWidget(),
+            Expanded(child: EventsWidget()),
             SizedBox(
               height: kBigMargin,
             ),
@@ -55,52 +55,44 @@ class EventsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Event> events = Provider.of<List<Event>>(context);
-    events.forEach((event) {
-      debugPrint('${event.name} === ${event.imageUri}');
-    });
     if (events == null) {
-      return Expanded(child: LoadingWidget());
+      return LoadingWidget();
     }
     if (events.isEmpty) {
-      return Expanded(
-        child: Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/empty_state_events.png',
-                width: kEmptyStateWidth,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                S.of(context).empty_state_events,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/empty_state_events.png',
+              width: kEmptyStateWidth,
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Text(
+              S.of(context).empty_state_events,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
         ),
       );
     }
-    return Expanded(
-      flex: 2,
-      child: Container(
-        child: StaggeredGridView.countBuilder(
-          key: UniqueKey(),
-          crossAxisCount: 4,
-          itemCount: events?.length ?? 0,
-          itemBuilder: (BuildContext context, int index) =>
-              EventCardWidget(event: events[index]),
-          staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-          mainAxisSpacing: 4.0,
-          crossAxisSpacing: 4.0,
-        ),
+    return Container(
+      child: StaggeredGridView.countBuilder(
+        key: UniqueKey(),
+        crossAxisCount: 4,
+        itemCount: events?.length ?? 0,
+        itemBuilder: (BuildContext context, int index) =>
+            EventCardWidget(event: events[index]),
+        staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
       ),
     );
   }

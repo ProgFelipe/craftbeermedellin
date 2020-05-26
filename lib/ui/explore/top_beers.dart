@@ -48,6 +48,7 @@ class TopBeersView extends StatelessWidget {
               height: kBeerCardHeight,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
                 itemCount: snapshot.data.length ?? 0,
                 itemBuilder: (context, index) =>
                     BeerCard(beer: snapshot.data[index]),

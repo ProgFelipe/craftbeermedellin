@@ -3,35 +3,20 @@ import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/components/beer_card.dart';
-import 'package:craftbeer/ui/search/promotions.dart';
-import 'package:craftbeer/ui/search/brewers_grid.dart';
-import 'package:craftbeer/ui/search/categories_chips.dart';
+import 'package:craftbeer/ui/user/brewers_grid.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:craftbeer/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SearchView extends StatefulWidget {
+class UserAreaView extends StatefulWidget {
   @override
-  _SearchViewState createState() => _SearchViewState();
+  _UserAreaViewState createState() => _UserAreaViewState();
 }
 
-class _SearchViewState extends State<SearchView>
-    with AutomaticKeepAliveClientMixin<SearchView> {
-  ScrollController _scrollController = ScrollController(
-    initialScrollOffset: 0.0,
-    keepScrollOffset: true,
-  );
-
-  void scrollDown() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );
-  }
-
+class _UserAreaViewState extends State<UserAreaView>
+    with AutomaticKeepAliveClientMixin<UserAreaView> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -39,7 +24,7 @@ class _SearchViewState extends State<SearchView>
       color: kBlackColor,
       child: SafeArea(
         child: SingleChildScrollView(
-            controller: _scrollController,
+            //controller: _scrollController,
             child: Column(
               children: [
                 ConnectivityWidget(),
@@ -50,21 +35,11 @@ class _SearchViewState extends State<SearchView>
                       SizedBox(
                         height: kBigMargin,
                       ),
-                      titleView(
-                        S.of(context).promotions_title,
-                      ),
-                      SizedBox(
-                        height: kMarginTopFromTitle,
-                      ),
-                      PromotionsWidget(),
-                      SizedBox(
-                        height: kBigMargin,
-                      ),
                       Container(
                         width: double.infinity,
                         child: Image.asset(
                           'assets/brewers.png',
-                          height: 100.0,
+                          height: 80.0,
                           alignment: Alignment.topLeft,
                         ),
                       ),
@@ -84,7 +59,7 @@ class _SearchViewState extends State<SearchView>
                         width: double.infinity,
                         child: Image.asset(
                           'assets/skullflowers.png',
-                          height: 200.0,
+                          height: 100.0,
                           alignment: Alignment.topLeft,
                         ),
                       ),
@@ -134,23 +109,6 @@ class _SearchViewState extends State<SearchView>
                       SizedBox(
                         height: kBigMargin,
                       ),
-                      SizedBox(
-                        height: kBigMargin,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: Image.asset(
-                          'assets/compass.png',
-                          height: 200.0,
-                          alignment: Alignment.topLeft,
-                        ),
-                      ),
-                      Container( alignment: Alignment.topLeft,child: Container(width: 200, height: 20, color: kGreenColor,)),
-                      titleView(S.of(context).categories),
-                      SizedBox(
-                        height: kMarginTopFromTitle,
-                      ),
-                      CategoriesChips(scrollOnTap: scrollDown,),
                     ],
                   ),
                 ),

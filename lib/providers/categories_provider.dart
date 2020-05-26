@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class CategoriesData extends BaseProvider {
   List<BeerType> categories = List();
   List<Beer> selectedCategoryBeers;
-  final api = DataBaseService();
+  final api = Api();
 
   BeerType selectedCategory;
 

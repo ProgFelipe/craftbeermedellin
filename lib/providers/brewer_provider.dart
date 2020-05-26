@@ -23,7 +23,7 @@ class BrewersData extends BaseProvider {
   bool brewerTakenFromDB = false;
   int tryAgainSeconds = 5;
 
-  final api = DataBaseService();
+  final api = Api();
   final brewerDAO = BrewerDao();
   final beersDAO = BeersDao();
 
