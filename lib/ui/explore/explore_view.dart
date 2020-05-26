@@ -30,7 +30,6 @@ class _ExploreViewState extends State<ExploreView> with AutomaticKeepAliveClient
   }
 
   void scrollDown() {
-    debugPrint('SCROLLING DOWN');
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 500),
@@ -69,7 +68,7 @@ class _ExploreViewState extends State<ExploreView> with AutomaticKeepAliveClient
                 width: double.infinity,
                 child: Image.asset(
                   'assets/pubbeer.png',
-                  height: 80.0,
+                  height: 100.0,
                   alignment: Alignment.topLeft,
                 )),
             titleView(S.of(context).top_week_title,
@@ -85,7 +84,7 @@ class _ExploreViewState extends State<ExploreView> with AutomaticKeepAliveClient
               width: double.infinity,
               child: Image.asset(
                 'assets/compass.png',
-                height: 80.0,
+                height: 100.0,
                 alignment: Alignment.topLeft,
               ),
             ),

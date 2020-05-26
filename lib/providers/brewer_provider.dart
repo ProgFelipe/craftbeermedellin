@@ -52,7 +52,6 @@ class BrewersData extends BaseProvider {
           brewerTakenFromDB = true;
           beers = await beersDAO.getBeers();
           tastedBeers = await getMyTastedBeers();
-          hideLoading();
           if (kDebugMode) {
             print(beers.length);
             print(brewers.length);
@@ -87,10 +86,13 @@ class BrewersData extends BaseProvider {
         }
         brewerDAO.insertBrewers(brewers);
       }
-      hideLoading();
+      if(!brewerTakenFromDB) {
+        hideLoading();
+      }
     } catch (exception, stacktrace) {
       debugPrint('ERROR FETCHING BEERS, BEERS ON DB $brewerTakenFromDB');
       if (!brewerTakenFromDB) {
+        hideLoading();
         debugPrint('NO BEERS AND ERROR FETCHING BREWERS');
         debugPrint('tryAgain Seconds $tryAgainSeconds');
         Future.delayed(
@@ -100,7 +102,6 @@ class BrewersData extends BaseProvider {
         }
       }
       print(stacktrace);
-      hideLoading();
     }
   }
 

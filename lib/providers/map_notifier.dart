@@ -22,7 +22,7 @@ class MapNotifier extends ChangeNotifier {
 
   get showDetail => _showDetailCard;
 
-  set setEvents(List<Event> events) {
+  setEvents(List<Event> events) async {
     _events = events;
     if (events != null && events.isNotEmpty && !eventsAdded) {
       eventsAdded = true;

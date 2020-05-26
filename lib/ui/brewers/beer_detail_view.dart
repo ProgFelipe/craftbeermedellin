@@ -46,7 +46,6 @@ class _BeerDetailViewState extends State<BeerDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    //BrewersData model = Provider.of<BrewersData>(context);
     return Consumer<BrewersData>(builder: (context, brewerData, child) {
       return Scaffold(
         backgroundColor: kBlackLightColor,

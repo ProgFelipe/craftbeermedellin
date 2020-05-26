@@ -13,7 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -29,13 +28,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
             SizedBox(
               height: kBigMargin,
             ),
-            /*Container(
-                width: double.infinity,
-                child: Image.asset(
-                  'assets/kraken.png',
-                  height: 150.0,
-                  alignment: Alignment.topLeft,
-                )),*/
             titleView(S.of(context).home_learn_title,
                 color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
             SizedBox(
@@ -45,8 +37,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
             SizedBox(
               height: kBigMargin,
             ),
-            /*titleView('Feeds', color: Colors.white),
-            LastComments(),*/
           ],
         ),
       ),

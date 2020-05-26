@@ -16,7 +16,6 @@ class BrewerDao {
           await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewer.id]);
       if (brewerMap?.isEmpty ?? true) {
         //debugPrint('DB ESTABA VACIA');
-
         await db.insert(
           BREWER_TABLE,
           brewer.toDbMap(),

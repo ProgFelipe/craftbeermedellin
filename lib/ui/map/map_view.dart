@@ -26,7 +26,7 @@ class _CraftMapState extends State<CraftMap>
     super.build(context);
     return Consumer<MapNotifier>(builder: (context, mapNotifier, child) {
       List<Event> events = Provider.of<List<Event>>(context);
-      mapNotifier.setEvents = events;
+      mapNotifier.setEvents(events);
       return Scaffold(
         body: Stack(
           children: <Widget>[
