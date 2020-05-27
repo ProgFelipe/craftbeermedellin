@@ -28,7 +28,7 @@ class EventMapMarketDetail extends StatelessWidget {
               children: [
                 Icon(
                   BeerIcon.ticket_filled,
-                  color: Colors.redAccent,
+                  color: Colors.orangeAccent,
                 ),
                 SizedBox(
                   width: 15.0,

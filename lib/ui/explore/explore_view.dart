@@ -22,11 +22,11 @@ class _ExploreViewState extends State<ExploreView> with AutomaticKeepAliveClient
   );
 
   void putScrollAtTop() {
-    _scrollController.animateTo(
+    /*_scrollController.animateTo(
       240.0,
       duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
-    );
+    );*/
   }
 
   void scrollDown() {
