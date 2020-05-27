@@ -104,7 +104,7 @@ class _NavigatorState extends State<Navigator> {
   PushNotificationsProvider _pushProvider;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final List<Widget> screens = [
+  final List<Widget> _screens = [
     Home(),
     ExploreView(),
     UserAreaView(),
@@ -163,18 +163,9 @@ class _NavigatorState extends State<Navigator> {
       key: scaffoldKey,
       body: WillPopScope(
         onWillPop: onWillPop,
-        child: PageView(
-          physics: _currentIndex == 4
-              ? NeverScrollableScrollPhysics()
-              : AlwaysScrollableScrollPhysics(),
-          controller: _pageController,
-          onPageChanged: (newPage) {
-            FocusScope.of(context).requestFocus(FocusNode());
-            setState(() {
-              this._currentIndex = newPage;
-            });
-          },
-          children: screens,
+        child: IndexedStack(
+          index: _currentIndex,
+          children: _screens,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -185,8 +176,9 @@ class _NavigatorState extends State<Navigator> {
         type: BottomNavigationBarType.fixed,
         iconSize: 25.0,
         onTap: (index) {
-          this._pageController.animateToPage(index,
-              duration: Duration(microseconds: 500), curve: Curves.easeInOut);
+          setState(() {
+            _currentIndex = index;
+          });
         },
         currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[

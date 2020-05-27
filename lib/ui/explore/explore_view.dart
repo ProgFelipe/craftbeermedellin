@@ -14,20 +14,12 @@ class ExploreView extends StatefulWidget {
   _ExploreViewState createState() => _ExploreViewState();
 }
 
-class _ExploreViewState extends State<ExploreView> with AutomaticKeepAliveClientMixin<ExploreView> {
-
+class _ExploreViewState extends State<ExploreView>
+    with AutomaticKeepAliveClientMixin<ExploreView> {
   ScrollController _scrollController = ScrollController(
     initialScrollOffset: 0.0,
     keepScrollOffset: true,
   );
-
-  void putScrollAtTop() {
-    /*_scrollController.animateTo(
-      240.0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );*/
-  }
 
   void scrollDown() {
     _scrollController.animateTo(
@@ -42,64 +34,82 @@ class _ExploreViewState extends State<ExploreView> with AutomaticKeepAliveClient
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            ConnectivityWidget(),
-            SizedBox(
-              height: kBigMargin,
-            ),
-            SearchWidget(putScrollAtTop),
-            SizedBox(
-              height: kBigMargin,
-            ),
-            titleView(
-              S.of(context).promotions_title,
-            ),
-            SizedBox(
-              height: kMarginTopFromTitle,
-            ),
-            PromotionsWidget(),
-            SizedBox(
-              height: kBigMargin,
-            ),
-            Container(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+            children: [
+              ConnectivityWidget(),
+              SizedBox(
+                height: kBigMargin,
+              ),
+              SearchWidget(),
+              SizedBox(
+                height: kBigMargin,
+              ),
+              titleView(S.of(context).promotions_title,
+                  margin: EdgeInsets.only(left: 15.0)),
+              SizedBox(
+                height: kMarginTopFromTitle,
+              ),
+              PromotionsWidget(),
+              SizedBox(
+                height: kBigMargin,
+              ),
+              Container(
+                  width: double.infinity,
+                  child: Image.asset(
+                    'assets/pubbeer.png',
+                    height: 100.0,
+                    alignment: Alignment.topLeft,
+                  )),
+              Container(
+                  alignment: Alignment.topLeft,
+                  margin: EdgeInsets.only(left: 15.0),
+                  child: Container(
+                    width: 200,
+                    height: 20,
+                    color: kBlackLightColor,
+                  )),
+              titleView(S.of(context).top_week_title,
+                  color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
+              SizedBox(
+                height: kMarginTopFromTitle,
+              ),
+              TopBeersView(),
+              SizedBox(
+                height: kBigMargin,
+              ),
+              Container(
                 width: double.infinity,
+                margin: EdgeInsets.only(left: 15.0),
                 child: Image.asset(
-                  'assets/pubbeer.png',
+                  'assets/compass.png',
                   height: 100.0,
                   alignment: Alignment.topLeft,
-                )),
-            titleView(S.of(context).top_week_title,
-                color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
-            SizedBox(
-              height: kMarginTopFromTitle,
-            ),
-            TopBeersView(),
-            SizedBox(
-              height: kBigMargin,
-            ),
-            Container(
-              width: double.infinity,
-              child: Image.asset(
-                'assets/compass.png',
-                height: 100.0,
-                alignment: Alignment.topLeft,
+                ),
               ),
-            ),
-            Container( alignment: Alignment.topLeft,child: Container(width: 200, height: 20, color: kGreenColor,)),
-            titleView(S.of(context).categories),
-            SizedBox(
-              height: kMarginTopFromTitle,
-            ),
-            CategoriesChips(scrollOnTap: scrollDown,),
-          ],
+              Container(
+                  alignment: Alignment.topLeft,
+                  margin: EdgeInsets.only(left: 15.0),
+                  child: Container(
+                    width: 200,
+                    height: 20,
+                    color: kGreenColor,
+                  )),
+              titleView(S.of(context).categories, margin: EdgeInsets.only(left: 15.0)),
+              SizedBox(
+                height: kMarginTopFromTitle,
+              ),
+              CategoriesChips(
+                scrollOnTap: scrollDown,
+              ),
+            ],
+          ),
         ),
-      ),),
+      ),
     );
   }
-
 
   @override
   bool get wantKeepAlive => true;

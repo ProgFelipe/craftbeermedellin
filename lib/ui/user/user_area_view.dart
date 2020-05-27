@@ -20,9 +20,9 @@ class _UserAreaViewState extends State<UserAreaView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-      color: kBlackColor,
-      child: SafeArea(
+    return Scaffold(
+      backgroundColor: kBlackColor,
+      body: SafeArea(
         child: SingleChildScrollView(
             //controller: _scrollController,
             child: Column(

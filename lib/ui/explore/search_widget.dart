@@ -13,9 +13,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
-  final Function scrollViewToTop;
-
-  SearchWidget(this.scrollViewToTop);
 
   @override
   _SearchWidgetState createState() => _SearchWidgetState();
@@ -90,7 +87,6 @@ class _SearchWidgetState extends State<SearchWidget> {
           elevation: 10.0,
         ),
         textFieldConfiguration: TextFieldConfiguration(
-          onTap: widget.scrollViewToTop,
           controller: _controller,
           autofocus: false,
           style: TextStyle(fontSize: 20.0),

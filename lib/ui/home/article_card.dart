@@ -26,55 +26,57 @@ class ArticleCard extends StatelessWidget {
         },
       )),
       child: Container(
-        height: 300.0,
-        margin: EdgeInsets.symmetric(horizontal: 5.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Hero(
-                    tag: article.title,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(kCardRadius),
-                      child: ImageProviderWidget(
-                        article.imageUri,
-                        myBoxFit: BoxFit.fill,
+        height: 200.0,
+        margin: EdgeInsets.symmetric(horizontal: 15.0),
+        child: Expanded(
+          child: Stack(
+            children: [
+              Card(
+                elevation: kCardElevation,
+                color: Colors.white,
+                child: ImageProviderWidget(
+                  article.imageUri,
+                  myBoxFit: BoxFit.fitWidth,
+                ),
+              ),
+              Positioned(
+                top: 10.0,
+                left: 15.0,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                      color: kBlackLightColor),
+                  child: Text(
+                    article.title,
+                    style: TextStyle(color: kWhiteColor, fontSize: 20.0),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: isArticleNew(),
+                child: Positioned(
+                  right: 20.0,
+                  bottom: 10.0,
+                  child: Container(
+                    padding: EdgeInsets.all(2.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                        color: kGreenColor),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Text(
+                        S.of(context).new_label,
+                        style: TextStyle(
+                            color: kWhiteColor, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-                  Visibility(
-                    visible: isArticleNew(),
-                    child: Positioned(
-                      right: 20.0,
-                      bottom: 10.0,
-                      child: Container(
-                        padding: EdgeInsets.all(2.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                            color: kGreenColor),
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(
-                            S.of(context).new_label,
-                            style: TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5.0),
-              alignment: Alignment.center,
-              child: Text(
-                article.title,
-                style: TextStyle(color: kWhiteColor, fontSize: 20.0),
-              ),
-            ),
-          ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
