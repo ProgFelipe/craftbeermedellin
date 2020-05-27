@@ -1,29 +1,52 @@
 import 'dart:async';
 
-import 'package:craftbeer/abstractions/article_model.dart';
+import 'package:craftbeer/abstractions/brewer_model.dart';
+import 'package:craftbeer/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class ArticleReader extends StatefulWidget {
-  final Article article;
-
-  ArticleReader({@required this.article});
+class Consents extends StatefulWidget {
+  final Brewer brewer;
+  const Consents({Key key, this.brewer}) : super(key: key);
 
   @override
-  _ArticleReaderState createState() => _ArticleReaderState();
+  _ConsentsState createState() => _ConsentsState();
 }
 
-class _ArticleReaderState extends State<ArticleReader> {
+class _ConsentsState extends State<Consents> {
+  static final consentsUri = "https://www.craftbeercolombia.co/consents";
+  static final consentsWithOutInvimaUri = "https://www.craftbeercolombia.co/consentsinvimarest";
 
   final Completer<WebViewController> _controller =
-  Completer<WebViewController>();
+      Completer<WebViewController>();
 
   bool showProgress = true;
 
   @override
-  initState(){
+  initState() {
     super.initState();
     showProgress = true;
+  }
+
+  void openWhatsApp(Brewer brewer, context) async {
+    String message =
+        "${brewer.name}\n${S.of(context).i_would_like_to_to_buy_msg}";
+
+    String url = 'whatsapp://send?phone=${brewer.phone}&text=$message';
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text(S.of(context).whatsapp_error),
+        ));
+      }
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(S.of(context).whatsapp_error),
+      ));
+    }
   }
 
   JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
@@ -36,7 +59,6 @@ class _ArticleReaderState extends State<ArticleReader> {
         });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +69,7 @@ class _ArticleReaderState extends State<ArticleReader> {
             children: [
               Container(
                 child: WebView(
-                  initialUrl: widget.article.contentUri,
+                  initialUrl: widget.brewer.canSale ? consentsUri : consentsWithOutInvimaUri,
                   javascriptMode: JavascriptMode.unrestricted,
                   onWebViewCreated: (WebViewController webViewController) {
                     _controller.complete(webViewController);
@@ -56,10 +78,6 @@ class _ArticleReaderState extends State<ArticleReader> {
                     _toasterJavascriptChannel(context),
                   ].toSet(),
                   navigationDelegate: (NavigationRequest request) {
-                    if (request.url.startsWith('https://www.youtube.com/')) {
-                      print('blocking navigation to $request}');
-                      return NavigationDecision.prevent;
-                    }
                     print('allowing navigation to $request');
                     return NavigationDecision.navigate;
                   },
@@ -89,6 +107,9 @@ class _ArticleReaderState extends State<ArticleReader> {
           );
         }),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        openWhatsApp(widget.brewer, context);
+      }, child: Text('Acepto', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),),
     );
   }
 }

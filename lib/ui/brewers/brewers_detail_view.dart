@@ -1,18 +1,15 @@
 import 'dart:math' as math;
 import 'dart:ui';
-
-import 'package:craftbeer/abstractions/brewer_model.dart';
-import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/loading_widget.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/brewer_content.dart';
 import 'package:craftbeer/ui/brewers/brewer_header.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
+import 'package:craftbeer/ui/components/consents.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 //Parallax effect
 //https://github.com/MarcinusX/buy_ticket_design/blob/master/lib/exhibition_bottom_sheet.dart
@@ -78,26 +75,6 @@ class _BrewersDetailState extends State<BrewersDetail>
     super.dispose();
   }
 
-  void openWhatsApp(Brewer brewer, context) async {
-    String message =
-        "${brewer.name}\n${S.of(context).i_would_like_to_to_buy_msg}";
-
-    String url = 'whatsapp://send?phone=${brewer.phone}&text=$message';
-    try {
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text(S.of(context).whatsapp_error),
-        ));
-      }
-    } catch (e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text(S.of(context).whatsapp_error),
-      ));
-    }
-  }
-
   updateFavoriteIfChanged(BrewersData brewersData, context) {
     brewersData.saveCurrentBrewerFavoriteState();
     Navigator.of(context).pop();
@@ -158,11 +135,12 @@ class _BrewersDetailState extends State<BrewersDetail>
               floatingActionButton: FloatingActionButton(
                 foregroundColor: Colors.white,
                 backgroundColor: kGreenColor,
-                child: brewerData.currentBrewer.canSale
-                    ? Icon(BeerIcon.car)
-                    : Icon(BeerIcon.user_filled),
-                onPressed: () =>
-                    openWhatsApp(brewerData.currentBrewer, context),
+                child: Icon(BeerIcon.car),
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Consents(
+                    brewer: brewerData.currentBrewer,
+                  ),
+                )),
               ),
             );
           });

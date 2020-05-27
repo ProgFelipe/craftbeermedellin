@@ -46,24 +46,6 @@ class BrewerContent extends StatelessWidget {
             height: 10.0,
           ),
           BrewerBeersWidget(),
-          Visibility(
-            visible: brewer.canSale,
-            child: Card(
-              color: Colors.black38,
-              child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 15.0),
-                  child: Text(
-                    S.of(context).informed_consent,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.0,
-                        letterSpacing: 2.0),
-                  )),
-            ),
-          ),
           SizedBox(
             height: 10.0,
           ),
