@@ -166,8 +166,7 @@ class BrewersData extends BaseProvider {
   }
 
   Future<Brewer> getBrewerById(int brewerId) async {
-    currentBrewer = await Future.microtask(
-        () => brewers.where((brewer) => brewer.id == brewerId).first);
+    currentBrewer = brewers.where((brewer) => brewer.id == brewerId).first;
     return currentBrewer;
   }
 

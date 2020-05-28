@@ -23,7 +23,7 @@ class ImageProviderWidget extends StatelessWidget {
         useOldImageOnUrlChange: true,
         progressIndicatorBuilder: (context, url, progress) => CircularProgressIndicator(strokeWidth: 10,),
         errorWidget: (context, url, error) {
-          return Icon(Icons.error);
+          return Container(height: 100 ,child: Icon(Icons.error, size: 40.0,));
         },
       ),
     );

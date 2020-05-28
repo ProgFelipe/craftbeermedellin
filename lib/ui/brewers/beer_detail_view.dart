@@ -10,14 +10,12 @@ import 'package:provider/provider.dart';
 
 class BeerDetailView extends StatefulWidget {
   final Beer selectedBeer;
-  final UniqueKey heroTagId;
-  BeerDetailView({this.selectedBeer, this.heroTagId});
+
+  BeerDetailView({this.selectedBeer});
 
   @override
   _BeerDetailViewState createState() => _BeerDetailViewState();
 }
-
-const double barHeight = 24.0;
 
 class _BeerDetailViewState extends State<BeerDetailView> {
   bool _tasted = false;
@@ -274,10 +272,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                   left: Consts.padding,
                   right: Consts.padding,
                   child: CircleAvatar(
-                    child: Hero(
-                        tag: widget.heroTagId,
-                        child:
-                            ImageProviderWidget(widget.selectedBeer.imageUri)),
+                    child: ImageProviderWidget(widget.selectedBeer.imageUri),
                     backgroundColor: kCitrusStartCustomColor,
                     radius: Consts.avatarRadius,
                   ),

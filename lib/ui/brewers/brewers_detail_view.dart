@@ -65,7 +65,7 @@ class _BrewersDetailState extends State<BrewersDetail>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 600),
+      duration: Duration(milliseconds: 500),
     );
   }
 
@@ -86,7 +86,7 @@ class _BrewersDetailState extends State<BrewersDetail>
       return FutureBuilder(
           future: brewerData.getBrewerById(widget.brewerId),
           builder: (context, snapshot) {
-            if (brewerData.currentBrewer == null && !snapshot.hasData) {
+            if (!snapshot.hasData) {
               return Scaffold(
                 body: Center(
                   child: LoadingWidget(),

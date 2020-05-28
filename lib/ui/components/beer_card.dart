@@ -18,7 +18,7 @@ class BeerCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BeerDetailView(selectedBeer: beer, heroTagId: UniqueKey(),)));
+            builder: (context) => BeerDetailView(selectedBeer: beer,)));
       },
       child: Container(
         height: kBeerCardHeight,

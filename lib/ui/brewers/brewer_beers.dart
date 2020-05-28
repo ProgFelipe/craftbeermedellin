@@ -19,7 +19,6 @@ class _BrewerBeersWidgetState extends State<BrewerBeersWidget> {
       MaterialPageRoute(
         builder: (context) => BeerDetailView(
           selectedBeer: beer,
-          heroTagId: UniqueKey(),
         ),
       ),
     );
