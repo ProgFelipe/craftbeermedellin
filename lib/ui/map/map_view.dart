@@ -18,7 +18,7 @@ class _CraftMapState extends State<CraftMap>
   //Valle del Aburra
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(6.2291968, -75.5859456),
-    zoom: 10,
+    zoom: 11,
   );
 
   @override

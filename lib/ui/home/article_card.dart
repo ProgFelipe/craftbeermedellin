@@ -44,16 +44,21 @@ class ArticleCard extends StatelessWidget {
           ),
           Positioned(
             top: 10.0,
+            left: 5.0,
+            right: 5.0,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                  color: kBlackLightColor),
-              child: Text(
-                article.title,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: kWhiteColor, fontSize: 15.0,),
+              alignment: Alignment.centerLeft,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 2.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                    color: kBlackLightColor),
+                child: Text(
+                  article.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white, fontSize: 15.0,),
+                ),
               ),
             ),
           ),

@@ -8,6 +8,7 @@ import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/components/ios_back_nav.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BrewerHeader extends StatefulWidget {
   final Brewer brewer;
@@ -20,6 +21,23 @@ class BrewerHeader extends StatefulWidget {
 }
 
 class _BrewerHeaderState extends State<BrewerHeader> {
+
+  void openWhatsApp(context) async {
+    String url = 'whatsapp://send?text=Prueba ${widget.brewer.name}. Una cervecería artesanal excelente, esta en Craft Beer Co!!';
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text(S.of(context).whatsapp_error),
+        ));
+      }
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(S.of(context).whatsapp_error),
+      ));
+    }
+  }
 
   showBrewerMoreInfo(Brewer brewer, context) {
     showDialog(
@@ -141,7 +159,9 @@ class _BrewerHeaderState extends State<BrewerHeader> {
               ),
               SizedBox(width: 10.0,),
               GestureDetector(
-                onTap: (){},
+                onTap: (){
+                  openWhatsApp(context);
+                },
                 child: CircleAvatar(
                   backgroundColor: kCitrusEndCustomColor,
                   radius: 20.0,

@@ -21,9 +21,23 @@ class ImageProviderWidget extends StatelessWidget {
         width: width,
         fit: myBoxFit ?? BoxFit.cover,
         useOldImageOnUrlChange: true,
-        progressIndicatorBuilder: (context, url, progress) => CircularProgressIndicator(strokeWidth: 10,),
+        progressIndicatorBuilder: (context, url, progress) => Container(
+            height: 100.0,
+            width: 100.0,
+            child: Container(
+              width: 50.0,
+              height: 50.0,
+              child: CircularProgressIndicator(
+                strokeWidth: 10,
+              ),
+            )),
         errorWidget: (context, url, error) {
-          return Container(height: 100 ,child: Icon(Icons.error, size: 40.0,));
+          return Container(
+              height: 100,
+              child: Icon(
+                Icons.error,
+                size: 40.0,
+              ));
         },
       ),
     );
