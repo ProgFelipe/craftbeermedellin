@@ -18,7 +18,14 @@ class CategoriesData extends BaseProvider {
     notifyListeners();
   }
 
-  CategoriesData() {
+
+  static final CategoriesData _singleton = CategoriesData._internal();
+
+  factory CategoriesData() {
+    return _singleton;
+  }
+
+  CategoriesData._internal(){
     getCategories();
   }
 

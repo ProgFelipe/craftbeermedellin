@@ -37,7 +37,13 @@ class MapNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  MapNotifier() {
+  static final MapNotifier _singleton = MapNotifier._internal();
+
+  factory MapNotifier() {
+    return _singleton;
+  }
+
+  MapNotifier._internal(){
     this.api = Api();
     init();
   }
@@ -78,6 +84,7 @@ class MapNotifier extends ChangeNotifier {
         await BitmapDescriptor.fromAssetImage(
             imageConfiguration, 'assets/marker_beer.png');
 
+    debugPrint("CREATING STORE");
     _stores?.forEach((store) {
       var marker = Marker(
           markerId: MarkerId(store.name),
@@ -103,6 +110,7 @@ class MapNotifier extends ChangeNotifier {
         await BitmapDescriptor.fromAssetImage(
             imageConfiguration, 'assets/marker_event.png');
 
+    debugPrint("CREATING EVENT");
     var count = 0;
     _events?.forEach((event) {
       debugPrint("EVENT NAME: ${event.description}");

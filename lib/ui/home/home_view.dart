@@ -21,7 +21,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
       color: Colors.black,
       child: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             ConnectivityWidget(),
             News(),

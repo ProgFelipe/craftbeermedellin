@@ -5,6 +5,7 @@ import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:craftbeer/ui/utils/dimen_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
@@ -25,59 +26,59 @@ class ArticleCard extends StatelessWidget {
           );
         },
       )),
-      child: Container(
-        height: 200.0,
-        margin: EdgeInsets.symmetric(horizontal: 15.0),
-        child: Expanded(
-          child: Stack(
-            children: [
-              Card(
-                elevation: kCardElevation,
-                color: Colors.white,
-                child: ImageProviderWidget(
-                  article.imageUri,
-                  myBoxFit: BoxFit.fitWidth,
-                ),
+      child: Stack(
+        children: [
+          Card(
+            elevation: kCardElevation,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(kCardRadius),
+            ),
+            color: Colors.white,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(kCardRadius),
+              child: ImageProviderWidget(
+                article.imageUri,
+                myBoxFit: BoxFit.fitWidth,
               ),
-              Positioned(
-                top: 10.0,
-                left: 15.0,
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                      color: kBlackLightColor),
-                  child: Text(
-                    article.title,
-                    style: TextStyle(color: kWhiteColor, fontSize: 20.0),
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: isArticleNew(),
-                child: Positioned(
-                  right: 20.0,
-                  bottom: 10.0,
-                  child: Container(
-                    padding: EdgeInsets.all(2.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                        color: kGreenColor),
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        S.of(context).new_label,
-                        style: TextStyle(
-                            color: kWhiteColor, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            top: 10.0,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                  color: kBlackLightColor),
+              child: Text(
+                article.title,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: kWhiteColor, fontSize: 15.0,),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: isArticleNew(),
+            child: Positioned(
+              right: 10.0,
+              bottom: 10.0,
+              child: Container(
+                padding: EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                    color: kGreenColor),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Text(
+                    S.of(context).new_label,
+                    style: TextStyle(
+                        color: kWhiteColor, fontWeight: FontWeight.bold, fontSize: 14.0),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

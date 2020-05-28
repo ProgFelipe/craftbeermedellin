@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Store {
   final String name;
   final bool parking, publicTransport, easyAccess;
@@ -16,8 +18,8 @@ class Store {
       this.imageUrl});
 
   factory Store.fromJson(Map<String, dynamic> data) {
-    print('STORES====');
-    print(data);
+    debugPrint('STORES====');
+    debugPrint('$data');
     return Store(
         name: data['name'] ?? '',
         parking: data['parking'] ?? false,

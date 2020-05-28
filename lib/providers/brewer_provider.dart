@@ -13,8 +13,10 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
+const kLastUpdate = "last_update";
+
 class BrewersData extends BaseProvider {
-  static const CACHE_TIME_IN_DAYS = 3;
+  static const CACHE_TIME_IN_DAYS = 1;
 
   List<Brewer> brewers = List();
   List<Beer> beers = List();
@@ -36,7 +38,14 @@ class BrewersData extends BaseProvider {
     return prefs;
   }
 
-  BrewersData() {
+
+  static final BrewersData _singleton = BrewersData._internal();
+
+  factory BrewersData() {
+    return _singleton;
+  }
+
+  BrewersData._internal(){
     getBrewers();
   }
 
@@ -47,7 +56,6 @@ class BrewersData extends BaseProvider {
         debugPrint('TOMANDO DATOS DE DATABASE');
         brewers = await brewerDAO.getBrewers();
         debugPrint('HAY POLAS ${brewers.length}');
-        //await shouldUpdateData()
         if (brewers.isNotEmpty) {
           brewerTakenFromDB = true;
           beers = await beersDAO.getBeers();
@@ -58,7 +66,9 @@ class BrewersData extends BaseProvider {
           }
           hideLoading();
         }
-        fetchBrewersAndBeers();
+        if(await shouldUpdateData()) {
+          fetchBrewersAndBeers();
+        }
       }
     } catch (exception, stacktrace) {
       debugPrint("$stacktrace");
@@ -66,12 +76,12 @@ class BrewersData extends BaseProvider {
     }
   }
 
-  void fetchBrewersAndBeers() async {
+  Future<void> fetchBrewersAndBeers() async {
     try {
       debugPrint('TOMANDO DATOS DE INTERNET');
       var response = await api.fetchBrewers();
       if (response.statusCode == 200) {
-        //setFetchCurrentDate();
+        setFetchCurrentDate();
         final jsonData = json.decode(utf8.decode(response.bodyBytes));
         beers.clear();
         brewers.clear();
@@ -117,22 +127,21 @@ class BrewersData extends BaseProvider {
   void setFetchCurrentDate() async {
     SharedPreferences prefs = await getSharedPreference();
     String lastUpdate = DateFormat.yMMMMd().format(DateTime.now());
-    prefs.setString('last_update', lastUpdate);
+    prefs.setString(kLastUpdate, lastUpdate);
   }
 
   Future<bool> shouldUpdateData() async {
     SharedPreferences prefs = await getSharedPreference();
-    String lastUpdate = (prefs.getString('last_update'));
+    String lastUpdate = (prefs.getString(kLastUpdate));
+    debugPrint('========LAST UPDATE========');
+    debugPrint(lastUpdate);
     try {
-      if (lastUpdate != null &&
-          DateTime.parse(lastUpdate).difference(DateTime.now()).inDays >
-              CACHE_TIME_IN_DAYS) {
-        return true;
-      } else {
-        return false;
-      }
+      var shouldUpdate = lastUpdate == null || lastUpdate.isEmpty ||
+          DateFormat.yMMMMd().parse(lastUpdate).difference(DateTime.now()).inDays > CACHE_TIME_IN_DAYS;
+      debugPrint('UPDATE $shouldUpdate');
+      return shouldUpdate;
     } catch (exception) {
-      print(exception);
+      debugPrint(exception);
       return true;
     }
   }
