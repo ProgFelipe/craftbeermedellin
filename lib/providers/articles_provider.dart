@@ -10,7 +10,13 @@ class ArticlesData extends BaseProvider {
 
   List<Article> articles;
 
-  ArticlesData() {
+  static final ArticlesData _singleton = ArticlesData._internal();
+
+  factory ArticlesData() {
+    return _singleton;
+  }
+
+  ArticlesData._internal(){
     fetchArticles();
   }
 

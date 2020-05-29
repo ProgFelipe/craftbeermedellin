@@ -31,6 +31,7 @@ class _CraftMapState extends State<CraftMap>
         body: Stack(
           children: <Widget>[
             GoogleMap(
+              //myLocationEnabled: true,
               mapType: MapType.normal,
               initialCameraPosition: _kGooglePlex,
               onTap: (LatLng pos) {

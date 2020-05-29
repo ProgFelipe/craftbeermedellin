@@ -24,7 +24,7 @@ class StoreMapMarketDetail extends StatelessWidget {
             Row(
               children: [
                 Container(
-                    height: 30.0, child: Image.asset('assets/marker_beer.png')),
+                    height: 25.0, child: Image.asset('assets/marker_beer.png')),
                 SizedBox(
                   width: 15.0,
                 ),
@@ -35,6 +35,26 @@ class StoreMapMarketDetail extends StatelessWidget {
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 ),
+              ],
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Visibility(
+                    visible: store.publicTransport,
+                    child: Icon(Icons.directions_bus, color: kGreenColor)),
+                Visibility(
+                    visible: store.parking,
+                    child: Icon(
+                      Icons.local_parking,
+                      color: kGreenColor,
+                    )),
+                Visibility(
+                    visible: store.easyAccess,
+                    child: Icon(Icons.accessible_forward, color: kGreenColor)),
               ],
             ),
             SizedBox(
@@ -54,23 +74,6 @@ class StoreMapMarketDetail extends StatelessWidget {
             ),
             Expanded(
               child: ImageProviderWidget(store.imageUrl),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Visibility(
-                    visible: store.publicTransport,
-                    child: Icon(Icons.airport_shuttle, color: kGreenColor)),
-                Visibility(
-                    visible: store.parking,
-                    child: Icon(
-                      Icons.local_parking,
-                      color: kGreenColor,
-                    )),
-                Visibility(
-                    visible: store.easyAccess,
-                    child: Icon(Icons.accessible_forward, color: kGreenColor)),
-              ],
             ),
           ],
         ),

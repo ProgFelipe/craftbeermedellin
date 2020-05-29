@@ -14,7 +14,6 @@ class MapNotifier extends ChangeNotifier {
   Api api;
   bool eventsAdded = false;
 
-  //Map<MarkerId, Marker> marker = <MarkerId, Marker>{};
   MarkerId selectedMarker;
   bool _showDetailCard = false;
   Set<Marker> _markers = {};

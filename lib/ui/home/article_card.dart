@@ -13,7 +13,7 @@ class ArticleCard extends StatelessWidget {
   const ArticleCard({@required this.article});
 
   bool isArticleNew() {
-    return article.timeStamp.toDate().difference(DateTime.now()).inDays < 5;
+    return article.timeStamp.toDate().difference(DateTime.now()).inDays > 5;
   }
 
   @override

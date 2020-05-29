@@ -5,6 +5,7 @@ import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -98,8 +99,11 @@ class BrewerItem extends StatelessWidget {
           children: <Widget>[
             Hero(
                 tag: brewer.name,
-                child: ImageProviderWidget(
-                  brewer.imageUri,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(90.0),
+                  child: ImageProviderWidget(
+                    brewer.imageUri,
+                  ),
                 )),
             Positioned(
               bottom: 7.0,
