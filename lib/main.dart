@@ -50,9 +50,9 @@ class MyApp extends StatelessWidget {
             value: connectivity.onConnectivityChanged),
 
         ///Django
+        ChangeNotifierProvider<ArticlesData>.value(value: ArticlesData()),
         ChangeNotifierProvider<BrewersData>.value(value: BrewersData()),
         ChangeNotifierProvider<CategoriesData>.value(value: CategoriesData()),
-        ChangeNotifierProvider<ArticlesData>.value(value: ArticlesData()),
         ChangeNotifierProvider<MapNotifier>.value(value: MapNotifier()),
 
         ///FireStore
