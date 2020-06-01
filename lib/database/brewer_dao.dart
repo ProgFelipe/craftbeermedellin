@@ -11,6 +11,9 @@ class BrewerDao {
   Future<void> insertBrewers(List<Brewer> brewers) async {
     debugPrint('INSERTAMOS POLAS ${brewers.length}');
     final Database db = await DataBaseProvider().getDataBase();
+
+    //Batch batch = db.batch();
+
     brewers.forEach((brewer) async {
       final List<Map<String, dynamic>> brewerMap =
           await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewer.id]);

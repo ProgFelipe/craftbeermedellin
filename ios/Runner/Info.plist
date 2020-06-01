@@ -46,8 +46,8 @@
     <true/>
 
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Application needs to access your current location</string>
+    <string>La aplicación necesita acceso a tú ubicación</string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Application needs to access your current location</string>
+    <string>La aplicación necesita acceso a tú ubicación</string>
 </dict>
 </plist>

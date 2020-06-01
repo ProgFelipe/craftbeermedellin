@@ -83,6 +83,11 @@ class BrewersData extends BaseProvider {
       if (response.statusCode == 200) {
         setFetchCurrentDate();
         final jsonData = json.decode(utf8.decode(response.bodyBytes));
+        //TODO: CREATE BATCH OPERATION INSTEAD
+        //1.) FETCH TASTED BEERS
+        //2.) CLEAR DB
+        //3.) INSERT BEERS WITH TASTED STATUS
+        //4.) FINISH BASH OPERATION
         beers.clear();
         brewers.clear();
         for (Map brewer in jsonData) {

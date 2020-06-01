@@ -8,6 +8,7 @@ import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventCardWidget extends StatefulWidget {
   final Event event;
@@ -21,6 +22,25 @@ class EventCardWidget extends StatefulWidget {
 class _EventCardWidgetState extends State<EventCardWidget> {
   final Event event;
   final DateFormat _dateFormat = DateFormat("MMMM dd");
+
+  void openRoute(context) async {
+    if(event.eventLink.isEmpty){
+      return;
+    }
+    try {
+      if (await canLaunch(event.eventLink)) {
+        await launch(event.eventLink);
+      } else {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text(''),
+        ));
+      }
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(S.of(context).whatsapp_error),
+      ));
+    }
+  }
 
   _EventCardWidgetState({this.event});
 
@@ -105,24 +125,24 @@ class _EventCardWidgetState extends State<EventCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => ImageProviderWidget(
-            event.imageUri,
-          ),
-        );
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(DecorationConsts.cardRadius),
-        ),
-        child: Column(
-          children: [
-            Stack(
-              children: <Widget>[
-                ClipRRect(
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(DecorationConsts.cardRadius),
+      ),
+      child: Column(
+        children: [
+          Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ImageProviderWidget(
+                      event.imageUri,
+                    ),
+                  );
+                },
+                child: ClipRRect(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(DecorationConsts.cardRadius),
                     topRight: Radius.circular(DecorationConsts.cardRadius),
@@ -132,119 +152,138 @@ class _EventCardWidgetState extends State<EventCardWidget> {
                     myBoxFit: BoxFit.cover,
                   ),
                 ),
-                Visibility(
-                  visible: _showTodayCounter,
-                  child: Positioned(
-                    child: Container(
-                      padding: EdgeInsets.all(2.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                          color: Colors.orangeAccent),
-                      child: Text(
-                        _remainEventCountDown ?? '',
-                        style: TextStyle(
-                            color: kBlackColor, fontWeight: FontWeight.bold),
-                      ),
+              ),
+              Visibility(
+                visible: _showTodayCounter,
+                child: Positioned(
+                  child: Container(
+                    padding: EdgeInsets.all(2.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                        color: Colors.orangeAccent),
+                    child: Text(
+                      _remainEventCountDown ?? '',
+                      style: TextStyle(
+                          color: kBlackColor, fontWeight: FontWeight.bold),
                     ),
-                    top: 10.0,
-                    right: 10.0,
                   ),
+                  top: 10.0,
+                  right: 10.0,
                 ),
-                Visibility(
-                  visible: true,
-                  child: Positioned(
-                    bottom: 10.0,
-                    right: 10.0,
-                    child: Container(
-                      padding: EdgeInsets.all(2.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                          color: kBlackLightColor),
-                      child: _eventLeftTime != null && _eventLeftTime.inDays > 0
-                          ? Text(
-                              //'8 hours 20 min',
-                              "${_eventLeftTime?.inDays ?? ''} ${S.of(context).days_left}",
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                color: kWhiteColor,
-                              ),
-                              textAlign: TextAlign.left,
-                            )
-                          : _eventLeftTime?.inDays == 0
-                              ? Text(
-                                  //'8 hours 20 min',
-                                  S.of(context).event_today,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: kZelyonyGreenLightColor,
-                                  ),
-                                )
-                              : Text(
-                                  //'8 hours 20 min',
-                                  S.of(context).event_in_pass,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.redAccent,
-                                  ),
+              ),
+              Visibility(
+                visible: true,
+                child: Positioned(
+                  bottom: 10.0,
+                  right: 10.0,
+                  child: Container(
+                    padding: EdgeInsets.all(2.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                        color: kBlackLightColor),
+                    child: _eventLeftTime != null && _eventLeftTime.inDays > 0
+                        ? Text(
+                            //'8 hours 20 min',
+                            "${_eventLeftTime?.inDays ?? ''} ${S.of(context).days_left}",
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              color: kWhiteColor,
+                            ),
+                            textAlign: TextAlign.left,
+                          )
+                        : _eventLeftTime?.inDays == 0
+                            ? Text(
+                                //'8 hours 20 min',
+                                S.of(context).event_today,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: kZelyonyGreenLightColor,
                                 ),
-                    ),
+                              )
+                            : Text(
+                                //'8 hours 20 min',
+                                S.of(context).event_in_pass,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
                   ),
                 ),
-              ],
-            ),
-            Container(
-                margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-                child: Column(
-                  children: [
-                    Container(
+              ),
+            ],
+          ),
+          Container(
+              margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    child: Text(
+                      event.description ?? '',
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                          color: kBlackColor),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Visibility(
+                    visible: event?.timestamp != null,
+                    child: Container(
                       width: double.infinity,
                       child: Text(
-                        event.description ?? '',
+                        event.timestamp != null
+                            ? _dateFormat.format(event.timestamp.toDate())
+                            : '',
                         style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.normal,
-                            color: kBlackColor),
+                          fontSize: 16.0,
+                          color: kBlackColor,
+                        ),
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    Visibility(
-                      visible: event?.timestamp != null,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: Text(
+                      event.city ?? '',
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                          color: kBlackColor),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.0,
+                  ),
+                  Visibility(
+                    visible: event.eventLink.isNotEmpty,
+                    child: GestureDetector(
+                      onTap: () => openRoute(context),
                       child: Container(
                         width: double.infinity,
+                        height: 40.0,
+                        alignment: Alignment.center,
                         child: Text(
-                          event.timestamp != null
-                              ? _dateFormat.format(event.timestamp.toDate())
-                              : '',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: kBlackColor,
-                          ),
-                          textAlign: TextAlign.left,
+                          'Enlace',
+                          style: TextStyle(color: Colors.white),
                         ),
+                        padding: EdgeInsets.all(2.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                            color: Colors.blue),
                       ),
                     ),
-                    Container(
-                      width: double.infinity,
-                      child: Text(
-                        event.city ?? '',
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.normal,
-                            color: kBlackColor),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.0,
-                    )
-                  ],
-                )),
-          ],
-        ),
+                  )
+                ],
+              )),
+        ],
       ),
     );
   }
