@@ -1,3 +1,4 @@
+import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/abstractions/brewer_model.dart';
 import 'package:craftbeer/database/beers_dao.dart';
 import 'package:craftbeer/database/database_provider.dart';
@@ -9,32 +10,40 @@ class BrewerDao {
   final beersDao = BeersDao();
 
   Future<void> insertBrewers(List<Brewer> brewers) async {
-    debugPrint('INSERTAMOS POLAS ${brewers.length}');
+    debugPrint('INSERTAMOS CERVECEROS ${brewers.length}');
     final Database db = await DataBaseProvider().getDataBase();
 
-    //Batch batch = db.batch();
+    Batch batch = db.batch();
+    batch.delete(BREWER_TABLE);
 
-    brewers.forEach((brewer) async {
-      final List<Map<String, dynamic>> brewerMap =
-          await db.query(BREWER_TABLE, where: "id = ?", whereArgs: [brewer.id]);
-      if (brewerMap?.isEmpty ?? true) {
-        //debugPrint('DB ESTABA VACIA');
-        await db.insert(
-          BREWER_TABLE,
-          brewer.toDbMap(),
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
-      } else {
-        Map<String, dynamic> brewerFromServer = brewer.toDbMap();
-        brewerFromServer['favorite'] = brewerMap[0]['favorite'];
-        //debugPrint('DB ESTABA LLENA');
+    List<Beer> beers = List();
+    //Current Favorite Brewers
+    final List<Map<String, dynamic>> favoriteBrewers =
+    await db.query(BREWER_TABLE, where: "favorite = ?", whereArgs: [1]);
 
-        await db.update(BREWER_TABLE, brewerFromServer,
-            where: "id = ?", whereArgs: [brewer.id]);
+    brewers.forEach((brewer){
+      Map<String, dynamic> brewerFromServer = brewer.toDbMap();
+      if (favoriteBrewers?.isNotEmpty ?? false) {
+        var result = favoriteBrewers.firstWhere((element) => element['id'] == brewer.id, orElse: () => null);
+        if(result != null) {
+          brewerFromServer['favorite'] = 1;
+        }
       }
-
-      await beersDao.insertBeers(brewer.beers);
+      batch.insert(
+        BREWER_TABLE,
+        brewerFromServer,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      //Beers from Current Brewer
+      if(brewer.beers != null && brewer.beers.isNotEmpty) {
+        debugPrint("Cervezas DEL SERVICIO ${brewer.beers.length}");
+        beers.addAll(brewer.beers);
+      }
     });
+    batch.commit(noResult: true);
+
+    debugPrint("Cervezas PARA INSERTAR ${beers.length}");
+    await beersDao.insertBeers(beers);
   }
 
   Future<List<Brewer>> getBrewers() async {

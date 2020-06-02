@@ -38,35 +38,36 @@ class BrewersData extends BaseProvider {
     return prefs;
   }
 
-
   static final BrewersData _singleton = BrewersData._internal();
 
   factory BrewersData() {
     return _singleton;
   }
 
-  BrewersData._internal(){
+  BrewersData._internal() {
     getBrewers();
+  }
+
+  Future<void> getBrewersAndBeersFromDB() async {
+    debugPrint('TOMANDO DATOS DE DATABASE');
+    brewers = await brewerDAO.getBrewers();
+    debugPrint('HAY POLAS ${brewers.length}');
+    if (brewers.isNotEmpty) {
+      brewerTakenFromDB = true;
+      beers = await beersDAO.getBeers();
+      tastedBeers = await getMyTastedBeers();
+      debugPrint("${beers.length}");
+      debugPrint("${brewers.length}");
+      hideLoading();
+    }
   }
 
   Future<void> getBrewers() async {
     try {
       showLoading();
       if (brewers.isEmpty) {
-        debugPrint('TOMANDO DATOS DE DATABASE');
-        brewers = await brewerDAO.getBrewers();
-        debugPrint('HAY POLAS ${brewers.length}');
-        if (brewers.isNotEmpty) {
-          brewerTakenFromDB = true;
-          beers = await beersDAO.getBeers();
-          tastedBeers = await getMyTastedBeers();
-          if (kDebugMode) {
-            print(beers.length);
-            print(brewers.length);
-          }
-          hideLoading();
-        }
-        if(await shouldUpdateData()) {
+        await getBrewersAndBeersFromDB();
+        if (await shouldUpdateData()) {
           fetchBrewersAndBeers();
         }
       }
@@ -76,6 +77,15 @@ class BrewersData extends BaseProvider {
     }
   }
 
+  List<Brewer> brewersAndBeersFromJsonConvert(dynamic jsonData) {
+    List<Brewer> brewers = List();
+    for (Map brewer in jsonData) {
+      var brewerObj = Brewer.fromJson(brewer);
+      brewers.add(brewerObj);
+    }
+    return brewers;
+  }
+
   Future<void> fetchBrewersAndBeers() async {
     try {
       debugPrint('TOMANDO DATOS DE INTERNET');
@@ -83,25 +93,12 @@ class BrewersData extends BaseProvider {
       if (response.statusCode == 200) {
         setFetchCurrentDate();
         final jsonData = json.decode(utf8.decode(response.bodyBytes));
-        //TODO: CREATE BATCH OPERATION INSTEAD
-        //1.) FETCH TASTED BEERS
-        //2.) CLEAR DB
-        //3.) INSERT BEERS WITH TASTED STATUS
-        //4.) FINISH BASH OPERATION
-        beers.clear();
-        brewers.clear();
-        for (Map brewer in jsonData) {
-          var brewerObj = Brewer.fromJson(brewer);
-          beers.addAll(brewerObj.beers);
-          brewers.add(brewerObj);
-        }
-        if (kDebugMode) {
-          print(beers.length);
-          print(brewers.length);
-        }
-        brewerDAO.insertBrewers(brewers);
+        var brewersFromJson = brewersAndBeersFromJsonConvert(jsonData);
+        await brewerDAO.insertBrewers(brewersFromJson);
+        debugPrint('NUEVAS CERVEZAS INSERTADAS EN DATOS DE DATABASE');
+        await getBrewersAndBeersFromDB();
       }
-      if(!brewerTakenFromDB) {
+      if (!brewerTakenFromDB) {
         hideLoading();
       }
     } catch (exception, stacktrace) {
@@ -112,7 +109,7 @@ class BrewersData extends BaseProvider {
         debugPrint('tryAgain Seconds $tryAgainSeconds');
         Future.delayed(
             Duration(seconds: tryAgainSeconds), fetchBrewersAndBeers);
-        if (tryAgainSeconds <= 40) {
+        if (tryAgainSeconds <= 20) {
           tryAgainSeconds += tryAgainSeconds;
         }
       }
@@ -141,8 +138,13 @@ class BrewersData extends BaseProvider {
     debugPrint('========LAST UPDATE========');
     debugPrint(lastUpdate);
     try {
-      var shouldUpdate = lastUpdate == null || lastUpdate.isEmpty ||
-          DateFormat.yMMMMd().parse(lastUpdate).difference(DateTime.now()).inDays > CACHE_TIME_IN_DAYS;
+      var shouldUpdate = lastUpdate == null ||
+          lastUpdate.isEmpty ||
+          DateFormat.yMMMMd()
+                  .parse(lastUpdate)
+                  .difference(DateTime.now())
+                  .inDays >
+              CACHE_TIME_IN_DAYS;
       debugPrint('UPDATE $shouldUpdate');
       return shouldUpdate;
     } catch (exception) {
