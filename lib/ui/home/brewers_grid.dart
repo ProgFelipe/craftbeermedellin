@@ -44,27 +44,28 @@ class _BrewersGridState extends State<BrewersGrid> {
     if(brewersData.brewers == null || brewersData.brewers.isEmpty){
       return Text(S.of(context).empty_state_brewers, style: TextStyle(color: Colors.grey[500]),);
     }
-    return Container(
-      height: 100.0,
-      alignment: Alignment.topLeft,
-      child: GridView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
+    return Expanded(
+      child: Container(
+        alignment: Alignment.topLeft,
+        child: GridView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            crossAxisSpacing: 5.0,
+            mainAxisSpacing: 5.0,
+          ),
+          itemCount: brewersData.brewers.length,
+          itemBuilder: (context, index) {
+            var brewer = brewersData.brewers[index];
+            return ChangeNotifierProvider<Brewer>.value(
+              value: brewer,
+              child: BrewerItem((brewer) {
+                brewersData.currentBrewer = brewer;
+              }),
+            );
+          },
         ),
-        itemCount: brewersData.brewers.length,
-        itemBuilder: (context, index) {
-          var brewer = brewersData.brewers[index];
-          return ChangeNotifierProvider<Brewer>.value(
-            value: brewer,
-            child: BrewerItem((brewer) {
-              brewersData.currentBrewer = brewer;
-            }),
-          );
-        },
       ),
     );
   }

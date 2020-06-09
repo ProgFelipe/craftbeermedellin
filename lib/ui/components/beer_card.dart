@@ -20,30 +20,27 @@ class BeerCard extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => BeerDetailView(selectedBeer: beer,)));
       },
-      child: Container(
-        height: kBeerCardHeight,
-        width: kBeerCardWidth,
-        alignment: Alignment.center,
-        child: Card(
-          elevation: kCardElevation,
-          shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.all(
-                  Radius.circular(kCardRadius)
-              )
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ImageProviderWidget(
+      child: Card(
+        elevation: kCardElevation,
+        shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(
+                Radius.circular(kCardRadius)
+            )
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              child: ImageProviderWidget(
                 beer.imageUri,
               ),
-              Text(
-                beer.name,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: kMoonlitAsteroidStartColor, fontWeight: FontWeight.bold, fontSize: 15.0),
-              ),
-            ],
-          ),
+            ),
+            Text(
+              beer.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: kMoonlitAsteroidStartColor, fontWeight: FontWeight.bold, fontSize: 15.0),
+            ),
+          ],
         ),
       ),
     );
