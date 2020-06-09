@@ -50,62 +50,70 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Expanded(
-                  child: Card(
-                    child: Container(
-                      height: 200,
-                      alignment: Alignment.center,
-                      child: titleView(S.of(context).home_learn_title,
-                          color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ArticlesWidget()));
+                      },
+                      child: Card(
+                        child: Container(
+                          height: 200,
+                          alignment: Alignment.center,
+                          child: titleView(S.of(context).home_learn_title,
+                              color: kWhiteColor,
+                              margin: EdgeInsets.only(left: 15.0)),
+                        ),
+                        color: Colors.orangeAccent,
+                      ),
                     ),
-                    color: Colors.orangeAccent,
                   ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Card(
-                        child: Container(
-                          height: 95,
-                          child: Column(
-                            children: [
-                              titleView(S.of(context).tasted_beers_title),
-                              Container(
-                                width: double.infinity,
-                                child: Image.asset(
-                                  'assets/skullflowers.png',
-                                  height: 60.0,
-                                  alignment: Alignment.topLeft,
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Card(
+                          child: Container(
+                            height: 95,
+                            child: Column(
+                              children: [
+                                titleView(S.of(context).tasted_beers_title),
+                                Container(
+                                  width: double.infinity,
+                                  child: Image.asset(
+                                    'assets/skullflowers.png',
+                                    height: 60.0,
+                                    alignment: Alignment.topLeft,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          color: Colors.blueAccent,
                         ),
-                        color: Colors.blueAccent,
-                      ),
-                      Card(
-                        child: Container(
-                          height: 96,
-                          child: Column(
-                            children: [
-                              titleView(S.of(context).local_brewers),
-                              Container(
-                                width: double.infinity,
-                                child: Image.asset(
-                                  'assets/brewers.png',
-                                  height: 60.0,
-                                  alignment: Alignment.topLeft,
+                        Card(
+                          child: Container(
+                            height: 96,
+                            child: Column(
+                              children: [
+                                titleView(S.of(context).local_brewers),
+                                Container(
+                                  width: double.infinity,
+                                  child: Image.asset(
+                                    'assets/brewers.png',
+                                    height: 60.0,
+                                    alignment: Alignment.topLeft,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          color: Colors.redAccent,
                         ),
-                        color: Colors.redAccent,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],),
+                ],
+              ),
               SizedBox(
                 height: kBigMargin,
               ),
@@ -166,7 +174,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                     height: 20,
                     color: kGreenColor,
                   )),
-              titleView(S.of(context).categories, margin: EdgeInsets.only(left: 15.0)),
+              titleView(S.of(context).categories,
+                  margin: EdgeInsets.only(left: 15.0)),
               SizedBox(
                 height: kMarginTopFromTitle,
               ),
