@@ -57,7 +57,9 @@ class ArticleCard extends StatelessWidget {
                 child: Text(
                   article.title,
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: TextStyle(color: Colors.white, fontSize: 15.0,),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

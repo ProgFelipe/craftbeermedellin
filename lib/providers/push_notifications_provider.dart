@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 
 class PushNotificationsProvider{
 
@@ -13,30 +14,30 @@ class PushNotificationsProvider{
     _firebaseMessaging.requestNotificationPermissions();
 
     _firebaseMessaging.getToken().then((token){
-      print('===== FCM TOKEN =====');
-      print(token);
+      debugPrint('===== FCM TOKEN =====');
+      debugPrint(token);
 
       //dMPUEZG3Stm0n36m_iwB90:APA91bEHyQDYi8I0_0gBYQGkvAwCE_J3RN1TOHcqY4kLCBo3AqPEATQ9wVdLN2GkdMGVc7yQeJWUD8oT8MbwLaWck34UUY5S62lvksmel8ZOYEwm3mX1gbl5fRraVTF0vrE84WDOiC_6
     });
 
     _firebaseMessaging.configure(
       onMessage: (info){
-        print('===== On Message =====');
+        debugPrint('===== On Message =====');
         print(info);
 
 
         return;
       },
       onLaunch: (info){
-        print('===== On Launch =====');
-        print(info);
-        print(info['data']);
+        debugPrint('===== On Launch =====');
+        debugPrint("$info");
+        debugPrint(info['data']);
         getNotification(info);
         return;
       },
       onResume: (info){
-        print('===== On Resume =====');
-        print(info);
+        debugPrint('===== On Resume =====');
+        debugPrint("$info");
         getNotification(info);
         return;
       }

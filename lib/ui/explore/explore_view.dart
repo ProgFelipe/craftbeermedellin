@@ -60,7 +60,7 @@ class _ExploreViewState extends State<ExploreView>
                   width: double.infinity,
                   child: Image.asset(
                     'assets/pubbeer.png',
-                    height: 100.0,
+                    height: 50.0,
                     alignment: Alignment.topLeft,
                   )),
               Container(
@@ -85,7 +85,7 @@ class _ExploreViewState extends State<ExploreView>
                 margin: EdgeInsets.only(left: 15.0),
                 child: Image.asset(
                   'assets/compass.png',
-                  height: 100.0,
+                  height: 50.0,
                   alignment: Alignment.topLeft,
                 ),
               ),
