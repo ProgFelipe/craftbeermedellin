@@ -106,8 +106,8 @@ class _NavigatorState extends State<Navigator> {
 
   final List<Widget> _screens = [
     Home(),
-    ExploreView(),
-    UserAreaView(),
+    //ExploreView(),
+    //UserAreaView(),
     EventsView(),
     CraftMap(),
   ];
@@ -193,30 +193,6 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.white,
             ),
             title: Text(S.of(context).home_nav_title),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: Icon(
-              Icons.search,
-              color: Colors.grey,
-            ),
-            activeIcon: Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            title: Text(S.of(context).home_nav_title),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              BeerIcon.beer_empty,
-              color: Colors.grey,
-            ),
-            activeIcon: Icon(
-              BeerIcon.beer_filled,
-              color: Colors.white,
-            ),
-            backgroundColor: Colors.black,
-            title: Text(S.of(context).beer_nav_title),
           ),
           BottomNavigationBarItem(
             icon: Icon(
