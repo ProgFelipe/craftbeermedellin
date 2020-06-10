@@ -10,6 +10,7 @@ import 'package:craftbeer/providers/map_notifier.dart';
 import 'package:craftbeer/providers/push_notifications_provider.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/events/events_view.dart';
+import 'package:craftbeer/ui/home/brewers_view.dart';
 import 'package:craftbeer/ui/home/home_view.dart';
 import 'package:craftbeer/ui/map/map_view.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
@@ -107,6 +108,7 @@ class _NavigatorState extends State<Navigator> {
     //ExploreView(),
     //UserAreaView(),
     EventsView(),
+    BrewersView(),
     CraftMap(),
   ];
 
@@ -203,6 +205,18 @@ class _NavigatorState extends State<Navigator> {
             ),
             backgroundColor: Colors.black,
             title: Text(S.of(context).events_nav_title),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              BeerIcon.beer_empty,
+              color: Colors.grey,
+            ),
+            activeIcon: Icon(
+              BeerIcon.beer_filled,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.black,
+            title: Text(''),
           ),
           BottomNavigationBarItem(
             icon: Icon(

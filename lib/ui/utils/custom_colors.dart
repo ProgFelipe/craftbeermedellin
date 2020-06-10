@@ -11,3 +11,7 @@ const kBlackColor = const Color(0xff222120);
 const kBlackLightColor = const Color(0xff3C3837);
 const kWhiteColor = const Color(0xffFEFEFC);
 const kGrayEmptyState = const Color(0xff9e9e9e);
+const kLightRed = const Color(0xffBA3F4C);
+const kFavoritesBlack = const Color(0xff202020);
+const kArticlesYellow = const Color(0xffF8F7F5);
+const kArticlesTextColor = const Color(0xff4B4B4B);

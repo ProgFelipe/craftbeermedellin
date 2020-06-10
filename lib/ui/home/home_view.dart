@@ -1,10 +1,10 @@
 import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
-import 'package:craftbeer/ui/home/categories_chips.dart';
+import 'package:craftbeer/ui/home/categories_view.dart';
+import 'package:craftbeer/ui/home/promotions.dart';
 import 'package:craftbeer/ui/home/search_widget.dart';
 import 'package:craftbeer/ui/home/top_beers.dart';
 import 'package:craftbeer/ui/home/articles.dart';
-import 'package:craftbeer/ui/home/brewers_view.dart';
 import 'package:craftbeer/ui/home/favorites_view.dart';
 import 'package:craftbeer/ui/home/new_releases.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
@@ -76,12 +76,12 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                                 alignment: Alignment.topLeft,
                               ),
                               titleView(S.of(context).home_learn_title,
-                                  color: kBlackColor,
+                                  color: kArticlesTextColor,
                                   margin: EdgeInsets.only(left: 15.0)),
                             ],
                           ),
                         ),
-                        color: Colors.orangeAccent,
+                        color: kArticlesYellow,
                       ),
                     ),
                   ),
@@ -99,9 +99,13 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                               child: Column(
                                 children: [
                                   titleView(S.of(context).tasted_beers_title,
-                                      color: kBlackColor),
+                                      color: kWhiteColor,
+                                      size: 18.0,
+                                      margin: EdgeInsets.only(top: 5.0, left: 5.0)),
                                   Container(
                                     width: double.infinity,
+                                    alignment: Alignment.bottomRight,
+                                    margin: EdgeInsets.only(right: 9.0),
                                     child: Image.asset(
                                       'assets/skullflowers.png',
                                       height: 60.0,
@@ -111,33 +115,39 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                                 ],
                               ),
                             ),
-                            color: Colors.blueAccent,
+                            color: kFavoritesBlack,
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => BrewersView()));
+                                builder: (context) => CategoriesView()));
                           },
                           child: Card(
                             child: Container(
                               height: 96,
                               child: Column(
                                 children: [
-                                  titleView(S.of(context).local_brewers,
-                                      color: kBlackColor),
+                                  titleView(
+                                    S.of(context).categories,
+                                    size: 18.0,
+                                    margin: EdgeInsets.only(top: 5.0, left: 5.0)
+                                  ),
                                   Container(
                                     width: double.infinity,
+                                    height: 60.0,
+                                    margin: EdgeInsets.only(right: 15.0),
+                                    alignment: Alignment.bottomRight,
                                     child: Image.asset(
-                                      'assets/brewers.png',
-                                      height: 60.0,
+                                      'assets/compass.png',
+                                      height: 50.0,
                                       alignment: Alignment.topLeft,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            color: Colors.redAccent,
+                            color: kLightRed,
                           ),
                         ),
                       ],
@@ -145,7 +155,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                   ),
                 ],
               ),
-              /*SizedBox(
+              SizedBox(
                 height: kBigMargin,
               ),
               titleView(S.of(context).promotions_title,
@@ -153,7 +163,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               SizedBox(
                 height: kMarginTopFromTitle,
               ),
-              PromotionsWidget(),*/
+              PromotionsWidget(),
               SizedBox(
                 height: kBigMargin,
               ),
@@ -181,31 +191,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
               TopBeersView(),
               SizedBox(
                 height: kBigMargin,
-              ),
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.only(left: 15.0),
-                child: Image.asset(
-                  'assets/compass.png',
-                  height: 50.0,
-                  alignment: Alignment.topLeft,
-                ),
-              ),
-              Container(
-                  alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(left: 15.0),
-                  child: Container(
-                    width: 200,
-                    height: 20,
-                    color: kGreenColor,
-                  )),
-              titleView(S.of(context).categories,
-                  margin: EdgeInsets.only(left: 15.0)),
-              SizedBox(
-                height: kMarginTopFromTitle,
-              ),
-              CategoriesChips(
-                scrollOnTap: scrollDown,
               ),
             ],
           ),

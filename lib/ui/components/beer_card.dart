@@ -18,27 +18,32 @@ class BeerCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BeerDetailView(selectedBeer: beer,)));
+            builder: (context) => BeerDetailView(
+                  selectedBeer: beer,
+                )));
       },
       child: Card(
         elevation: kCardElevation,
         shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.all(
-                Radius.circular(kCardRadius)
-            )
-        ),
+            borderRadius: const BorderRadius.all(Radius.circular(kCardRadius))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Expanded(
-              child: ImageProviderWidget(
-                beer.imageUri,
+              child: Container(
+                padding: EdgeInsets.only(top: 5.0),
+                child: ImageProviderWidget(
+                  beer.imageUri,
+                ),
               ),
             ),
             Text(
               beer.name,
               textAlign: TextAlign.center,
-              style: TextStyle(color: kMoonlitAsteroidStartColor, fontWeight: FontWeight.bold, fontSize: 15.0),
+              style: TextStyle(
+                  color: kMoonlitAsteroidStartColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0),
             ),
           ],
         ),

@@ -23,28 +23,37 @@ class ArticlesWidget extends StatelessWidget {
               return Center(child: LoadingWidget());
             }
             if (articlesData.articles == null || articlesData.articles.isEmpty) {
-              return Column(
-                children: [
-                  Image.asset('assets/empty_state_articles.png',
-                      width: kEmptyStateWidth),
-                  SizedBox(
-                    height: 20.0,
+              return Expanded(
+                child: Container(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/empty_state_articles.png',
+                          width: kEmptyStateWidth),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Text(
+                        S
+                            .of(context)
+                            .empty_state_articles,
+                        style: TextStyle(
+                            color: kGrayEmptyState,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
                   ),
-                  Text(
-                    S.of(context).empty_state_articles,
-                    style: TextStyle(
-                        color: kGrayEmptyState,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
+                ),
               );
             }
             return Column(
               children: [
+                SizedBox(height: kMarginTopFromTitle,),
                 Image.asset(
                   'assets/kraken.png',
-                  height: 60.0,
+                  height: 100.0,
                   alignment: Alignment.topLeft,
                 ),
                 titleView(S.of(context).home_learn_title,
