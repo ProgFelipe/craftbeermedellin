@@ -22,7 +22,8 @@ class ArticlesWidget extends StatelessWidget {
             if (articlesData.loadingState) {
               return Center(child: LoadingWidget());
             }
-            if (articlesData.articles == null || articlesData.articles.isEmpty) {
+            if (articlesData.articles == null ||
+                articlesData.articles.isEmpty) {
               return Expanded(
                 child: Container(
                   width: double.infinity,
@@ -35,9 +36,7 @@ class ArticlesWidget extends StatelessWidget {
                         height: 20.0,
                       ),
                       Text(
-                        S
-                            .of(context)
-                            .empty_state_articles,
+                        S.of(context).empty_state_articles,
                         style: TextStyle(
                             color: kGrayEmptyState,
                             fontSize: 20.0,
@@ -50,23 +49,24 @@ class ArticlesWidget extends StatelessWidget {
             }
             return Column(
               children: [
-                SizedBox(height: kMarginTopFromTitle,),
+                SizedBox(
+                  height: kMarginTopFromTitle,
+                ),
                 Image.asset(
                   'assets/kraken.png',
                   height: 100.0,
                   alignment: Alignment.topLeft,
                 ),
                 titleView(S.of(context).home_learn_title,
-                    color: kWhiteColor,
-                    margin: EdgeInsets.only(left: 15.0)),
+                    color: kWhiteColor, margin: EdgeInsets.only(left: 15.0)),
                 Expanded(
                   child: StaggeredGridView.countBuilder(
                     crossAxisCount: 4,
                     itemCount: articlesData.articles.length,
                     itemBuilder: (BuildContext context, int index) =>
                         ArticleCard(
-                          article: articlesData.articles[index],
-                        ),
+                      article: articlesData.articles[index],
+                    ),
                     staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
                     mainAxisSpacing: 0.0,
                     crossAxisSpacing: 0.0,
