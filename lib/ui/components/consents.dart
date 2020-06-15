@@ -38,12 +38,12 @@ class _ConsentsState extends State<Consents> {
       if (await canLaunch(url)) {
         await launch(url);
       } else {
-        Scaffold.of(context).showSnackBar(SnackBar(
+        globalKey.currentState.showSnackBar(SnackBar(
           content: Text(S.of(context).whatsapp_error),
         ));
       }
     } catch (e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
+      globalKey.currentState.showSnackBar(SnackBar(
         content: Text(S.of(context).whatsapp_error),
       ));
     }
@@ -59,9 +59,12 @@ class _ConsentsState extends State<Consents> {
         });
   }
 
+  final globalKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: globalKey,
       backgroundColor: Colors.black54,
       body: SafeArea(
         child: Builder(builder: (BuildContext context) {

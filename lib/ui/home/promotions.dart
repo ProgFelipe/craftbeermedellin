@@ -25,8 +25,18 @@ class PromotionsWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: promotions.length,
         itemBuilder: (BuildContext context, int index) {
-          return ImageProviderWidget(promotions[index].imageUri,
-              width: 150.0, height: 200.0);
+          return GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => ImageProviderWidget(
+                  promotions[index].imageUri,
+                ),
+              );
+            },
+            child: ImageProviderWidget(promotions[index].imageUri,
+                width: 150.0, height: 200.0),
+          );
         },
       ),
     );

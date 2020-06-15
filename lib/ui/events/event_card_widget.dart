@@ -49,7 +49,6 @@ class _EventCardWidgetState extends State<EventCardWidget> {
 
   String _remainEventCountDown;
   bool _showTodayCounter = false;
-  bool _showRemainEventDaysLabel = false;
 
   String twoDigits(int n) {
     if (n >= 10) return "$n";
@@ -79,10 +78,6 @@ class _EventCardWidgetState extends State<EventCardWidget> {
       _eventLeftTime = event.timestamp.toDate().difference(DateTime.now());
       if (_eventLeftTime.inHours >= 0 && _eventLeftTime.inHours <= 24) {
         todayEventTimer();
-      } else if (_eventLeftTime.inDays > 0) {
-        setState(() {
-          _showRemainEventDaysLabel = true;
-        });
       }
     }
   }
@@ -91,7 +86,6 @@ class _EventCardWidgetState extends State<EventCardWidget> {
     const oneSecond = Duration(seconds: 1);
     setState(() {
       _showTodayCounter = true;
-      _showRemainEventDaysLabel = true;
     });
     _timer = Timer.periodic(
       oneSecond,

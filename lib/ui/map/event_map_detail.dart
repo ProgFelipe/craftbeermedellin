@@ -1,7 +1,6 @@
 import 'package:craftbeer/abstractions/event_model.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
-import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class EventMapMarketDetail extends StatelessWidget {

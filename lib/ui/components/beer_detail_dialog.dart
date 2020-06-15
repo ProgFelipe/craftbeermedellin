@@ -69,91 +69,93 @@ class _BeerDetailDialogState extends State<BeerDetailDialog> {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min, // To make the card compact
-              children: <Widget>[
-                Visibility(
-                  visible: widget.starts,
-                  child: Text(
-                    widget.title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.w700,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // To make the card compact
+                children: <Widget>[
+                  Visibility(
+                    visible: widget.starts,
+                    child: Text(
+                      widget.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  widget.description,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16.0,
+                  SizedBox(
+                    height: 10.0,
                   ),
-                ),
-                SizedBox(
-                  height: 15.0,
-                ),
-                Visibility(
-                  visible: widget.showVotesBox && _canVote,
-                  child: Column(
+                  SizedBox(height: 16.0),
+                  Text(
+                    widget.description,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Visibility(
+                    visible: widget.showVotesBox && _canVote,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          S.of(context).do_you_like_it,
+                          style: TextStyle(
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: Iterable<Widget>.generate(
+                              5,
+                              (index) => VoteItem(
+                                    index: index,
+                                    voteAction: onVote,
+                                  )).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: widget.showVotesBox && !_canVote,
+                    child: Text(
+                      S.of(context).thanks_for_the_vote,
+                      style: TextStyle(color: Colors.amberAccent),
+                    ),
+                  ),
+                  SizedBox(height: 24.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text(
-                        S.of(context).do_you_like_it,
-                        style: TextStyle(
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.w700,
+                      Visibility(
+                        visible: widget.actionText != null,
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            widget.action(); // To close the dialog
+                          },
+                          child: widget.actionText != null ? Text(widget.actionText) : Text(''),
                         ),
                       ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: Iterable<Widget>.generate(
-                            5,
-                            (index) => VoteItem(
-                                  index: index,
-                                  voteAction: onVote,
-                                )).toList(),
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // To close the dialog
+                        },
+                        child: Text(widget.buttonText),
                       ),
                     ],
                   ),
-                ),
-                Visibility(
-                  visible: widget.showVotesBox && !_canVote,
-                  child: Text(
-                    S.of(context).thanks_for_the_vote,
-                    style: TextStyle(color: Colors.amberAccent),
-                  ),
-                ),
-                SizedBox(height: 24.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Visibility(
-                      visible: widget.actionText != null,
-                      child: FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          widget.action(); // To close the dialog
-                        },
-                        child: widget.actionText != null ? Text(widget.actionText) : Text(''),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); // To close the dialog
-                      },
-                      child: Text(widget.buttonText),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Positioned(

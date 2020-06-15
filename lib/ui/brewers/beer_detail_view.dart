@@ -1,7 +1,6 @@
 import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
-import 'package:craftbeer/ui/brewers/brewers_detail_view.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/components/consents.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
@@ -111,6 +110,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                         Visibility(
                           visible: snapshot.hasData,
                           child: FlatButton.icon(
+                            onPressed: (){},
                             icon: Icon(BeerIcon.beer_filled),
                             label: Text(
                               '${brewerData.currentBrewer.name}',

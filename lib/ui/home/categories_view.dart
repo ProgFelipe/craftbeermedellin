@@ -11,36 +11,38 @@ class CategoriesView extends StatelessWidget {
     return Scaffold(
      backgroundColor: kBlackColor,
      body: SafeArea(
-       child: Column(children: [
-         SizedBox(
-           height: kBigMargin,
-         ),
-         Container(
-           width: double.infinity,
-           margin: EdgeInsets.only(left: 15.0),
-           child: Image.asset(
-             'assets/compass.png',
-             height: 50.0,
-             alignment: Alignment.topLeft,
+       child: SingleChildScrollView(
+         child: Column(children: [
+           SizedBox(
+             height: kBigMargin,
            ),
-         ),
-         Container(
-             alignment: Alignment.topLeft,
+           Container(
+             width: double.infinity,
              margin: EdgeInsets.only(left: 15.0),
-             child: Container(
-               width: 200,
-               height: 20,
-               color: kGreenColor,
-             )),
-         titleView(S.of(context).categories,
-             margin: EdgeInsets.only(left: 15.0)),
-         SizedBox(
-           height: kMarginTopFromTitle,
-         ),
-         CategoriesChips(
-           scrollOnTap: (){},
-         ),
-       ],),
+             child: Image.asset(
+               'assets/compass.png',
+               height: 50.0,
+               alignment: Alignment.topLeft,
+             ),
+           ),
+           Container(
+               alignment: Alignment.topLeft,
+               margin: EdgeInsets.only(left: 15.0),
+               child: Container(
+                 width: 200,
+                 height: 20,
+                 color: kGreenColor,
+               )),
+           titleView(S.of(context).categories,
+               margin: EdgeInsets.only(left: 15.0)),
+           SizedBox(
+             height: kMarginTopFromTitle,
+           ),
+           CategoriesChips(
+             scrollOnTap: (){},
+           ),
+         ],),
+       ),
      ),
     );
   }

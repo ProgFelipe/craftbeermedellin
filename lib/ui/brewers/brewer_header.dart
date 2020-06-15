@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:craftbeer/abstractions/brewer_model.dart';
-import 'package:craftbeer/connectivity_widget.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/ui/components/beer_detail_dialog.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
@@ -44,7 +43,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
       context: context,
       builder: (BuildContext context) => BeerDetailDialog(
         title: brewer.name,
-        description: brewer.aboutUs,
+        description: brewer.description + '\n\n\n' + brewer.aboutUs,
         buttonText: S.of(context).back,
         avatarImage: brewer.imageUri,
         avatarColor: Colors.white,
@@ -59,9 +58,8 @@ class _BrewerHeaderState extends State<BrewerHeader> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          ConnectivityWidget(),
           SizedBox(
-            height: 20.0,
+            height: 10.0,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +85,7 @@ class _BrewerHeaderState extends State<BrewerHeader> {
             ],
           ),
           SizedBox(
-            height: 20.0,
+            height: 10.0,
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10.0),
@@ -95,29 +93,10 @@ class _BrewerHeaderState extends State<BrewerHeader> {
               tag: widget.brewer.name,
               child: ImageProviderWidget(
                 widget.brewer.imageUri,
-                height: 100.0,
+                height: 80.0,
                 animationDuration: 0,
               ),
             ),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.0),
-            child: Text(
-              widget.brewer.description,
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.grey[400],
-                  fontWeight: FontWeight.normal),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(
-            height: 5.0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

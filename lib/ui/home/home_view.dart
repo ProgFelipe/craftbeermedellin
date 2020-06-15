@@ -102,14 +102,16 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                                       color: kWhiteColor,
                                       size: 18.0,
                                       margin: EdgeInsets.only(top: 5.0, left: 5.0)),
-                                  Container(
-                                    width: double.infinity,
-                                    alignment: Alignment.bottomRight,
-                                    margin: EdgeInsets.only(right: 9.0),
-                                    child: Image.asset(
-                                      'assets/skullflowers.png',
-                                      height: 60.0,
-                                      alignment: Alignment.topLeft,
+                                  Expanded(
+                                    child: Container(
+                                      width: double.infinity,
+                                      alignment: Alignment.bottomRight,
+                                      margin: EdgeInsets.only(right: 9.0),
+                                      child: Image.asset(
+                                        'assets/skullflowers.png',
+                                        height: 60.0,
+                                        alignment: Alignment.topLeft,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -133,15 +135,17 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                                     size: 18.0,
                                     margin: EdgeInsets.only(top: 5.0, left: 5.0)
                                   ),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 60.0,
-                                    margin: EdgeInsets.only(right: 15.0),
-                                    alignment: Alignment.bottomRight,
-                                    child: Image.asset(
-                                      'assets/compass.png',
-                                      height: 50.0,
-                                      alignment: Alignment.topLeft,
+                                  Expanded(
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 60.0,
+                                      margin: EdgeInsets.only(right: 15.0),
+                                      alignment: Alignment.bottomRight,
+                                      child: Image.asset(
+                                        'assets/compass.png',
+                                        height: 50.0,
+                                        alignment: Alignment.topLeft,
+                                      ),
                                     ),
                                   ),
                                 ],
