@@ -8,6 +8,7 @@ import 'package:craftbeer/database/brewer_dao.dart';
 import 'package:craftbeer/providers/base_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +29,7 @@ class BrewersData extends BaseProvider {
   final api = Api();
   final brewerDAO = BrewerDao();
   final beersDAO = BeersDao();
+  final baseCacheManager = DefaultCacheManager();
 
   SharedPreferences prefs;
 
@@ -183,5 +185,14 @@ class BrewersData extends BaseProvider {
 
   Future<List<Beer>> fetchBeersByCategory(List<int> categoryId) async {
     return await beersDAO.getBeersFromCategory(categoryId);
+  }
+
+  bool calledClearCache = false;
+  Future<void> clearCache() async {
+    if(!calledClearCache) {
+      calledClearCache = true;
+      baseCacheManager.emptyCache();
+      fetchBrewersAndBeers();
+    }
   }
 }
