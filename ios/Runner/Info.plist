@@ -49,5 +49,7 @@
     <string>La aplicación necesita acceso a tú ubicación</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>La aplicación necesita acceso a tú ubicación</string>
+    <key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-3418693319032947~3367916363</string>
 </dict>
 </plist>
