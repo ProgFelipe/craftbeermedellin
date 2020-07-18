@@ -27,7 +27,7 @@ class DeliveryPickerData extends ChangeNotifier {
   void saveAddress() async {
     SharedPreferences prefs = await getSharedPreference();
     prefs.setString(kFirstAddress,
-        "${delivery.address.replaceAll('#', '%23').replaceAll('-', '%2D')},${delivery.description},${delivery.latitude},${delivery.longitude}");
+        "${delivery.address.replaceAll('#', '%23').replaceAll('-', '%2D').toUpperCase()},${delivery.description},${delivery.latitude},${delivery.longitude}");
   }
 
   Future<String> fetchDeliveryData() async {

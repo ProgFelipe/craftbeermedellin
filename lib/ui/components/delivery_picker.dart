@@ -38,10 +38,10 @@ class _DeliveryPickerState extends State<DeliveryPicker> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             final form = _formKey.currentState;
-            if (form.validate() && (_pickedLocation.latLng != null ||
+            if (form.validate() && (_pickedLocation?.latLng != null ||
                 deliveryPickerData.delivery.latitude != null)) {
               form.save();
-              if (_pickedLocation.latLng != null) {
+              if (_pickedLocation?.latLng != null) {
                 deliveryPickerData.delivery.latitude =
                     _pickedLocation.latLng.latitude.toString();
                 deliveryPickerData.delivery.longitude =
@@ -183,13 +183,10 @@ class _DeliveryPickerState extends State<DeliveryPicker> {
                   ),
                 ),
                 SizedBox(
-                  height: 10.0,
+                  height: 30.0,
                 ),
                 ImageProviderWidget(
                     'https://i.giphy.com/media/h8NdYZJGH1ZRe/giphy.gif'),
-                SizedBox(
-                  height: 20.0,
-                ),
               ],
             ),
           ),
