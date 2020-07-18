@@ -6,11 +6,11 @@ import 'package:craftbeer/api_service.dart';
 import 'package:craftbeer/providers/articles_provider.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/providers/categories_provider.dart';
+import 'package:craftbeer/providers/delivery_picker_provider.dart';
 import 'package:craftbeer/providers/map_notifier.dart';
 import 'package:craftbeer/providers/push_notifications_provider.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
 import 'package:craftbeer/ui/events/events_view.dart';
-import 'package:craftbeer/ui/forum.dart';
 import 'package:craftbeer/ui/home/brewers_view.dart';
 import 'package:craftbeer/ui/home/home_view.dart';
 import 'package:craftbeer/ui/map/map_view.dart';
@@ -28,7 +28,7 @@ import 'generated/l10n.dart';
 
 void main() {
   // Pass all uncaught errors from the framework to Crashlytics.
-  if(kReleaseMode) {
+  if (kReleaseMode) {
     FlutterError.onError = Crashlytics.instance.recordFlutterError;
   }
   runApp(MyApp());
@@ -54,6 +54,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<BrewersData>.value(value: BrewersData()),
         ChangeNotifierProvider<CategoriesData>.value(value: CategoriesData()),
         ChangeNotifierProvider<MapNotifier>.value(value: MapNotifier()),
+        ChangeNotifierProvider<DeliveryPickerData>.value(
+            value: DeliveryPickerData()),
 
         ///FireStore
         StreamProvider<List<Release>>.value(value: database.fetchReleases()),
@@ -106,11 +108,8 @@ class _NavigatorState extends State<Navigator> {
 
   final List<Widget> _screens = [
     Home(),
-    //ExploreView(),
-    //UserAreaView(),
     EventsView(),
     BrewersView(),
-    ForumView(),
     CraftMap(),
   ];
 
@@ -218,17 +217,6 @@ class _NavigatorState extends State<Navigator> {
               color: Colors.white,
             ),
             backgroundColor: Colors.black,
-            title: Text(''),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.group,
-              color: Colors.grey,
-            ),
-            activeIcon: Icon(
-              Icons.remove_red_eye,
-              color: Colors.white,
-            ),
             title: Text(''),
           ),
           BottomNavigationBarItem(

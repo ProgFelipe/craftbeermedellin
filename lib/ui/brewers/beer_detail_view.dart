@@ -2,7 +2,7 @@ import 'package:craftbeer/abstractions/beer_model.dart';
 import 'package:craftbeer/generated/l10n.dart';
 import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
-import 'package:craftbeer/ui/components/consents.dart';
+import 'package:craftbeer/ui/components/delivery_picker.dart';
 import 'package:craftbeer/ui/components/image_provider.dart';
 import 'package:craftbeer/ui/components/ios_back_nav.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
@@ -46,6 +46,12 @@ class _BeerDetailViewState extends State<BeerDetailView> {
     }
   }
 
+  void goToDeliveryLocationPickView(){
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => DeliveryPicker(),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<BrewersData>(builder: (context, brewerData, child) {
@@ -59,11 +65,8 @@ class _BeerDetailViewState extends State<BeerDetailView> {
             child: Icon(BeerIcon.car),
             onPressed: () {
               if (snapshot.hasData) {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Consents(
-                    brewer: brewerData.currentBrewer,
-                  ),
-                ));
+               ///Open Map to choose delivery location.
+                goToDeliveryLocationPickView();
               }
             },
           ),

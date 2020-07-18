@@ -135,7 +135,8 @@ class BrewersData extends BaseProvider {
   }
 
   Future<bool> shouldUpdateData() async {
-    SharedPreferences prefs = await getSharedPreference();
+    return true;
+    /*SharedPreferences prefs = await getSharedPreference();
     String lastUpdate = (prefs.getString(kLastUpdate));
     debugPrint('========LAST UPDATE========');
     debugPrint(lastUpdate);
@@ -152,7 +153,7 @@ class BrewersData extends BaseProvider {
     } catch (exception) {
       debugPrint(exception);
       return true;
-    }
+    }*/
   }
 
   ///Top Beers

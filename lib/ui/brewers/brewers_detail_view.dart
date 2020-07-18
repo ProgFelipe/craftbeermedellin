@@ -5,7 +5,7 @@ import 'package:craftbeer/providers/brewer_provider.dart';
 import 'package:craftbeer/ui/brewers/brewer_content.dart';
 import 'package:craftbeer/ui/brewers/brewer_header.dart';
 import 'package:craftbeer/ui/components/beer_icon_icons.dart';
-import 'package:craftbeer/ui/components/consents.dart';
+import 'package:craftbeer/ui/components/delivery_picker.dart';
 import 'package:craftbeer/ui/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -80,6 +80,12 @@ class _BrewersDetailState extends State<BrewersDetail>
     Navigator.of(context).pop();
   }
 
+  void goToDeliveryLocationPickView(){
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => DeliveryPicker(),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<BrewersData>(builder: (context, brewerData, child) {
@@ -136,11 +142,9 @@ class _BrewersDetailState extends State<BrewersDetail>
                 foregroundColor: Colors.white,
                 backgroundColor: kGreenColor,
                 child: Icon(BeerIcon.car),
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Consents(
-                    brewer: brewerData.currentBrewer,
-                  ),
-                )),
+                onPressed: () =>
+                ///Open Map to choose delivery location.
+                goToDeliveryLocationPickView()
               ),
             );
           });
