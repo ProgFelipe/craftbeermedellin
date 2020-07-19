@@ -88,13 +88,22 @@ class _BrewerHeaderState extends State<BrewerHeader> {
             height: 10.0,
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 10.0),
+            width: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(90.0),
+              ),
+              color: kWhiteColor,
+            ),
             child: Hero(
               tag: widget.brewer.name,
-              child: ImageProviderWidget(
-                widget.brewer.imageUri,
-                height: 80.0,
-                animationDuration: 0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(90.0),
+                child: ImageProviderWidget(
+                  widget.brewer.imageUri,
+                  height: 100.0,
+                  animationDuration: 0,
+                ),
               ),
             ),
           ),

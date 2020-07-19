@@ -91,7 +91,10 @@ class BrewerItem extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => BrewersDetail(
                     brewerId: brewer.id,
-                  )),
+                  ),
+              settings: RouteSettings(name: 'View_'+brewer.name),
+          ),
+
         );
       },
       child: Container(

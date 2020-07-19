@@ -10,6 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'dart:convert';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -30,6 +32,19 @@ class BrewersData extends BaseProvider {
   final brewerDAO = BrewerDao();
   final beersDAO = BeersDao();
   final baseCacheManager = DefaultCacheManager();
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+  FirebaseAnalyticsObserver(analytics: analytics);
+
+  /*
+  * Analytics
+   */
+  Future<void> sendBuyEvent() async {
+    await analytics.logEvent(name: 'BUY', parameters: <String, dynamic>{
+      'brewer' : currentBrewer.name,
+    });
+  }
 
   SharedPreferences prefs;
 

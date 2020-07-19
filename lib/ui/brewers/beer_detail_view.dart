@@ -46,7 +46,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
     }
   }
 
-  void goToDeliveryLocationPickView(){
+  void goToDeliveryLocationPickView() {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => DeliveryPicker(),
     ));
@@ -65,7 +65,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
             child: Icon(BeerIcon.car),
             onPressed: () {
               if (snapshot.hasData) {
-               ///Open Map to choose delivery location.
+                ///Open Map to choose delivery location.
                 goToDeliveryLocationPickView();
               }
             },
@@ -113,7 +113,7 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                         Visibility(
                           visible: snapshot.hasData,
                           child: FlatButton.icon(
-                            onPressed: (){},
+                            onPressed: () {},
                             icon: Icon(BeerIcon.beer_filled),
                             label: Text(
                               '${brewerData.currentBrewer.name}',
@@ -304,10 +304,34 @@ class _BeerDetailViewState extends State<BeerDetailView> {
                   Positioned(
                     left: kPadding,
                     right: kPadding,
-                    child: CircleAvatar(
-                      child: ImageProviderWidget(widget.selectedBeer.imageUri),
-                      backgroundColor: kCitrusStartCustomColor,
-                      radius: kAvatarRadius,
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ImageProviderWidget(
+                            widget.selectedBeer.imageUri,
+                          ),
+                        );
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CircleAvatar(
+                            child: ImageProviderWidget(
+                                widget.selectedBeer.imageUri),
+                            backgroundColor: kCitrusStartCustomColor,
+                            radius: kAvatarRadius,
+                          ),
+                          Container(
+                            color: Colors.black12,
+                            child: Icon(
+                              Icons.zoom_in,
+                              size: 40.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

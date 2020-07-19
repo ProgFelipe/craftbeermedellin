@@ -34,7 +34,7 @@ class _ConsentsState extends State<Consents> {
     String message =
         "${brewer.name}\n${S.of(context).i_would_like_to_to_buy_msg}";
     String url =
-        "whatsapp://send?phone=${brewer.phone}&text=$message\n\nDirección Envío:\n\n${deliveryUri}";
+        "whatsapp://send?phone=${brewer.phone}&text=$message\n\nDirección Envío:\n\n$deliveryUri";
     try {
       if (await canLaunch(url)) {
         await launch(url);
@@ -119,9 +119,10 @@ class _ConsentsState extends State<Consents> {
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               await deliveryData.preFillDataIfExist();
+              brewerData.sendBuyEvent();
               openWhatsApp(
                   brewerData.currentBrewer,
-                  "${deliveryData.delivery.address}\n${deliveryData.delivery.description}\n\n" +
+                  "${deliveryData.delivery.address.replaceAll('#', '%23').replaceAll('-', '%2D')}\n${deliveryData.delivery.description}\n\n" +
                       deliveryData.getDeliveryMapsUri(),
                   context);
             },

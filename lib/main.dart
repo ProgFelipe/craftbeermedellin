@@ -23,6 +23,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 import 'generated/l10n.dart';
 
@@ -37,6 +39,9 @@ void main() {
 class MyApp extends StatelessWidget {
   final database = Api();
   final connectivity = Connectivity();
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+  FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +71,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Craft Beer Co',
+        navigatorObservers: <NavigatorObserver>[observer],
         supportedLocales: S.delegate.supportedLocales,
         localizationsDelegates: [
           S.delegate,

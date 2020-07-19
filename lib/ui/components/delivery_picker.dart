@@ -66,35 +66,38 @@ class _DeliveryPickerState extends State<DeliveryPicker> {
           ),
         ),
         body: SafeArea(
-          child: Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Icon(
-                      DeliveryIcon.food_delivery,
-                      color: Colors.amber,
-                      size: 80.0,
-                    ),
-                    SizedBox(
-                      width: 20.0,
-                    ),
-                    Icon(
-                      DeliveryIcon.box,
-                      size: 80.0,
-                      color: Colors.green,
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                ),
-                SizedBox(
-                  height: 40.0,
-                ),
-                FutureBuilder(
-                  future: deliveryPickerData.preFillDataIfExist(),
-                  builder: (context, snapshot) => Container(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Icon(
+                    DeliveryIcon.food_delivery,
+                    color: Colors.amber,
+                    size: 80.0,
+                  ),
+                  SizedBox(
+                    width: 20.0,
+                  ),
+                  Icon(
+                    DeliveryIcon.box,
+                    size: 80.0,
+                    color: Colors.green,
+                  )
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              SizedBox(
+                height: 40.0,
+              ),
+              FutureBuilder(
+                future: deliveryPickerData.preFillDataIfExist(),
+                builder: (context, snapshot) {
+                  if(!snapshot.hasData){
+                    return Center(child: Text('Cargando...'),);
+                  }
+                  return Container(
                     margin: EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Form(
                         key: _formKey,
@@ -104,11 +107,13 @@ class _DeliveryPickerState extends State<DeliveryPicker> {
                                 ? deliveryPickerData.delivery.address
                                 : '',
                             style: new TextStyle(
-                                fontWeight: FontWeight.normal, fontSize: 20.0),
+                                fontWeight: FontWeight.normal,
+                                fontSize: 20.0),
                             decoration: InputDecoration(
                               labelText: 'Dirección',
                               border: OutlineInputBorder(),
                             ),
+                            // ignore: missing_return
                             validator: (value) {
                               if (value.isEmpty || value.length > 95) {
                                 return 'Ingrese una dirección válida';
@@ -118,7 +123,8 @@ class _DeliveryPickerState extends State<DeliveryPicker> {
                             onFieldSubmitted: (v) {
                               FocusScope.of(context).requestFocus(focus);
                             },
-                            onSaved: (val) => setState(() =>
+                            onSaved: (val) =>
+                                setState(() =>
                                 deliveryPickerData.delivery.address = val),
                           ),
                           SizedBox(
@@ -130,19 +136,24 @@ class _DeliveryPickerState extends State<DeliveryPicker> {
                                 : '',
                             focusNode: focus,
                             style: new TextStyle(
-                                fontWeight: FontWeight.normal, fontSize: 20.0),
+                                fontWeight: FontWeight.normal,
+                                fontSize: 20.0),
                             decoration: InputDecoration(
                               labelText: 'Ciudad, Unidad, #Apto-Casa',
                               border: OutlineInputBorder(),
                             ),
+                            // ignore: missing_return
                             validator: (value) {
+                              // ignore: missing_return
                               if (value.isEmpty) {
                                 return 'Ingrese información valida';
                               }
                             },
                             textInputAction: TextInputAction.done,
-                            onSaved: (val) => setState(() =>
-                                deliveryPickerData.delivery.description = val),
+                            onSaved: (val) =>
+                                setState(() =>
+                                deliveryPickerData.delivery.description =
+                                    val),
                           ),
                           SizedBox(
                             height: 30.0,
@@ -166,10 +177,11 @@ class _DeliveryPickerState extends State<DeliveryPicker> {
                               });
                             },
                             child: Container(
-                              margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                              margin: EdgeInsets.only(
+                                  left: 20.0, right: 20.0),
                               alignment: Alignment.center,
                               color:
-                                  snapshot.data ? Colors.blue : colorMapPicker,
+                              snapshot.data ? Colors.blue : colorMapPicker,
                               height: 50.0,
                               width: double.infinity,
                               child: Text(
@@ -180,15 +192,15 @@ class _DeliveryPickerState extends State<DeliveryPicker> {
                             ),
                           ),
                         ])),
-                  ),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                ImageProviderWidget(
-                    'https://i.giphy.com/media/h8NdYZJGH1ZRe/giphy.gif'),
-              ],
-            ),
+                  );
+                }
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              ImageProviderWidget(
+                  'https://i.giphy.com/media/h8NdYZJGH1ZRe/giphy.gif'),
+            ],
           ),
         ),
       );

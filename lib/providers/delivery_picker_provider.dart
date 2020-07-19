@@ -27,7 +27,7 @@ class DeliveryPickerData extends ChangeNotifier {
   void saveAddress() async {
     SharedPreferences prefs = await getSharedPreference();
     prefs.setString(kFirstAddress,
-        "${delivery.address.replaceAll('#', '%23').replaceAll('-', '%2D').toUpperCase()},${delivery.description},${delivery.latitude},${delivery.longitude}");
+        "${delivery.address.toUpperCase()};${delivery.description};${delivery.latitude};${delivery.longitude}");
   }
 
   Future<String> fetchDeliveryData() async {
@@ -38,7 +38,7 @@ class DeliveryPickerData extends ChangeNotifier {
   Future<bool> preFillDataIfExist() async {
     String value = await fetchDeliveryData();
     if (value != null) {
-      var elements = value.split(',');
+      var elements = value.split(';');
       if (elements.length == 4) {
         delivery.address = elements[0];
         delivery.description = elements[1];
